@@ -7,6 +7,7 @@ public class SpawnManager : MonoBehaviour {
     //刷怪位置
     public Transform[] spawnPoints;
     private float leftTimeToNextSpawn = 0;
+    [SerializeField]
     private float spawnTimer = 0;
     //每个刷怪点刷新怪物间隔
     public float SpawnIntervalTime = 3;
@@ -31,9 +32,9 @@ public class SpawnManager : MonoBehaviour {
     {
         if (bLooping)
         {
-            if (Time.realtimeSinceStartup - spawnTimer >= SpawnIntervalTime)
+            if (Time.time - spawnTimer >= SpawnIntervalTime)
             {
-                spawnTimer = Time.realtimeSinceStartup;
+                spawnTimer = Time.time;
                 Spawn();
             }
         }
@@ -49,7 +50,7 @@ public class SpawnManager : MonoBehaviour {
 
         WaveCount = 0;
         leftTimeToNextSpawn = 0;
-        spawnTimer = Time.realtimeSinceStartup;
+        spawnTimer = Time.time;
 
         MoveToCachePool(monsterList);
         monsterList = new List<Transform>();
@@ -59,12 +60,12 @@ public class SpawnManager : MonoBehaviour {
     public void Pause()
     {
         bLooping = false;
-        leftTimeToNextSpawn = SpawnIntervalTime - (Time.realtimeSinceStartup - spawnTimer);
+        leftTimeToNextSpawn = SpawnIntervalTime - (Time.time - spawnTimer);
     }
 
     public void Continue()
     {
-        spawnTimer = Time.realtimeSinceStartup - leftTimeToNextSpawn;
+        spawnTimer = Time.time - leftTimeToNextSpawn;
         bLooping = true;
     }
 

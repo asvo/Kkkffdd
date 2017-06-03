@@ -29,9 +29,11 @@ public class GameManager : MonoBehaviour
     }
 
     public GameObject player;
+    SpawnManager spawnManager;
     void Start()
     {
-        //CameraManager.Instance().LookAt(player.transform);
+        spawnManager = FindObjectOfType<SpawnManager>();
+        spawnManager.Init();
     }
 }
 
