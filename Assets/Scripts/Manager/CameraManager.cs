@@ -38,10 +38,5 @@ public class CameraManager : Single<CameraManager> {
     {
         DOTween.To(() => MainCamera.transform.eulerAngles, x => MainCamera.transform.eulerAngles = x, new Vector3(0, A, 0), duration).OnComplete(delegate { TweenRotYFromAToB(B, -A, duration); });
     }
-
-    public void SetBackGround()
-    {
-        //MainCamera.te
-    }
 }
 

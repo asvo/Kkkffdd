@@ -11,7 +11,10 @@ public class CameraCtr : MonoBehaviour {
 
     private Camera mainCamera;
 
-    //主摄像机（有时候会在工程中有多个摄像机，但是只能有一个主摄像机吧）     
+    public Renderer backgroundRender;
+
+    public float leftBorder = -11;
+    public float rightBorder = 11;
 
     void Awake()
     {
@@ -22,9 +25,18 @@ public class CameraCtr : MonoBehaviour {
 
     void Update()
     {
-
-        transform.position = Vector3.SmoothDamp(transform.position, character.position + new Vector3(0, 0, -5), ref cameraVelocity, smoothTime);
-
+        if (character.position.x <= leftBorder)
+        {
+            mainCamera.transform.position = new Vector3(leftBorder, 0, character.position.z - 5);
+        }
+        if (character.position.x >= rightBorder)
+        {
+            mainCamera.transform.position = new Vector3(rightBorder, 0, character.position.z - 5);
+        }
+        if (character.position.x >= leftBorder && character.position.x <= rightBorder)
+        {
+            mainCamera.transform.position = Vector3.SmoothDamp(mainCamera.transform.position, new Vector3(character.position.x, 0, character.position.z - 5), ref cameraVelocity, smoothTime);
+        }
     }  
  
 }

@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
         return instance;
     }
 
+    public bool bPause = false;
+
     void Awake()
     {
         instance = this;
