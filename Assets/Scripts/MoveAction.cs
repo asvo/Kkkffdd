@@ -26,7 +26,7 @@ public class MoveAction : MonoBehaviour {
         if (dir != mMovingDir)
         {
             mMovingDir = dir;
-            float flag = mMovingDir == MoveDir.Left ? 1 : -1;
+            float flag = mMovingDir == MoveDir.Right ? 1 : -1;
             mCurrentSpeed = 2f * flag; // init speed
             mTargetSpeed = moveSpeed * flag;
         }
