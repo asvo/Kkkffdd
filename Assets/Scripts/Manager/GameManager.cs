@@ -22,13 +22,14 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
     public GameObject player;
     void Start()
     {
-        CameraManager.Instance().LookAt(player.transform);
+        //CameraManager.Instance().LookAt(player.transform);
     }
 }
 
