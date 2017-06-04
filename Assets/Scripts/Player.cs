@@ -8,30 +8,16 @@ using System.Collections;
 
 
 public class Player : BaseEntity {
-
-    private MoveAction mMoveCtr;
-
-    void Awake()
-    {
-        mMoveCtr = GetComponent<MoveAction>();
-    }
+    
 
     public override void Move(MoveDir moveDir)
     {
         base.Move(moveDir);
-        if (mMoveCtr != null)
-        {
-            mMoveCtr.Move(moveDir, MaxMoveSpeed);
-        }
     }
 
     public override void EndMove()
     {
         base.EndMove();
-        if (mMoveCtr != null)
-        {
-            mMoveCtr.EndMove();
-        }
     }
 }
 

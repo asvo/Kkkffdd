@@ -42,4 +42,45 @@ public class MoveInput : MonoBehaviour
         if (GetPlayer != null)
             GetPlayer.EndMove();
     }
+
+    #region Keyboard-Move
+
+    int mLastMoveVal = 0;
+    int moveVal = 0;
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            --moveVal;
+        }
+        if (Input.GetKeyUp(KeyCode.A))
+        {
+            ++moveVal;
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            ++moveVal;
+        }
+        if (Input.GetKeyUp(KeyCode.D))
+        {
+            --moveVal;
+        }
+        if (mLastMoveVal == moveVal)
+            return;
+        mLastMoveVal = moveVal;
+        if (moveVal < 0)
+        {
+            OnClickMove(MoveDir.Left);
+        }
+        else if (moveVal > 0)
+        {
+            OnClickMove(MoveDir.Right);
+        }
+        else
+        {
+            OnClickEndMove();
+        }
+    }
+
+    #endregion Keyboard-Move
 }
