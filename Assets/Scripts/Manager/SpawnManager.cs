@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class SpawnManager : MonoBehaviour {
 
+    public GameObject EnemyPrefab = null;
     //刷怪位置
     public Transform[] spawnPoints;
     private float leftTimeToNextSpawn = 0;
@@ -15,15 +16,18 @@ public class SpawnManager : MonoBehaviour {
     public int SpawnCount = 5;
     //怪物刷新波数
     public int WaveCount = 0;
+    public int MaxWave = 3;
 
     [SerializeField]
     private bool bLooping = false;
 
-    public List<Transform> monsterList = new List<Transform>();
-    public Dictionary<int, Transform> dic_CacheMonsterList = new Dictionary<int, Transform>();
+    public List<Monster> monsterList = new List<Monster>();
+    public Dictionary<int, Monster> dic_CacheMonsterList = new Dictionary<int, Monster>();
 
     void Start()
     {
+        if (EnemyPrefab == null)
+            EnemyPrefab = Resources.Load("ModelPrefab/Enemy") as GameObject;
         Debug.LogError("I am monster Spawner");
         bLooping = false;
     }
@@ -53,7 +57,7 @@ public class SpawnManager : MonoBehaviour {
         spawnTimer = Time.time;
 
         MoveToCachePool(monsterList);
-        monsterList = new List<Transform>();
+        monsterList = new List<Monster>();
         bLooping = true;
     }
 
@@ -72,6 +76,9 @@ public class SpawnManager : MonoBehaviour {
 
     private void Spawn()
     {
+        if (WaveCount >= MaxWave)
+            return;
+
         for (int i = 0; i < spawnPoints.Length; i++)
         {
             for (int j = 0; j < SpawnCount; j++)
@@ -83,23 +90,28 @@ public class SpawnManager : MonoBehaviour {
         WaveCount++;
     }
 
-    private Transform SpawnOneMonster(int MonsterIndex,Transform spawnPoint)
+    private Monster SpawnOneMonster(int MonsterIndex,Transform spawnPoint)
     {
+        Monster monster = null;
         if (dic_CacheMonsterList.ContainsKey(MonsterIndex))
         {
-            Transform monster = dic_CacheMonsterList[MonsterIndex];
+            monster = dic_CacheMonsterList[MonsterIndex];
+            monster.Spawn();
             dic_CacheMonsterList.Remove(MonsterIndex);
             return monster;
         }
 
-        GameObject goMonster = new GameObject(MonsterIndex.ToString());
+        GameObject goMonster = Instantiate(EnemyPrefab);
+        monster = Util.TryAddComponent<Monster>(goMonster);
+        monster.Spawn();
+        goMonster.name = MonsterIndex.ToString();
         goMonster.transform.SetParent(spawnPoint);
         goMonster.transform.localPosition = Vector3.zero;
         goMonster.transform.localRotation = Quaternion.identity;
-        return goMonster.transform;
+        return monster;
     }
 
-    public void MonsterDie(Transform monster)
+    public void MonsterDie(Monster monster)
     {
         monsterList.Remove(monster);
         int monsterIndex = 0;
@@ -111,18 +123,18 @@ public class SpawnManager : MonoBehaviour {
             }
             else
             {
-                Destroy(monster);
+                Destroy(monster.gameObject);
             }
         }
     }
 
 
-    private void MoveToCachePool(List<Transform> Monsters)
+    private void MoveToCachePool(List<Monster> Monsters)
     {
         if (Monsters == null)
             return;
-        List<Transform> deleterMonster = new List<Transform>();
-        foreach (Transform child in Monsters)
+        List<Monster> deleterMonster = new List<Monster>();
+        foreach (Monster child in Monsters)
         {
             if (child != null)
             {

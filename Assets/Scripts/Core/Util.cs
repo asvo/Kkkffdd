@@ -14,4 +14,16 @@ public static class Util {
         Plane[] planes = GeometryUtility.CalculateFrustumPlanes(camera);
         return GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
     }
+
+    public static T TryAddComponent<T>(GameObject go)where T:Component
+    {
+        if (go.GetComponent<T>() != null)
+        {
+           return go.GetComponent<T>();
+        }
+        else
+        {
+           return go.AddComponent<T>();
+        }
+    }
 }

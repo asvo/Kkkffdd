@@ -7,16 +7,54 @@ using System.Collections;
  */
 
 
-public class Monster : MonoBehaviour {
+public class Monster : BaseEntity {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public EnemyAI enemyAi = null;
+    public void Spawn()
+    {
+        Health = 3;
+        isDead = false;
+        enemyAi = Util.TryAddComponent<EnemyAI>(gameObject);
+        enemyAi.InitEnemyAI();
+    }
+
+    public void Attack()
+    {
+        Debug.LogError(gameObject.name + " is Attack!");
+    }
+
+    public void Damage()
+    {               
+        if (enemyAi != null)
+            enemyAi.Damage();
+
+        Restats();
+    }
+
+    public void MoveToPlayer()
+    {
+        if (GameManager.Instance().player != null)
+        {
+            MoveDir moveDir = GameManager.Instance().player.transform.position.x - transform.position.x > 0 ? MoveDir.Right : MoveDir.Left;
+            if (moveDir == MoveDir.Left)
+            {
+                GetComponent<SpriteRenderer>().flipX =true;
+            }
+            else if (moveDir == MoveDir.Right)
+            {
+                GetComponent<SpriteRenderer>().flipX = false;
+            }
+            base.Move(moveDir);
+        }
+        else
+        {
+            Debug.LogError("Player is not exist!");
+        }
+    }
+
+    public void Restats()
+    {
+
+    }
 }
 

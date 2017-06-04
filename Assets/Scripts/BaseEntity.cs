@@ -5,8 +5,29 @@ public class BaseEntity : MonoBehaviour {
 
     public float InitMoveSpeed = 2f;
     public float MaxMoveSpeed = 10f;
+    public int Health = 3;
+    public bool isDead = false;
 
-    public virtual void Move(MoveDir moveDir) { }
+    private MoveAction mMoveCtr;
 
-    public virtual void EndMove() { }
+    void Awake()
+    {
+        mMoveCtr = GetComponent<MoveAction>();
+    }
+
+    public virtual void Move(MoveDir moveDir)
+    {
+        if (mMoveCtr != null)
+        {
+            mMoveCtr.Move(moveDir, MaxMoveSpeed);
+        }
+    }
+
+    public virtual void EndMove()
+    {
+        if (mMoveCtr != null)
+        {
+            mMoveCtr.EndMove();
+        }
+    }
 }
