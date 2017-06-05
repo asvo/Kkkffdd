@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
 
     public bool bPause = false;
 
+    public const float NearestDistance = 1.2f;
+
     void Awake()
     {
         instance = this;

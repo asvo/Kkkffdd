@@ -21,13 +21,8 @@ public class SpawnManager : MonoBehaviour {
     [SerializeField]
     private bool bLooping = false;
 
-    public List<Monster> monsterList = new List<Monster>();
-    public Dictionary<int, Monster> dic_CacheMonsterList = new Dictionary<int, Monster>();
-
     void Start()
-    {
-        if (EnemyPrefab == null)
-            EnemyPrefab = Resources.Load("ModelPrefab/Enemy") as GameObject;
+    {       
         Debug.LogError("I am monster Spawner");
         bLooping = false;
     }
@@ -56,8 +51,7 @@ public class SpawnManager : MonoBehaviour {
         leftTimeToNextSpawn = 0;
         spawnTimer = Time.time;
 
-        MoveToCachePool(monsterList);
-        monsterList = new List<Monster>();
+        MonsterManager.Instance().MoveToCachePool();
         bLooping = true;
     }
 
@@ -79,84 +73,27 @@ public class SpawnManager : MonoBehaviour {
         if (WaveCount >= MaxWave)
             return;
 
+        if (EnemyPrefab == null)
+        {
+            EnemyPrefab = Resources.Load("ModelPrefab/Enemy") as GameObject;
+        }
+
         for (int i = 0; i < spawnPoints.Length; i++)
         {
             for (int j = 0; j < SpawnCount; j++)
             {
-                monsterList.Add(SpawnOneMonster(WaveCount * SpawnCount + j, spawnPoints[i]));
+                MonsterManager.Instance().SpawnOneMonster(WaveCount * SpawnCount + j, spawnPoints[i],EnemyPrefab);
             }
         }
 
         WaveCount++;
     }
 
-    private Monster SpawnOneMonster(int MonsterIndex,Transform spawnPoint)
-    {
-        Monster monster = null;
-        if (dic_CacheMonsterList.ContainsKey(MonsterIndex))
-        {
-            monster = dic_CacheMonsterList[MonsterIndex];
-            monster.Spawn();
-            dic_CacheMonsterList.Remove(MonsterIndex);
-            return monster;
-        }
-
-        GameObject goMonster = Instantiate(EnemyPrefab);
-        monster = Util.TryAddComponent<Monster>(goMonster);
-        monster.Spawn();
-        goMonster.name = MonsterIndex.ToString();
-        goMonster.transform.SetParent(spawnPoint);
-        goMonster.transform.localPosition = Vector3.zero;
-        goMonster.transform.localRotation = Quaternion.identity;
-        return monster;
-    }
-
-    public void MonsterDie(Monster monster)
-    {
-        monsterList.Remove(monster);
-        int monsterIndex = 0;
-        if (int.TryParse(monster.name, out monsterIndex))
-        {
-            if (!dic_CacheMonsterList.ContainsKey(monsterIndex))
-            {
-                dic_CacheMonsterList.Add(monsterIndex, monster);
-            }
-            else
-            {
-                Destroy(monster.gameObject);
-            }
-        }
-    }
 
 
-    private void MoveToCachePool(List<Monster> Monsters)
-    {
-        if (Monsters == null)
-            return;
-        List<Monster> deleterMonster = new List<Monster>();
-        foreach (Monster child in Monsters)
-        {
-            if (child != null)
-            {
-                child.gameObject.SetActive(false);
-                int monsterIndex = 0;
-                if (int.TryParse(child.name, out monsterIndex))
-                {
-                    if (!dic_CacheMonsterList.ContainsKey(monsterIndex))
-                    {
-                        dic_CacheMonsterList.Add(monsterIndex, child);
-                    }
-                    else
-                    {
-                        deleterMonster.Add(child);
-                    }
-                }
-            }
-        }
 
-        for (int i = 0; i < deleterMonster.Count; i++)
-        {
-            Destroy(deleterMonster[i].gameObject);
-        }
-    }
+   
+
+
+    
 }

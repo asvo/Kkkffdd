@@ -19,6 +19,14 @@ public class BaseEntity : MonoBehaviour {
     {
         if (mMoveCtr != null)
         {
+            if (moveDir == MoveDir.Left)
+            {
+                GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else if (moveDir == MoveDir.Right)
+            {
+                GetComponent<SpriteRenderer>().flipX = false;
+            }
             mMoveCtr.Move(moveDir, InitMoveSpeed);
         }
     }

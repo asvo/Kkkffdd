@@ -53,11 +53,7 @@ public class EnemyAI : MonoBehaviour {
     /// 优先级高于进攻距离
     /// </summary>
     public float confusedTime = 20;
-    /// <summary>
-    /// 攻击范围
-    /// </summary>
-    public float AttackRange = 3;
-    public float AttckRate = 1;
+
     private float attackSecond = 1;
     private bool canAttack = false;
 
@@ -142,7 +138,7 @@ public class EnemyAI : MonoBehaviour {
     /// </summary>
     private void Offensive()
     {
-        if (distanceToPlayer() > AttackRange)
+        if (distanceToPlayer() > GameManager.NearestDistance + monster.AttackRange)
         {
             canAttack = false;
         }
@@ -160,13 +156,22 @@ public class EnemyAI : MonoBehaviour {
             }
             else
             {
-                attackSecond = AttckRate;
+                attackSecond = monster.AttckRate;
                 monster.Attack();
             }
         }
         else
         {
-            monster.MoveToPlayer();
+            if (MonsterManager.Instance().CheckHaveEnemyInFront(monster))
+            {
+                monster.EndMove();
+                enemyCurState = e_EnemyState.confused;
+                confusedTime = 5;
+            }
+            else
+            {
+                monster.MoveToPlayer();
+            }
         }
     }
 

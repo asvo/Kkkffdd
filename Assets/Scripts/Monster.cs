@@ -10,6 +10,14 @@ using System.Collections;
 public class Monster : BaseEntity {
 
     public EnemyAI enemyAi = null;
+    /// <summary>
+    /// 攻击范围
+    /// </summary>
+    public float AttackRange = 0.1f;
+    /// <summary>
+    /// 攻击频率
+    /// </summary>
+    public float AttckRate = 1;
     public void Spawn()
     {
         Health = 3;
@@ -35,20 +43,18 @@ public class Monster : BaseEntity {
     {
         if (GameManager.Instance().player != null)
         {
-            MoveDir moveDir = GameManager.Instance().player.transform.position.x - transform.position.x > 0 ? MoveDir.Right : MoveDir.Left;
-            if (moveDir == MoveDir.Left)
+            float distanceToPlayer = Vector2.Distance(GameManager.Instance().player.transform.position, transform.position);
+            if (distanceToPlayer < GameManager.NearestDistance)
             {
-                GetComponent<SpriteRenderer>().flipX =true;
+                //Debug.Log(gameObject.name + " distance to player " + distanceToPlayer);
+                base.EndMove();
+                return;
             }
-            else if (moveDir == MoveDir.Right)
-            {
-                GetComponent<SpriteRenderer>().flipX = false;
-            }
+
+
+            MoveDir moveDir = MonsterManager.Instance().DirToPlayer(this);            
+
             base.Move(moveDir);
-        }
-        else
-        {
-            Debug.LogError("Player is not exist!");
         }
     }
 
