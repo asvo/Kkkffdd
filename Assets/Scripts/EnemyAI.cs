@@ -59,6 +59,7 @@ public class EnemyAI : MonoBehaviour {
     public float AttackRange = 3;
     public float AttckRate = 1;
     private float attackSecond = 1;
+    private bool canAttack = false;
 
     /// <summary>
     /// 硬直时间
@@ -143,9 +144,15 @@ public class EnemyAI : MonoBehaviour {
     {
         if (distanceToPlayer() > AttackRange)
         {
-            monster.MoveToPlayer();
+            canAttack = false;
         }
         else
+        {
+            if (monster != null)
+                monster.EndMove();
+            canAttack = true;
+        }
+        if (canAttack)
         {
             if (attackSecond > 0)
             {
@@ -156,6 +163,10 @@ public class EnemyAI : MonoBehaviour {
                 attackSecond = AttckRate;
                 monster.Attack();
             }
+        }
+        else
+        {
+            monster.MoveToPlayer();
         }
     }
 
@@ -203,6 +214,8 @@ public class EnemyAI : MonoBehaviour {
     {
         Debug.LogError("I am restats");
         canChangeState = false;
+        canAttack = false;
+        attackSecond = 0;
         enemyCurState = e_EnemyState.restats;
     }
 }

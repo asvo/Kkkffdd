@@ -19,7 +19,7 @@ public class BaseEntity : MonoBehaviour {
     {
         if (mMoveCtr != null)
         {
-            mMoveCtr.Move(moveDir, MaxMoveSpeed);
+            mMoveCtr.Move(moveDir, InitMoveSpeed);
         }
     }
 
