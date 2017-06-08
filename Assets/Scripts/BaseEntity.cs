@@ -8,16 +8,16 @@ public class BaseEntity : MonoBehaviour {
     public int Health = 3;
     public bool isDead = false;
 
-    private MoveAction mMoveCtr;
+    public MoveAction MoveCtrl;
 
     void Awake()
     {
-        mMoveCtr = GetComponent<MoveAction>();
+        MoveCtrl = Util.TryAddComponent<MoveAction>(gameObject);
     }
 
     public virtual void Move(MoveDir moveDir)
     {
-        if (mMoveCtr != null)
+        if (MoveCtrl != null)
         {
             if (moveDir == MoveDir.Left)
             {
@@ -27,15 +27,15 @@ public class BaseEntity : MonoBehaviour {
             {
                 GetComponent<SpriteRenderer>().flipX = false;
             }
-            mMoveCtr.Move(moveDir, InitMoveSpeed);
+            MoveCtrl.Move(moveDir, InitMoveSpeed);
         }
     }
 
     public virtual void EndMove()
     {
-        if (mMoveCtr != null)
+        if (MoveCtrl != null)
         {
-            mMoveCtr.EndMove();
+            MoveCtrl.EndMove();
         }
     }
 }

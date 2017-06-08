@@ -34,6 +34,8 @@ public class MonsterManager : Single<MonsterManager> {
             GameObject goMonster = GameObject.Instantiate(EnemyPrefab);
             monster = Util.TryAddComponent<Monster>(goMonster);
             monster.Spawn();
+            goMonster.layer = Util.MonsterLayer;
+            monster.MoveCtrl.CC2D.platformMask = 1 << Util.MonsterLayer | 1 << Util.PlayerLayer;
             goMonster.name = MonsterIndex.ToString();
             goMonster.transform.SetParent(spawnPoint);
             goMonster.transform.localPosition = Vector3.zero;

@@ -26,4 +26,20 @@ public static class Util {
            return go.AddComponent<T>();
         }
     }
+
+    public static int PlayerLayer
+    {
+        get
+        {
+            return LayerMask.NameToLayer("Player");
+        }
+    }
+
+    public static int MonsterLayer
+    {
+        get
+        {
+            return LayerMask.NameToLayer("Monster");
+        }
+    }
 }
