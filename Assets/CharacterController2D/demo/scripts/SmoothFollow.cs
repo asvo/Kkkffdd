@@ -16,11 +16,21 @@ public class SmoothFollow : MonoBehaviour
 	private Vector3 _smoothDampVelocity;
 	
 	
-	void Awake()
+	public void Init(Transform followTarget)
 	{
+        target = followTarget;
 		transform = gameObject.transform;
 		_playerController = target.GetComponent<CharacterController2D>();
 	}
+
+    void Awake()
+    {
+        if (target != null)
+        {
+            transform = gameObject.transform;
+            _playerController = target.GetComponent<CharacterController2D>();
+        }
+    }
 	
 	
 	void LateUpdate()
@@ -39,6 +49,9 @@ public class SmoothFollow : MonoBehaviour
 
 	void updateCameraPosition()
 	{
+        if (target == null)
+            return;
+
 		if( _playerController == null )
 		{
 			transform.position = Vector3.SmoothDamp( transform.position, target.position - cameraOffset, ref _smoothDampVelocity, smoothDampTime );

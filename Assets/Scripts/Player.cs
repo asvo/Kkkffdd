@@ -8,7 +8,9 @@ using System.Collections;
 
 
 public class Player : BaseEntity {
-    
+
+    public Animator mAnimator;
+
     public void InitPlayer()
     {
         Health = 1;
@@ -32,9 +34,16 @@ public class Player : BaseEntity {
         base.EndMove();
     }
 
+    public void FireSkill(int slot)
+    {
+        if (mAnimator != null)
+        {
+            mAnimator.SetTrigger("Attack");
+        }
+    }
+
     public bool TooNearToMonster(MoveDir moveDir)
     {
-        return false;
         foreach (Monster monster in MonsterManager.Instance().ActiveMonsters)
         {
             if (MonsterManager.Instance().DirToTarget(transform, monster.transform) == moveDir)

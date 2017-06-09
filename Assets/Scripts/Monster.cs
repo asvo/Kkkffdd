@@ -51,8 +51,8 @@ public class Monster : BaseEntity {
                 return;
             }
 
-
-            MoveDir moveDir = MonsterManager.Instance().DirToPlayer(this);            
+            MoveDir moveDir = MonsterManager.Instance().DirToPlayer(this);
+            Debug.LogError(moveDir);
 
             base.Move(moveDir);
         }

@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public GameObject player;
     SpawnManager spawnManager;
+    public Player MainPlayer;
     void Start()
     {
         LoadPlayer();
@@ -44,13 +45,13 @@ public class GameManager : MonoBehaviour
     {
         Object playerObj = Resources.Load("ModelPrefab/Player");
         player = GameObject.Instantiate(playerObj) as GameObject;
-        Player playerSc = Util.TryAddComponent<Player>(player);
-        playerSc.InitPlayer();
+        MainPlayer = Util.TryAddComponent<Player>(player);
+        MainPlayer.InitPlayer();
 
-        CameraCtr camc = CameraManager.Instance().MainCamera.GetComponent<CameraCtr>();
+        SmoothFollow camc = CameraManager.Instance().MainCamera.GetComponent<SmoothFollow>();
         if (null != camc)
         {
-            camc.character = player.transform;
+            camc.Init(player.transform);
         }
     }
 }

@@ -55,6 +55,12 @@ public class MoveAction : MonoBehaviour {
     {
         if (dir != mMovingDir)
         {
+            Debug.Log(dir);
+            if (GetComponentInChildren<Animator>() != null)
+            {
+                GetComponentInChildren<Animator>().SetBool("Move", true);
+            }
+
             mMovingDir = dir;
             float flag = mMovingDir == MoveDir.Right ? 1 : -1;
             mCurrentSpeed = 2f * flag; // init speed
@@ -64,6 +70,10 @@ public class MoveAction : MonoBehaviour {
 
     public void EndMove()
     {
+        if (GetComponentInChildren<Animator>() != null)
+        {
+            GetComponentInChildren<Animator>().SetBool("Move", false);
+        }
         mMovingDir = MoveDir.None;
         movement.x = 0;  
     }
@@ -72,9 +82,9 @@ public class MoveAction : MonoBehaviour {
     {
         if (mMovingDir == MoveDir.None)
             return;
-        float speed = Mathf.Lerp(2f, mTargetSpeed, 1.5f);
-        if (speed > mTargetSpeed)
-            speed = mTargetSpeed;
+        //float speed = Mathf.Lerp(2f, mTargetSpeed, 1.5f);
+        //if (speed > mTargetSpeed)
+        float speed = mTargetSpeed;
         movement.x = speed;
         // 4 - 让游戏物体移动
         if (null != mCC2D)
