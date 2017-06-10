@@ -218,10 +218,21 @@ public class EnemyAI : MonoBehaviour {
     public void Damage()
     {
         Debug.LogError("I am restats");
-        canChangeState = false;
-        canAttack = false;
-        attackSecond = 0;
-        enemyCurState = e_EnemyState.restats;
+        if (enemyCurState != e_EnemyState.restats)
+        {
+            enemyCurState = e_EnemyState.restats;
+            canChangeState = false;
+            canAttack = false;
+            attackSecond = 0;
+        }
+        else
+        {
+            monster.HitFly();
+            enemyCurState = e_EnemyState.confused;
+            canChangeState = true;
+            canAttack = true;
+            attackSecond = 0;
+        }
     }
 }
 

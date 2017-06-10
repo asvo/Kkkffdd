@@ -18,7 +18,7 @@ public class Monster : BaseEntity {
     /// 攻击频率
     /// </summary>
     public float AttckRate = 1;
-    Animator mAnimator = null;
+    public Animator mAnimator = null;
 
     public void Spawn()
     {
@@ -69,6 +69,14 @@ public class Monster : BaseEntity {
     public void Restats()
     {
 
+    }
+
+    public void HitFly()
+    {
+        if (mAnimator != null)
+        {
+            mAnimator.SetBool("Hit", true);
+        }
     }
 }
 
