@@ -18,17 +18,25 @@ public class Monster : BaseEntity {
     /// 攻击频率
     /// </summary>
     public float AttckRate = 1;
+    Animator mAnimator = null;
+
     public void Spawn()
     {
         Health = 3;
         isDead = false;
         enemyAi = Util.TryAddComponent<EnemyAI>(gameObject);
         enemyAi.InitEnemyAI();
+
+        mAnimator = GetComponentInChildren<Animator>();
     }
 
     public void Attack()
     {
         Debug.LogError(gameObject.name + " is Attack!");
+        if (mAnimator != null)
+        {
+            mAnimator.SetBool("Attack", true);
+        }
     }
 
     public void Damage()
