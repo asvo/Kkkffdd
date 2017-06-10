@@ -13,6 +13,14 @@ public class Player : BaseEntity {
 
     private List<SkillData> mSkillList;
 
+#region cfg-data
+    public float NormalAttackCd = 1.5f;
+    public float NormalAttackRange = 2.5f;
+    public float NormalAttackDamgePoint = 0.3f;
+    public int NormalAttackDamge = 1;
+
+#endregion cfg-data
+
     public void InitPlayer()
     {
         Health = 1;
@@ -37,6 +45,7 @@ public class Player : BaseEntity {
 
     public override void Move(MoveDir moveDir)
     {
+        CancelNormalAttack();
         if (TooNearToMonster(moveDir))
             EndMove();
         else
@@ -47,11 +56,32 @@ public class Player : BaseEntity {
     {
         base.EndMove();
     }
+    
+    private bool mIsNormalAttackInCd = false;
 
     public void FireSkill(int slot)
     {
+        //能不能放技能(cd检查)
+        if (mIsNormalAttackInCd)
+            return;
+        mIsNormalAttackInCd = true;
+        StartCoroutine(ResetNormalAttackCd());
+
  //       SkillCaster.Instance().CastSkill(mSkillList[slot], this);
         StartCoroutine(NormalAttackPre());
+    }
+
+    private void CancelNormalAttack()
+    {
+        mAnimator.ResetTrigger("Attack");
+        mAnimator.Play("八神Idle");
+        StopCoroutine(NormalAttackPre());
+    }
+
+    private IEnumerator ResetNormalAttackCd()
+    {
+        yield return new WaitForSeconds(NormalAttackCd);
+        mIsNormalAttackInCd = false;
     }
 
     private IEnumerator NormalAttackPre()
@@ -60,16 +90,18 @@ public class Player : BaseEntity {
         {
             mAnimator.SetTrigger("Attack");
         }
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(NormalAttackDamgePoint);
         CastNormalAttack();
     }
 
     private void CastNormalAttack()
     {
-        BaseEntity target = Util.FindNereastTargetMonsterByDist(this, 50f);
+        // cur-weight = 1.14f;
+//        float normalAtackDist = 1.14f * 0.5f + 1.14f * 0.5f + 1.14f;
+        BaseEntity target = Util.FindNereastTargetMonsterByDist(this, NormalAttackRange);
         if (null != target)
         {
-            DamagerHandler.Instance().CalculateDamage(this, target, 1);
+            DamagerHandler.Instance().CalculateDamage(this, target, NormalAttackDamge);
         }
     }
     

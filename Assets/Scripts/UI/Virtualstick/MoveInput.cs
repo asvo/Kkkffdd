@@ -39,6 +39,7 @@ public class MoveInput : MonoBehaviour
 
     public void OnClickEndMove()
     {
+        Debug.LogError("end move");
         if (GetPlayer != null)
             GetPlayer.EndMove();
     }
@@ -49,37 +50,60 @@ public class MoveInput : MonoBehaviour
     int moveVal = 0;
     void Update()
     {
+#region move-keyboard
         if (Input.GetKeyDown(KeyCode.A))
         {
-            --moveVal;
+            MinusMove();
         }
         if (Input.GetKeyUp(KeyCode.A))
         {
-            ++moveVal;
+            AddMove();
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            ++moveVal;
+            AddMove();
         }
         if (Input.GetKeyUp(KeyCode.D))
         {
-            --moveVal;
+            MinusMove();
         }
-        if (mLastMoveVal == moveVal)
-            return;
-        mLastMoveVal = moveVal;
-        if (moveVal < 0)
+        if (mLastMoveVal != moveVal)
         {
-            OnClickMove(MoveDir.Left);
+            mLastMoveVal = moveVal;
+            if (moveVal < 0)
+            {
+                OnClickMove(MoveDir.Left);
+            }
+            else if (moveVal > 0)
+            {
+                OnClickMove(MoveDir.Right);
+            }
+            else
+            {
+                OnClickEndMove();
+            }
         }
-        else if (moveVal > 0)
+#endregion move-keyboard
+
+        if (Input.GetKey(KeyCode.J))
         {
-            OnClickMove(MoveDir.Right);
+            if (GetPlayer != null)
+                GetPlayer.FireSkill(0);
         }
-        else
-        {
-            OnClickEndMove();
-        }
+    }
+
+    private void AddMove()
+    {
+        ++moveVal;
+        if (moveVal > 1)
+            moveVal = 1;
+    }
+
+    private void MinusMove()
+    {
+        --moveVal;
+        if (moveVal < -1)
+            moveVal = -1;
     }
 
     #endregion Keyboard-Move

@@ -55,7 +55,7 @@ public class MoveAction : MonoBehaviour {
     {
         if (dir != mMovingDir)
         {
-  //          Debug.Log(dir);
+            //Debug.Log("set moving dir = " + dir);
             if (GetComponentInChildren<Animator>() != null)
             {
                 GetComponentInChildren<Animator>().SetBool("Move", true);
