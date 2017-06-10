@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 /*
  *  功能需求 ： 
  *  编写者     ： 林鸿伟
  *  version  ：1.0
  */
 
-
 public class Player : BaseEntity {
 
     public Animator mAnimator;
+
+    private List<SkillData> mSkillList;
 
     public void InitPlayer()
     {
@@ -19,6 +21,18 @@ public class Player : BaseEntity {
         gameObject.transform.localScale = Vector3.one;
         gameObject.layer = Util.PlayerLayer;
         MoveCtrl.CC2D.platformMask = 1 << Util.MonsterLayer;
+
+        mSkillList = new List<SkillData>();
+        SkillData sk = new SkillData
+        {
+            SkillId = 1001,
+            SlotId = 0,
+            DamagePoint = 0.3f,
+            Damage = 3f,
+            AttackRange = 5f,
+            AnimationName = "Attack",
+            Priority = ActPriority.NormalAttack
+        };
     }
 
     public override void Move(MoveDir moveDir)
@@ -36,10 +50,11 @@ public class Player : BaseEntity {
 
     public void FireSkill(int slot)
     {
-        if (mAnimator != null)
-        {
-            mAnimator.SetTrigger("Attack");
-        }
+        SkillCaster.Instance().CastSkill(mSkillList[slot], this);
+        //if (mAnimator != null)
+        //{
+        //    mAnimator.SetTrigger("Attack");
+        //}
     }
 
     public bool TooNearToMonster(MoveDir moveDir)
