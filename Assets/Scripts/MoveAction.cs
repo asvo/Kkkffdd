@@ -38,24 +38,24 @@ public class MoveAction : MonoBehaviour {
 
     private void OnCC2DCollider(RaycastHit2D hit)
     {
-        Debug.Log("OnCC2DCollider " + hit.transform.name);
+  //      Debug.Log("OnCC2DCollider " + hit.transform.name);
     }
 
     private void OnCC2DTriggerEnter(Collider2D collider)
     {
-        Debug.Log("OnCC2DTriggerEnter " + collider.name);
+  //      Debug.Log("OnCC2DTriggerEnter " + collider.name);
     }
 
     private void OnCC2DTriggerExit(Collider2D collider)
     {
-        Debug.Log("OnCC2DTriggerExit " + collider.name);
+ //       Debug.Log("OnCC2DTriggerExit " + collider.name);
     }
 
     public void Move(MoveDir dir, float moveSpeed)
     {
         if (dir != mMovingDir)
         {
-            Debug.Log(dir);
+  //          Debug.Log(dir);
             if (GetComponentInChildren<Animator>() != null)
             {
                 GetComponentInChildren<Animator>().SetBool("Move", true);
@@ -89,6 +89,19 @@ public class MoveAction : MonoBehaviour {
         // 4 - 让游戏物体移动
         if (null != mCC2D)
             mCC2D.move(movement * Time.fixedDeltaTime);
+    }
+
+    public MoveDir GetCurrentFaceDir()
+    {
+        MoveDir moveDir = MoveDir.Right;    //right for default
+        if (null != mCC2D)
+        {
+            if (mCC2D.collisionState.right)
+                moveDir = MoveDir.Right;
+            else if (mCC2D.collisionState.left)
+                moveDir = MoveDir.Left;
+        }
+        return moveDir;
     }
 }
 

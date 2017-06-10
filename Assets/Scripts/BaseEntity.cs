@@ -15,6 +15,17 @@ public class BaseEntity : MonoBehaviour {
         MoveCtrl = Util.TryAddComponent<MoveAction>(gameObject);
     }
 
+    public virtual void OnDamaged(int damage)
+    {
+        //暂时不考虑伤害为负的情况, asvo
+        Health -= damage;
+        if (Health <= 0)
+        {
+            Health = 0;
+            Die();
+        }
+    }
+
     public virtual void Move(MoveDir moveDir)
     {
         if (MoveCtrl != null)
@@ -40,5 +51,10 @@ public class BaseEntity : MonoBehaviour {
         {
             MoveCtrl.EndMove();
         }
+    }
+
+    public virtual void Die()
+    {
+
     }
 }

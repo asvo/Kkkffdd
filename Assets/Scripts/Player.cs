@@ -22,17 +22,17 @@ public class Player : BaseEntity {
         gameObject.layer = Util.PlayerLayer;
         MoveCtrl.CC2D.platformMask = 1 << Util.MonsterLayer;
 
-        mSkillList = new List<SkillData>();
-        SkillData sk = new SkillData
-        {
-            SkillId = 1001,
-            SlotId = 0,
-            DamagePoint = 0.3f,
-            Damage = 3f,
-            AttackRange = 5f,
-            AnimationName = "Attack",
-            Priority = ActPriority.NormalAttack
-        };
+        //mSkillList = new List<SkillData>();
+        //SkillData sk = new SkillData
+        //{
+        //    SkillId = 1001,
+        //    SlotId = 0,
+        //    DamagePoint = 0.3f,
+        //    Damage = 3f,
+        //    AttackRange = 5f,
+        //    AnimationName = "Attack",
+        //    Priority = ActPriority.NormalAttack
+        //};
     }
 
     public override void Move(MoveDir moveDir)
@@ -50,14 +50,43 @@ public class Player : BaseEntity {
 
     public void FireSkill(int slot)
     {
-        SkillCaster.Instance().CastSkill(mSkillList[slot], this);
-        //if (mAnimator != null)
-        //{
-        //    mAnimator.SetTrigger("Attack");
-        //}
+ //       SkillCaster.Instance().CastSkill(mSkillList[slot], this);
+        StartCoroutine(NormalAttackPre());
     }
 
-    public bool TooNearToMonster(MoveDir moveDir)
+    private IEnumerator NormalAttackPre()
+    {        
+        if (mAnimator != null)
+        {
+            mAnimator.SetTrigger("Attack");
+        }
+        yield return new WaitForSeconds(0.3f);
+        CastNormalAttack();
+    }
+
+    private void CastNormalAttack()
+    {
+        BaseEntity target = Util.FindNereastTargetMonsterByDist(this, 50f);
+        if (null != target)
+        {
+            DamagerHandler.Instance().CalculateDamage(this, target, 1);
+        }
+    }
+    
+    public override void OnDamaged(int damage)
+    {
+        base.OnDamaged(damage);
+    }
+
+    public override void Die()
+    {
+        //play die anim.
+
+        //game over
+        Debug.Log("Player Died, Game Over~");
+    }
+
+    private bool TooNearToMonster(MoveDir moveDir)
     {
         foreach (Monster monster in MonsterManager.Instance().ActiveMonsters)
         {

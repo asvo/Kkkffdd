@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public static class Util {
 
@@ -41,5 +42,36 @@ public static class Util {
         {
             return LayerMask.NameToLayer("Monster");
         }
+    }
+
+    /// <summary>
+    /// 主角寻找目标距离的怪物
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="dist"></param>
+    /// <returns></returns>
+    public static BaseEntity FindNereastTargetMonsterByDist(BaseEntity entity, float dist)
+    {
+        MoveDir faceDir = entity.MoveCtrl.GetCurrentFaceDir();
+        List<Monster> monsters = MonsterManager.Instance().ActiveMonsters;
+        float curDelta = float.MaxValue;
+        BaseEntity findedMonster = null;
+        for (int i = 0; i < monsters.Count; ++i)
+        {
+            float deltaPos = monsters[i].transform.position.x - entity.transform.position.x;
+            if (faceDir == MoveDir.Right && deltaPos < 0)
+                continue;
+            if (faceDir == MoveDir.Left && deltaPos > 0)
+                continue;
+            float disttace = Mathf.Abs(deltaPos);
+            if (disttace > dist)
+                continue;
+            if (curDelta > disttace)
+            {
+                curDelta = disttace;
+                findedMonster = monsters[i];
+            }
+        }
+        return findedMonster;
     }
 }

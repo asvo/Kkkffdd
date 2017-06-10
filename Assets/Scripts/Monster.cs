@@ -37,6 +37,15 @@ public class Monster : BaseEntity {
         {
             mAnimator.SetBool("Attack", true);
         }
+        //范围判断? if need
+
+        DamagerHandler.Instance().CalculateDamage(this, GameManager.
+            Instance().MainPlayer, 10);
+    }
+
+    public override void OnDamaged(int damage)
+    {
+        Damage();
     }
 
     public void Damage()
@@ -60,7 +69,7 @@ public class Monster : BaseEntity {
             }
 
             MoveDir moveDir = MonsterManager.Instance().DirToPlayer(this);
-            Debug.LogError(moveDir);
+      //      Debug.LogError(moveDir);
 
             base.Move(moveDir);
         }

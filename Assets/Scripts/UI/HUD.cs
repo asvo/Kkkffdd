@@ -13,7 +13,6 @@ public class HUD : MonoBehaviour {
 
     private void OnClickNormalAttack()
     {
-        Debug.Log("Click Attack");
         GameManager.Instance().MainPlayer.FireSkill(0);
     }
 }
