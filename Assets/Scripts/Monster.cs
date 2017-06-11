@@ -29,8 +29,6 @@ public class Monster : BaseEntity {
         enemyAi.InitEnemyAI();
 
         mAnimator = GetComponentInChildren<Animator>();
-        if (!gameObject.activeSelf)
-            gameObject.SetActive(true);
     }
 
     public void Attack()
@@ -72,7 +70,7 @@ public class Monster : BaseEntity {
             }
 
             MoveDir moveDir = MonsterManager.Instance().DirToPlayer(this);
-      //      Debug.LogError(moveDir);
+            Debug.LogError(moveDir);
 
             base.Move(moveDir);
         }

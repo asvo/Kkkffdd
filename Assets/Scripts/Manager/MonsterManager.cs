@@ -27,6 +27,8 @@ public class MonsterManager : Single<MonsterManager> {
         {
             monster = dic_CacheMonsterList[MonsterIndex];
             monster.Spawn();
+            monster.transform.SetParent(spawnPoint);
+            monster.gameObject.SetActive(true);
             dic_CacheMonsterList.Remove(MonsterIndex);
         }
         else
