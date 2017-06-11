@@ -36,6 +36,9 @@ public class Player : BaseEntity {
     {
         Health = 1;
 
+        isDead = false;
+        if (!gameObject.activeSelf)
+            gameObject.SetActive(true);
         gameObject.transform.position = Vector3.zero;
         gameObject.transform.localScale = Vector3.one;
         gameObject.layer = Util.PlayerLayer;
@@ -82,14 +85,14 @@ public class Player : BaseEntity {
         StartCoroutine(ResetNormalAttackCd());
 
  //       SkillCaster.Instance().CastSkill(mSkillList[slot], this);
-        StartCoroutine(NormalAttackPre());
+        StartCoroutine("NormalAttackPre");
     }
 
     private void CancelNormalAttack()
     {
         mAnimator.ResetTrigger("Attack");
         mAnimator.Play("八神Idle");
-        StopCoroutine(NormalAttackPre());
+        StopCoroutine("NormalAttackPre");
     }
 
     private IEnumerator ResetNormalAttackCd()
@@ -102,7 +105,8 @@ public class Player : BaseEntity {
     {        
         if (mAnimator != null)
         {
-            mAnimator.SetTrigger("Attack");
+            //mAnimator.SetTrigger("Attack");
+            mAnimator.Play("LegAttack");
         }
         yield return new WaitForSeconds(NormalAttackDamgePoint);
         CastNormalAttack();
@@ -110,6 +114,7 @@ public class Player : BaseEntity {
 
     private void CastNormalAttack()
     {
+   //     Debug.LogError("cast noarml attack");
         // cur-weight = 1.14f;
 //        float normalAtackDist = 1.14f * 0.5f + 1.14f * 0.5f + 1.14f;
         BaseEntity target = Util.FindNereastTargetMonsterByDist(this, NormalAttackRange);
@@ -126,13 +131,26 @@ public class Player : BaseEntity {
 
     public override void Die()
     {
+        base.Die();
+        Status = PlayerStatus.Die;
         //play die anim.
         mAnimator.Play("八神_Hit");
 
+        StartCoroutine(WaitForDieAnimOver());
+
         //game over
-        Debug.Log("Player Died, Game Over~");
         GameManager.Instance().PauseGame();
         GameOverUI.Instance.ShowUi();
+    }
+
+    IEnumerator WaitForDieAnimOver()
+    {
+        yield return new WaitForSeconds(1.0f);
+        if (Status == PlayerStatus.Die)
+        {
+            this.gameObject.SetActive(false);
+            StopAllCoroutines();
+        }
     }
 
     private bool TooNearToMonster(MoveDir moveDir)

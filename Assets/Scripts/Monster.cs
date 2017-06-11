@@ -34,6 +34,8 @@ public class Monster : BaseEntity {
 
     public void Attack()
     {
+        if (GameManager.Instance().MainPlayer.isDead)
+            return;
         Debug.LogError(gameObject.name + " is Attack!" +Time.realtimeSinceStartup);
         if (mAnimator != null)
         {
@@ -85,7 +87,7 @@ public class Monster : BaseEntity {
         //    }
 
             MoveDir moveDir = MonsterManager.Instance().DirToPlayer(this);
-            Debug.LogError(moveDir);
+   //         Debug.LogError(moveDir);
 
             base.Move(moveDir);
         //}
