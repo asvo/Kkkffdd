@@ -48,16 +48,15 @@ public class Monster : BaseEntity {
     public override void OnDamaged(int damage)
     {
         base.OnDamaged(damage);
+        Restats();
         Damage();
     }
 
     public void Damage()
     {
-        if (enemyAi == null || isDead == true)
+        if (enemyAi == null)
             return;
-
-        enemyAi.Damage();
-        Restats();
+        enemyAi.Damage();       
     }
 
     public override void Die()
@@ -69,7 +68,7 @@ public class Monster : BaseEntity {
 
     IEnumerator TimeForFly()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2.3f);
         MonsterManager.Instance().MonsterDie(this);
     }
 
@@ -94,14 +93,24 @@ public class Monster : BaseEntity {
 
     public void Restats()
     {
+        if (mAnimator != null)
+        {
+            mAnimator.Play("八神_HitBack");
+        }
+    }
 
+    public void EndRestats()
+    {
+        if (mAnimator != null)
+        {
+            mAnimator.Play("八神Idle");
+        }
     }
 
     public void HitFly()
     {
         if (mAnimator != null)
         {
-            StartCoroutine(ResetApplyRootMotion());
             mAnimator.SetTrigger("Hit");
         }
     }

@@ -132,6 +132,8 @@ public class EnemyAI : MonoBehaviour {
                 attackSecond = monster.AttckRate;
                 enemyCurState = e_EnemyState.offensive;
             }
+
+            monster.EndRestats();
         }
     }
 
@@ -224,11 +226,11 @@ public class EnemyAI : MonoBehaviour {
         {
             Debug.LogError("I am restats" + Time.realtimeSinceStartup);
 
-            monster.HitFly();
             enemyCurState = e_EnemyState.restats;
             restatsTime = monster.RestatsTime;
             canChangeState = false;
             canAttack = false;
+            monster.EndMove();
         }
     }
 }
