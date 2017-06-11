@@ -28,6 +28,8 @@ public class MonsterManager : Single<MonsterManager> {
             monster = dic_CacheMonsterList[MonsterIndex];
             monster.Spawn();
             monster.transform.SetParent(spawnPoint);
+            monster.transform.localPosition = Vector3.zero;
+            monster.transform.localEulerAngles = Vector3.zero;
             monster.gameObject.SetActive(true);
             dic_CacheMonsterList.Remove(MonsterIndex);
         }
