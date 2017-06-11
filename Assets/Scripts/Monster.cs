@@ -68,7 +68,7 @@ public class Monster : BaseEntity {
 
     IEnumerator TimeForFly()
     {
-        yield return new WaitForSeconds(2.3f);
+        yield return new WaitForSeconds(4f);
         MonsterManager.Instance().MonsterDie(this);
     }
 
@@ -111,8 +111,7 @@ public class Monster : BaseEntity {
     {
         if (mAnimator != null)
         {
-            mAnimator.Play("八神Idle");
-            mAnimator.SetTrigger("Hit");
+            mAnimator.Play("八神_Hit");
         }
     }
 

@@ -221,7 +221,9 @@ public class EnemyAI : MonoBehaviour {
     /// </summary>
     public void Damage()
     {
-        
+        if (monster.isDead)
+            return;
+
         if (enemyCurState != e_EnemyState.restats)
         {
             Debug.LogError("I am restats" + Time.realtimeSinceStartup);
