@@ -22,12 +22,15 @@ public class Monster : BaseEntity {
 
     public void Spawn()
     {
+
         Health = 3;
         isDead = false;
         enemyAi = Util.TryAddComponent<EnemyAI>(gameObject);
         enemyAi.InitEnemyAI();
 
         mAnimator = GetComponentInChildren<Animator>();
+        if (!gameObject.activeSelf)
+            gameObject.SetActive(true);
     }
 
     public void Attack()
