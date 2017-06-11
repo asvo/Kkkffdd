@@ -60,7 +60,7 @@ public class EnemyAI : MonoBehaviour {
     /// <summary>
     /// 硬直时间
     /// </summary>
-    private float restatsTime = 0.3f;
+    public float restatsTime = 0.3f;
 
     // Use this for initialization
     public void InitEnemyAI () {
@@ -217,9 +217,11 @@ public class EnemyAI : MonoBehaviour {
     /// </summary>
     public void Damage()
     {
-        Debug.LogError("I am restats");
+        
         if (enemyCurState != e_EnemyState.restats)
         {
+            Debug.LogError("I am restats");
+
             enemyCurState = e_EnemyState.restats;
             canChangeState = false;
             canAttack = false;
@@ -227,10 +229,12 @@ public class EnemyAI : MonoBehaviour {
         }
         else
         {
+            Debug.LogError("I am HitFly");
+
             monster.HitFly();
             enemyCurState = e_EnemyState.confused;
-            canChangeState = true;
-            canAttack = true;
+            canChangeState = false;
+            canAttack = false;
             attackSecond = 0;
         }
     }
