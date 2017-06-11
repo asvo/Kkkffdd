@@ -222,17 +222,8 @@ public class EnemyAI : MonoBehaviour {
         {
             Debug.LogError("I am restats");
 
-            enemyCurState = e_EnemyState.restats;
-            canChangeState = false;
-            canAttack = false;
-            attackSecond = 0;
-        }
-        else
-        {
-            Debug.LogError("I am HitFly");
-
             monster.HitFly();
-            enemyCurState = e_EnemyState.confused;
+            enemyCurState = e_EnemyState.restats;
             canChangeState = false;
             canAttack = false;
             attackSecond = 0;

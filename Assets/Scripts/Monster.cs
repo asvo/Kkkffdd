@@ -46,15 +46,23 @@ public class Monster : BaseEntity {
 
     public override void OnDamaged(int damage)
     {
+        base.OnDamaged(damage);
         Damage();
     }
 
     public void Damage()
-    {               
-        if (enemyAi != null)
-            enemyAi.Damage();
+    {
+        if (enemyAi == null || isDead == true)
+            return;
 
+        enemyAi.Damage();
         Restats();
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        MonsterManager.Instance().MonsterDie(this);
     }
 
     public void MoveToPlayer()
@@ -85,7 +93,7 @@ public class Monster : BaseEntity {
     {
         if (mAnimator != null)
         {
-            mAnimator.SetBool("Hit", true);
+            mAnimator.SetTrigger("Hit");
         }
     }
 }

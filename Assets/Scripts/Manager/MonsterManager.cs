@@ -92,6 +92,7 @@ public class MonsterManager : Single<MonsterManager> {
     /// <param name="monster"></param>
     public void MonsterDie(Monster monster)
     {
+        monster.gameObject.SetActive(false);
         ActiveMonsters.Remove(monster);
         int monsterIndex = 0;
         if (int.TryParse(monster.name, out monsterIndex))
