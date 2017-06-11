@@ -60,7 +60,7 @@ public class EnemyAI : MonoBehaviour {
     /// <summary>
     /// 硬直时间
     /// </summary>
-    public float restatsTime = 0.3f;
+    private float restatsTime = 0.3f;
 
     // Use this for initialization
     public void InitEnemyAI () {
@@ -69,7 +69,8 @@ public class EnemyAI : MonoBehaviour {
         confusedTime = MaxConfusedTime;
         enemyCurState = e_EnemyState.confused;
         canChangeState = true;
-
+        canAttack = false;
+        attackSecond = monster.AttckRate;
     }
 	
 	// Update is called once per frame
@@ -77,7 +78,6 @@ public class EnemyAI : MonoBehaviour {
 
         if (monster.isDead)
         {
-            this.enabled = false;
             return;
         }
 
@@ -116,6 +116,7 @@ public class EnemyAI : MonoBehaviour {
             else
             {
                 confusedTime = 0;
+                attackSecond = monster.AttckRate;
                 enemyCurState = e_EnemyState.offensive;
             }
         }
@@ -128,6 +129,7 @@ public class EnemyAI : MonoBehaviour {
             }
             else
             {
+                attackSecond = monster.AttckRate;
                 enemyCurState = e_EnemyState.offensive;
             }
         }
@@ -220,13 +222,13 @@ public class EnemyAI : MonoBehaviour {
         
         if (enemyCurState != e_EnemyState.restats)
         {
-            Debug.LogError("I am restats");
+            Debug.LogError("I am restats" + Time.realtimeSinceStartup);
 
             monster.HitFly();
             enemyCurState = e_EnemyState.restats;
+            restatsTime = monster.RestatsTime;
             canChangeState = false;
             canAttack = false;
-            attackSecond = 0;
         }
     }
 }

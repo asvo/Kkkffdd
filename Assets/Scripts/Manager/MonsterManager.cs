@@ -115,20 +115,20 @@ public class MonsterManager : Single<MonsterManager> {
     /// <returns></returns>
     public bool CheckHaveEnemyInFront(Monster mMonster)
     {      
-        MoveDir front = DirToPlayer(mMonster);
-        foreach (Monster monster in ActiveMonsters)
-        {
-            if (monster == mMonster)
-                continue;
-            if (DirToTarget(mMonster.transform,monster.transform) == front)
-            {
-                if (Vector2.Distance(mMonster.transform.position, monster.transform.position) < GameManager.NearestDistance)
-                {
-                    //Debug.Log("Monster " + mMonster.name + " To near to monster " + monster.name);
-                    return true;
-                }
-            }
-        }
+        //MoveDir front = DirToPlayer(mMonster);
+        //foreach (Monster monster in ActiveMonsters)
+        //{
+        //    if (monster == mMonster)
+        //        continue;
+        //    if (DirToTarget(mMonster.transform,monster.transform) == front)
+        //    {
+        //        if (Vector2.Distance(mMonster.transform.position, monster.transform.position) < GameManager.NearestDistance)
+        //        {
+        //            //Debug.Log("Monster " + mMonster.name + " To near to monster " + monster.name);
+        //            return true;
+        //        }
+        //    }
+        //}
 
         return false;
     }
