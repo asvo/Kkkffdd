@@ -13,6 +13,17 @@ public class Player : BaseEntity {
 
     private List<SkillData> mSkillList;
 
+    public enum PlayerStatus
+    {
+        None = 0,
+        Idle,
+        Attack,
+        Hit,
+        CastSkill,
+        Die
+    }
+    public PlayerStatus Status;
+
 #region cfg-data
     public float NormalAttackCd = 1.5f;
     public float NormalAttackRange = 2.5f;
@@ -41,6 +52,9 @@ public class Player : BaseEntity {
         //    AnimationName = "Attack",
         //    Priority = ActPriority.NormalAttack
         //};
+
+        Status = PlayerStatus.Idle;
+        mAnimator.Play("八神Idle");
     }
 
     public override void Move(MoveDir moveDir)
@@ -113,9 +127,12 @@ public class Player : BaseEntity {
     public override void Die()
     {
         //play die anim.
+        mAnimator.Play("八神_Hit");
 
         //game over
         Debug.Log("Player Died, Game Over~");
+        GameManager.Instance().PauseGame();
+        GameOverUI.Instance.ShowUi();
     }
 
     private bool TooNearToMonster(MoveDir moveDir)

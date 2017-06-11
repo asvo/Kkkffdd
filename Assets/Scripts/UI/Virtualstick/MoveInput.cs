@@ -33,13 +33,16 @@ public class MoveInput : MonoBehaviour
 
     public void OnClickMove(MoveDir dir)
     {
+        if (GameManager.Instance().IsGameOver)
+            return;
         if (GetPlayer != null)
             GetPlayer.Move(dir);
     }
 
     public void OnClickEndMove()
     {
-        Debug.LogError("end move");
+        if (GameManager.Instance().IsGameOver)
+            return;
         if (GetPlayer != null)
             GetPlayer.EndMove();
     }
@@ -50,6 +53,9 @@ public class MoveInput : MonoBehaviour
     int moveVal = 0;
     void Update()
     {
+        if (GameManager.Instance().IsGameOver)
+            return;
+
 #region move-keyboard
         if (Input.GetKeyDown(KeyCode.A))
         {
