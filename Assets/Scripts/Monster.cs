@@ -111,6 +111,7 @@ public class Monster : BaseEntity {
     {
         if (mAnimator != null)
         {
+            mAnimator.Play("八神Idle");
             mAnimator.SetTrigger("Hit");
         }
     }
