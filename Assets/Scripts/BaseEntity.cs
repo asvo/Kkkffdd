@@ -28,7 +28,7 @@ public class BaseEntity : MonoBehaviour {
 
     public virtual void Move(MoveDir moveDir)
     {
-        Debug.LogError("moveDir"+ moveDir);
+   //     Debug.LogError("moveDir"+ moveDir);
         if (MoveCtrl != null)
         {
             if (GetComponentInChildren<SpriteRenderer>() != null)
@@ -48,7 +48,7 @@ public class BaseEntity : MonoBehaviour {
 
     public virtual void EndMove()
     {
-        Debug.LogError("EndMove");
+  //      Debug.LogError("EndMove");
         if (MoveCtrl != null)
         {
             MoveCtrl.EndMove();
