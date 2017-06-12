@@ -221,6 +221,7 @@ public class EnemyAI : MonoBehaviour {
     /// </summary>
     public void Damage()
     {
+        monster.EndMove();
         if (monster.isDead)
             return;
 
@@ -231,8 +232,7 @@ public class EnemyAI : MonoBehaviour {
             enemyCurState = e_EnemyState.restats;
             restatsTime = monster.RestatsTime;
             canChangeState = false;
-            canAttack = false;
-            monster.EndMove();
+            canAttack = false;            
         }
     }
 }
