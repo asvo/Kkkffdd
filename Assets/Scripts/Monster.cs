@@ -36,7 +36,7 @@ public class Monster : BaseEntity {
     {
         if (GameManager.Instance().MainPlayer.isDead)
             return;
-        Debug.LogError(gameObject.name + " is Attack!" +Time.realtimeSinceStartup);
+        //Debug.LogError(gameObject.name + " is Attack!" +Time.realtimeSinceStartup);
         if (mAnimator != null)
         {
             mAnimator.SetBool("Attack", true);

@@ -23,7 +23,7 @@ public class SpawnManager : MonoBehaviour {
 
     void Start()
     {       
-        Debug.LogError("I am monster Spawner");
+        //Debug.LogError("I am monster Spawner");
         bLooping = false;
     }
 
