@@ -112,8 +112,8 @@ public static class Util
         string savePath = Application.persistentDataPath + "/" + path + ".json";
         string jsonTxt = File.ReadAllText(savePath);
         //Debug.LogError(savePath);
-        //T t = JsonFx.Json.JsonReader.Deserialize<T>(jsonTxt);
-        T t = JsonUtility.FromJson<T>(jsonTxt);
+        T t = JsonFx.Json.JsonReader.Deserialize<T>(jsonTxt);
+        //T t = JsonUtility.FromJson<T>(jsonTxt);
         return t;
     }
 

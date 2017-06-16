@@ -6,7 +6,7 @@ using System.Text;
 
 public class JsDataBaseValue
 {
-    public Dictionary<e_BaseValue, float> dic_BaseValues = new Dictionary<e_BaseValue, float>();
+    public Dictionary<string, float> dic_BaseValues = new Dictionary<string, float>();
 }
 
 public class BaseValUnit
@@ -77,26 +77,26 @@ public class ValueManager : Single<ValueManager>
     private void SetDefaultValues(bool isPlayer)
     {
         JsDataBaseValue defaultValue = new JsDataBaseValue();
-        Dictionary<e_BaseValue, float> dic_BaseValues = defaultValue.dic_BaseValues;
+        Dictionary<string, float> dic_BaseValues = defaultValue.dic_BaseValues;
 
         if (isPlayer)
         {
-            dic_BaseValues.Add(e_BaseValue.MoveSpeed, 3);
-            dic_BaseValues.Add(e_BaseValue.NormalAttackCd, 0.3f);
-            dic_BaseValues.Add(e_BaseValue.NormalAttackDamge, 1);
-            dic_BaseValues.Add(e_BaseValue.NormalAttackDamgePoint, 0.3f);
-            dic_BaseValues.Add(e_BaseValue.NormalAttackRange, 1);
+            dic_BaseValues.Add(e_BaseValue.MoveSpeed.ToString(), 3);
+            dic_BaseValues.Add(e_BaseValue.NormalAttackCd.ToString(), 0.3f);
+            dic_BaseValues.Add(e_BaseValue.NormalAttackDamge.ToString(), 1);
+            dic_BaseValues.Add(e_BaseValue.NormalAttackDamgePoint.ToString(), 0.3f);
+            dic_BaseValues.Add(e_BaseValue.NormalAttackRange.ToString(), 1);
 
             PlayerValueSettings = defaultValue;
         }
         else
         {
-            dic_BaseValues.Add(e_BaseValue.MoveSpeed, 4);
-            dic_BaseValues.Add(e_BaseValue.NormalAttackCd, 0.3f);
-            dic_BaseValues.Add(e_BaseValue.NormalAttackDamge, 1);
-            dic_BaseValues.Add(e_BaseValue.NormalAttackDamgePoint, 0.3f);
-            dic_BaseValues.Add(e_BaseValue.NormalAttackRange, 0.2f);
-            dic_BaseValues.Add(e_BaseValue.RestatsTime, 1);
+            dic_BaseValues.Add(e_BaseValue.MoveSpeed.ToString(), 4);
+            dic_BaseValues.Add(e_BaseValue.NormalAttackCd.ToString(), 0.3f);
+            dic_BaseValues.Add(e_BaseValue.NormalAttackDamge.ToString(), 1);
+            dic_BaseValues.Add(e_BaseValue.NormalAttackDamgePoint.ToString(), 0.3f);
+            dic_BaseValues.Add(e_BaseValue.NormalAttackRange.ToString(), 0.2f);
+            dic_BaseValues.Add(e_BaseValue.RestatsTime.ToString(), 1);
 
             MonsterValueSettings = defaultValue;
         }
