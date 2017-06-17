@@ -25,6 +25,7 @@ public class MoveAction : MonoBehaviour {
     // 存储运动
     private Vector2 movement = Vector2.zero;
 
+    private MoveDir mFaceDir;
     private MoveDir mMovingDir;
     private float mCurrentSpeed;
     private float mTargetSpeed;
@@ -62,6 +63,7 @@ public class MoveAction : MonoBehaviour {
             }
 
             mMovingDir = dir;
+            mFaceDir = dir;
             flag = mMovingDir == MoveDir.Right ? 1 : -1;
             mCurrentSpeed = 2f * flag; // init speed
         }
@@ -93,15 +95,7 @@ public class MoveAction : MonoBehaviour {
 
     public MoveDir GetCurrentFaceDir()
     {
-        MoveDir moveDir = MoveDir.Right;    //right for default
-        if (null != mCC2D)
-        {
-            if (mCC2D.collisionState.right)
-                moveDir = MoveDir.Right;
-            else if (mCC2D.collisionState.left)
-                moveDir = MoveDir.Left;
-        }
-        return moveDir;
+        return mFaceDir;
     }
 }
 

@@ -67,8 +67,9 @@ public class Player : BaseEntity {
     }
 
     public override void Move(MoveDir moveDir)
-    {
-        CancelNormalAttack();
+    {        
+        if (CheckWillCancelNormalAttack(moveDir))
+            CancelNormalAttack();
         if (TooNearToMonster(moveDir))
             EndMove();
         else
@@ -92,6 +93,13 @@ public class Player : BaseEntity {
 
  //       SkillCaster.Instance().CastSkill(mSkillList[slot], this);
         StartCoroutine("NormalAttackPre");
+    }
+
+    private bool CheckWillCancelNormalAttack(MoveDir moveDir)
+    {
+        MoveDir dir = MoveCtrl.GetCurrentFaceDir();
+     //   Debug.LogFormat("CurrentDir={0}, MovingDir={1}", dir, moveDir);
+        return moveDir != dir;
     }
 
     private void CancelNormalAttack()
