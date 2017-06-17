@@ -36,6 +36,17 @@ public class ValueManager : Single<ValueManager>
     public void Save(bool isPlayer)
     {
         SaveSettingValues(isPlayer);
+        if (isPlayer)
+        {
+            GameManager.Instance().MainPlayer.LoadSettingData();
+        }
+        else
+        {
+            foreach (Monster monster in MonsterManager.Instance().ActiveMonsters)
+            {
+                monster.LoadSettingData();
+            }
+        }
     }
 
     public void Load(bool isPlayer)

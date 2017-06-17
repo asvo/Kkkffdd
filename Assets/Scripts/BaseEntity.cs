@@ -3,6 +3,14 @@ using System.Collections;
 
 public class BaseEntity : MonoBehaviour {
 
+    #region cfg-data
+    public float NormalAttackCd = 1.5f;
+    public float NormalAttackRange = 2.5f;
+    public float NormalAttackDamgePoint = 0.3f;
+    public int NormalAttackDamge = 1;
+
+    #endregion cfg-data
+
     public float InitMoveSpeed = 2f;
     public float MaxMoveSpeed = 10f;
     public int Health = 3;

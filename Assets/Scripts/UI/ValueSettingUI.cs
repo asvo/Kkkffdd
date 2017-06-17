@@ -21,6 +21,10 @@ public class ValueSettingUI : MonoBehaviour {
 
     public void Save()
     {
+        if (settingInputs == null || settingInputs.Count == 0)
+        {
+            return;
+        }
         JsDataBaseValue jsData = null;
         if (bPlayerSetting)
         {
@@ -49,6 +53,7 @@ public class ValueSettingUI : MonoBehaviour {
 
         ValueManager.Instance().Save(bPlayerSetting);
         Grid.gameObject.SetActive(false);
+        settingInputs.Clear();
     }
 
     private void InitSettingInput(string[] keys)

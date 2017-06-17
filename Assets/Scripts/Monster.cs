@@ -10,20 +10,26 @@ using System.Collections;
 public class Monster : BaseEntity {
 
     public EnemyAI enemyAi = null;
-    /// <summary>
-    /// 攻击范围
-    /// </summary>
-    public float AttackRange = 0.1f;
-    /// <summary>
-    /// 攻击频率
-    /// </summary>
-    public float AttckRate = 1;
     public float RestatsTime = 0.3f;
     public Animator mAnimator = null;
 
+    public void LoadSettingData()
+    {
+        JsDataBaseValue jsdata = ValueManager.Instance().MonsterValueSettings;
+        if (jsdata != null)
+        {
+            NormalAttackCd = jsdata.dic_BaseValues[e_BaseValue.NormalAttackCd.ToString()];
+            NormalAttackRange = jsdata.dic_BaseValues[e_BaseValue.NormalAttackRange.ToString()];
+            NormalAttackDamgePoint = jsdata.dic_BaseValues[e_BaseValue.NormalAttackDamgePoint.ToString()];
+            NormalAttackDamge = (int)jsdata.dic_BaseValues[e_BaseValue.NormalAttackDamge.ToString()];
+            RestatsTime = jsdata.dic_BaseValues[e_BaseValue.RestatsTime.ToString()];
+            InitMoveSpeed = (int)jsdata.dic_BaseValues[e_BaseValue.MoveSpeed.ToString()];
+        }
+    }
+
     public void Spawn()
     {
-
+        LoadSettingData();
         Health = 3;
         isDead = false;
         enemyAi = Util.TryAddComponent<EnemyAI>(gameObject);

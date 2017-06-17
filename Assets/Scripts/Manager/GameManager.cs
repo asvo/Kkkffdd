@@ -37,10 +37,17 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         GameOverUI.Instance.HideUi();
+        LoadSettingData();
         LoadPlayer();
         spawnManager = FindObjectOfType<SpawnManager>();
         
         StartGame();
+    }
+
+    private void LoadSettingData()
+    {
+        ValueManager.Instance().Load(true);
+        ValueManager.Instance().Load(false);        
     }
 
     public Vector3 PlayerInitPos = Vector3.zero;

@@ -24,16 +24,22 @@ public class Player : BaseEntity {
     }
     public PlayerStatus Status;
 
-#region cfg-data
-    public float NormalAttackCd = 1.5f;
-    public float NormalAttackRange = 2.5f;
-    public float NormalAttackDamgePoint = 0.3f;
-    public int NormalAttackDamge = 1;
-
-#endregion cfg-data
+    public void LoadSettingData()
+    {
+        JsDataBaseValue jsdata = ValueManager.Instance().PlayerValueSettings;
+        if (jsdata != null)
+        {
+            NormalAttackCd = jsdata.dic_BaseValues[e_BaseValue.NormalAttackCd.ToString()];
+            NormalAttackRange = jsdata.dic_BaseValues[e_BaseValue.NormalAttackRange.ToString()];
+            NormalAttackDamgePoint = jsdata.dic_BaseValues[e_BaseValue.NormalAttackDamgePoint.ToString()];
+            NormalAttackDamge = (int)jsdata.dic_BaseValues[e_BaseValue.NormalAttackDamge.ToString()];
+            InitMoveSpeed = jsdata.dic_BaseValues[e_BaseValue.MoveSpeed.ToString()];
+        }
+    }
 
     public void InitPlayer()
     {
+        LoadSettingData();
         Health = 1;
 
         isDead = false;
@@ -159,7 +165,7 @@ public class Player : BaseEntity {
         {
             if (MonsterManager.Instance().DirToTarget(transform, monster.transform) == moveDir)
             {
-                if (Vector2.Distance(monster.transform.position, transform.position) <= GameManager.NearestDistance + monster.AttackRange)
+                if (Vector2.Distance(monster.transform.position, transform.position) <= GameManager.NearestDistance + monster.NormalAttackRange)
                 {
                     return true;
                 }

@@ -50,7 +50,7 @@ public class MoveAction : MonoBehaviour {
     {
  //       Debug.Log("OnCC2DTriggerExit " + collider.name);
     }
-
+    float flag = 0;
     public void Move(MoveDir dir, float moveSpeed)
     {
         if (dir != mMovingDir)
@@ -62,10 +62,10 @@ public class MoveAction : MonoBehaviour {
             }
 
             mMovingDir = dir;
-            float flag = mMovingDir == MoveDir.Right ? 1 : -1;
+            flag = mMovingDir == MoveDir.Right ? 1 : -1;
             mCurrentSpeed = 2f * flag; // init speed
-            mTargetSpeed = moveSpeed * flag;
         }
+        mTargetSpeed = flag * moveSpeed;
     }
 
     public void EndMove()

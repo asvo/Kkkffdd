@@ -70,7 +70,7 @@ public class EnemyAI : MonoBehaviour {
         enemyCurState = e_EnemyState.confused;
         canChangeState = true;
         canAttack = false;
-        attackSecond = monster.AttckRate;
+        attackSecond = monster.NormalAttackCd;
     }
 	
 	// Update is called once per frame
@@ -116,7 +116,7 @@ public class EnemyAI : MonoBehaviour {
             else
             {
                 confusedTime = 0;
-                attackSecond = monster.AttckRate;
+                attackSecond = monster.NormalAttackCd;
                 enemyCurState = e_EnemyState.offensive;
             }
         }
@@ -129,7 +129,7 @@ public class EnemyAI : MonoBehaviour {
             }
             else
             {
-                attackSecond = monster.AttckRate;
+                attackSecond = monster.NormalAttackCd;
                 enemyCurState = e_EnemyState.offensive;
             }
 
@@ -142,7 +142,7 @@ public class EnemyAI : MonoBehaviour {
     /// </summary>
     private void Offensive()
     {
-        if (distanceToPlayer() > GameManager.NearestDistance + monster.AttackRange)
+        if (distanceToPlayer() > GameManager.NearestDistance + monster.NormalAttackRange)
         {
             canAttack = false;
         }
@@ -160,7 +160,7 @@ public class EnemyAI : MonoBehaviour {
             }
             else
             {
-                attackSecond = monster.AttckRate;
+                attackSecond = monster.NormalAttackCd;
                 monster.Attack();
             }
         }
