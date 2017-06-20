@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Spine.Unity;
 
-public class BaseEntity : MonoBehaviour {
+public class BaseEntity : MonoBehaviour
+{
 
     #region cfg-data
     public float NormalAttackCd = 1.5f;
@@ -17,6 +19,20 @@ public class BaseEntity : MonoBehaviour {
     public bool isDead = false;
 
     public MoveAction MoveCtrl;
+
+    private SkeletonAnimation mSkeletonAnim;
+    public SkeletonAnimation SkeletonAnim
+    {
+        get
+        {
+            if (null == mSkeletonAnim)
+            {
+                Transform skeletonTrans = transform.FindChild("playerSkeleton");
+                mSkeletonAnim = skeletonTrans.GetComponent<SkeletonAnimation>();
+            }
+            return mSkeletonAnim;
+        }
+    }
 
     void Awake()
     {
@@ -36,29 +52,28 @@ public class BaseEntity : MonoBehaviour {
 
     public virtual void Move(MoveDir moveDir)
     {
-   //     Debug.LogError("moveDir"+ moveDir);
+        //     Debug.LogError("moveDir"+ moveDir);
         if (MoveCtrl != null)
         {
-            if (GetComponentInChildren<SpriteRenderer>() != null)
+            if (moveDir == MoveDir.Left)
             {
-                if (moveDir == MoveDir.Left)
-                {
-                    GetComponentInChildren<SpriteRenderer>().flipX = true;
-                }
-                else if (moveDir == MoveDir.Right)
-                {
-                    GetComponentInChildren<SpriteRenderer>().flipX = false;
-                }
+                mSkeletonAnim.Skeleton.FlipX = true;
             }
+            else if (moveDir == MoveDir.Right)
+            {
+                mSkeletonAnim.Skeleton.FlipX = false;
+            }
+            PlayAnim("run", true);
             MoveCtrl.Move(moveDir, InitMoveSpeed);
         }
     }
 
     public virtual void EndMove()
     {
-  //      Debug.LogError("EndMove");
+        //      Debug.LogError("EndMove");
         if (MoveCtrl != null)
         {
+            PlayAnim("idle");
             MoveCtrl.EndMove();
         }
     }
@@ -67,5 +82,29 @@ public class BaseEntity : MonoBehaviour {
     {
         Debug.Log(this.transform.name + " died");
         isDead = true;
+    }
+
+    public void PlayAnim(string animName, bool isloop = false)
+    {
+        if (SkeletonAnim == null)
+        {
+            return;
+        }
+        Spine.AnimationState animState = SkeletonAnim.state;
+        animState.SetAnimation(0, animName, isloop);
+    }
+
+    /// <summary>
+    /// todo, asvo. 暂时没想好咋个停止动画。这里直接重置动作，清除tracks.
+    /// </summary>
+    /// <param name="animName"></param>
+    public void StopAnim(string animName)
+    {
+        if (SkeletonAnim == null)
+        {
+            return;
+        }
+        SkeletonAnim.skeleton.SetToSetupPose();
+        SkeletonAnim.state.ClearTracks();
     }
 }

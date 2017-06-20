@@ -56,12 +56,6 @@ public class MoveAction : MonoBehaviour {
     {
         if (dir != mMovingDir)
         {
-            //Debug.Log("set moving dir = " + dir);
-            if (GetComponentInChildren<Animator>() != null)
-            {
-                GetComponentInChildren<Animator>().SetBool("Move", true);
-            }
-
             mMovingDir = dir;
             mFaceDir = dir;
             flag = mMovingDir == MoveDir.Right ? 1 : -1;
@@ -72,23 +66,16 @@ public class MoveAction : MonoBehaviour {
 
     public void EndMove()
     {
-        if (GetComponentInChildren<Animator>() != null)
-        {
-            GetComponentInChildren<Animator>().SetBool("Move", false);
-        }
         mMovingDir = MoveDir.None;
         movement.x = 0;  
     }
 
     void FixedUpdate()
-    {
+    {        
         if (mMovingDir == MoveDir.None)
             return;
-        //float speed = Mathf.Lerp(2f, mTargetSpeed, 1.5f);
-        //if (speed > mTargetSpeed)
         float speed = mTargetSpeed;
         movement.x = speed;
-        // 4 - 让游戏物体移动
         if (null != mCC2D)
             mCC2D.move(movement * Time.fixedDeltaTime);
     }

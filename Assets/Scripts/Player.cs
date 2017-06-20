@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Spine.Unity;
 /*
  *  功能需求 ： 
  *  编写者     ： 林鸿伟
@@ -9,8 +10,7 @@ using System.Collections.Generic;
 
 public class Player : BaseEntity {
 
-    public Animator mAnimator;
-
+//    public Animator mAnimator;    
     private List<SkillData> mSkillList;
 
     public enum PlayerStatus
@@ -63,13 +63,18 @@ public class Player : BaseEntity {
         //};
 
         Status = PlayerStatus.Idle;
-        mAnimator.Play("八神Idle");
-    }
+        PlayAnim("idle");
+    }    
 
     public override void Move(MoveDir moveDir)
-    {        
-        if (CheckWillCancelNormalAttack(moveDir))
+    {
+        if (mIsNormalAttackInCd)
+        {
+            MoveDir dir = MoveCtrl.GetCurrentFaceDir();
+            if (dir == moveDir)
+                return;     //目前（2017/06/20）攻击时只处理向后移动的行为
             CancelNormalAttack();
+        }
         if (TooNearToMonster(moveDir))
             EndMove();
         else
@@ -95,17 +100,10 @@ public class Player : BaseEntity {
         StartCoroutine("NormalAttackPre");
     }
 
-    private bool CheckWillCancelNormalAttack(MoveDir moveDir)
-    {
-        MoveDir dir = MoveCtrl.GetCurrentFaceDir();
-     //   Debug.LogFormat("CurrentDir={0}, MovingDir={1}", dir, moveDir);
-        return moveDir != dir;
-    }
-
     private void CancelNormalAttack()
-    {
-        mAnimator.ResetTrigger("Attack");
-        mAnimator.Play("八神Idle");
+    {     
+        StopAnim("attack");
+        PlayAnim("idle");
         StopCoroutine("NormalAttackPre");
     }
 
@@ -115,13 +113,16 @@ public class Player : BaseEntity {
         mIsNormalAttackInCd = false;
     }
 
+    private void StopMove()
+    {
+        base.EndMove();
+        StopAnim("run");
+    }
+
     private IEnumerator NormalAttackPre()
-    {        
-        if (mAnimator != null)
-        {
-            //mAnimator.SetTrigger("Attack");
-            mAnimator.Play("LegAttack");
-        }
+    {
+        StopMove();
+        PlayAnim("attack");     
         yield return new WaitForSeconds(NormalAttackDamgePoint);
         CastNormalAttack();
     }
@@ -148,7 +149,7 @@ public class Player : BaseEntity {
         base.Die();
         Status = PlayerStatus.Die;
         //play die anim.
-        mAnimator.Play("八神_Hit");
+        PlayAnim("idle");
 
         StartCoroutine(WaitForDieAnimOver());
 
