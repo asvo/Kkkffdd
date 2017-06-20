@@ -12,7 +12,6 @@ public class Monster : BaseEntity {
 
     public EnemyAI enemyAi = null;
     public float RestatsTime = 0.3f;
-    public SkeletonAnimation skeletonAnimation;
 
     public void LoadSettingData()
     {
@@ -36,13 +35,17 @@ public class Monster : BaseEntity {
         enemyAi = Util.TryAddComponent<EnemyAI>(gameObject);
         enemyAi.InitEnemyAI();
 
-        skeletonAnimation = GetComponentInChildren<SkeletonAnimation>();
+        if (SkeletonAnim != null)
+        {
+            SkeletonAnim.skeleton.SetToSetupPose();
+            SkeletonAnim.state.ClearTracks();
+        }
     }
 
     public void Attack()
     {
         if (GameManager.Instance().MainPlayer.isDead)
-            return;
+            return;        
         PlayAnim("run", false);
         //范围判断? if need
 
@@ -73,15 +76,39 @@ public class Monster : BaseEntity {
 
     IEnumerator TimeForFly()
     {
-        yield return new WaitForSeconds(4f);
+        float delaydestroy = 0;
+        var trackEntry = SkeletonAnim.state.GetCurrent(0);
+        if (trackEntry != null)
+        {
+            delaydestroy = trackEntry.endTime;
+        }
+        yield return new WaitForSeconds(delaydestroy);
         MonsterManager.Instance().MonsterDie(this);
     }
 
     public void MoveToPlayer()
     {
         MoveDir moveDir = MonsterManager.Instance().DirToPlayer(this);
-        base.Move(moveDir);
+        Move(moveDir);
     }
+    public override void Move(MoveDir moveDir)
+    {
+        //     Debug.LogError("moveDir"+ moveDir);
+        if (MoveCtrl != null)
+        {
+            if (moveDir == MoveDir.Left)
+            {
+                SkeletonAnim.Skeleton.FlipX = false;
+            }
+            else if (moveDir == MoveDir.Right)
+            {
+                SkeletonAnim.Skeleton.FlipX = true;
+            }
+            PlayAnim("run", true);
+            MoveCtrl.Move(moveDir, InitMoveSpeed);
+        }
+    }
+
 
     public override void EndMove()
     {
@@ -91,17 +118,23 @@ public class Monster : BaseEntity {
 
     public void Restats()
     {
-        PlayAnim("hit", false);
+        SkeletonAnim.skeleton.SetToSetupPose();
+        SkeletonAnim.state.ClearTracks();
+        PlayAnim("hit2", false);
     }
 
     public void EndRestats()
     {
+        SkeletonAnim.skeleton.SetToSetupPose();
+        SkeletonAnim.state.ClearTracks();
         PlayAnim("run", true);
     }
 
     public void HitFly()
     {
-        PlayAnim("hit2", true);
+        SkeletonAnim.skeleton.SetToSetupPose();
+        SkeletonAnim.state.ClearTracks();
+        PlayAnim("hit", true);
     }
 }
 
