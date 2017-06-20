@@ -84,6 +84,7 @@ public class Player : BaseEntity {
     public override void EndMove()
     {
         base.EndMove();
+        PlayAnim("idle");
     }
     
     private bool mIsNormalAttackInCd = false;

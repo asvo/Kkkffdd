@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Spine.Unity;
 /*
  *  功能需求 ： 
  *  编写者     ： 林鸿伟
@@ -11,7 +12,7 @@ public class Monster : BaseEntity {
 
     public EnemyAI enemyAi = null;
     public float RestatsTime = 0.3f;
-    public Animator mAnimator = null;
+    public SkeletonAnimation skeletonAnimation;
 
     public void LoadSettingData()
     {
@@ -35,18 +36,14 @@ public class Monster : BaseEntity {
         enemyAi = Util.TryAddComponent<EnemyAI>(gameObject);
         enemyAi.InitEnemyAI();
 
-        mAnimator = GetComponentInChildren<Animator>();
+        skeletonAnimation = GetComponentInChildren<SkeletonAnimation>();
     }
 
     public void Attack()
     {
         if (GameManager.Instance().MainPlayer.isDead)
             return;
-        //Debug.LogError(gameObject.name + " is Attack!" +Time.realtimeSinceStartup);
-        if (mAnimator != null)
-        {
-            mAnimator.SetBool("Attack", true);
-        }
+        PlayAnim("run", false);
         //范围判断? if need
 
         DamagerHandler.Instance().CalculateDamage(this, GameManager.
@@ -82,54 +79,29 @@ public class Monster : BaseEntity {
 
     public void MoveToPlayer()
     {
-        //if (GameManager.Instance().player != null)
-        //{
-        //    float distanceToPlayer = Vector2.Distance(GameManager.Instance().player.transform.position, transform.position);
-        //    if (distanceToPlayer < GameManager.NearestDistance)
-        //    {
-        //        //Debug.Log(gameObject.name + " distance to player " + distanceToPlayer);
-        //        base.EndMove();
-        //        return;
-        //    }
-
-            MoveDir moveDir = MonsterManager.Instance().DirToPlayer(this);
-   //         Debug.LogError(moveDir);
-
-            base.Move(moveDir);
-        //}
+        MoveDir moveDir = MonsterManager.Instance().DirToPlayer(this);
+        base.Move(moveDir);
     }
+
+    public override void EndMove()
+    {
+        base.EndMove();
+    }
+
 
     public void Restats()
     {
-        if (mAnimator != null)
-        {
-            mAnimator.Play("八神_HitBack");
-        }
+        PlayAnim("hit", false);
     }
 
     public void EndRestats()
     {
-        if (mAnimator != null)
-        {
-            mAnimator.Play("八神Idle");
-        }
+        PlayAnim("run", true);
     }
 
     public void HitFly()
     {
-        if (mAnimator != null)
-        {
-            mAnimator.Play("八神_Hit");
-        }
-    }
-
-    IEnumerator ResetApplyRootMotion()
-    {
-        yield return new WaitForSeconds(2f);
-        if (mAnimator != null)
-        {
-            mAnimator.applyRootMotion = false;
-        }
+        PlayAnim("hit2", true);
     }
 }
 

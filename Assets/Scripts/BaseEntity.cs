@@ -57,11 +57,11 @@ public class BaseEntity : MonoBehaviour
         {
             if (moveDir == MoveDir.Left)
             {
-                mSkeletonAnim.Skeleton.FlipX = true;
+                SkeletonAnim.Skeleton.FlipX = true;
             }
             else if (moveDir == MoveDir.Right)
             {
-                mSkeletonAnim.Skeleton.FlipX = false;
+                SkeletonAnim.Skeleton.FlipX = false;
             }
             PlayAnim("run", true);
             MoveCtrl.Move(moveDir, InitMoveSpeed);
@@ -72,8 +72,7 @@ public class BaseEntity : MonoBehaviour
     {
         //      Debug.LogError("EndMove");
         if (MoveCtrl != null)
-        {
-            PlayAnim("idle");
+        {            
             MoveCtrl.EndMove();
         }
     }
