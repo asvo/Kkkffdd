@@ -27,7 +27,7 @@ public class BaseEntity : MonoBehaviour
         {
             if (null == mSkeletonAnim)
             {
-                Transform skeletonTrans = transform.FindChild("playerSkeleton");
+                Transform skeletonTrans = transform.FindChild("entitySkeleton");
                 mSkeletonAnim = skeletonTrans.GetComponent<SkeletonAnimation>();
             }
             return mSkeletonAnim;
