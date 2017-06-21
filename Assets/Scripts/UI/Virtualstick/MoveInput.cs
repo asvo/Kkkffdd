@@ -8,9 +8,19 @@ using System.Collections;
 /// </summary>
 public class MoveInput : MonoBehaviour
 {
-    
-    public MoveBtnClick BtnLeft;
-    public MoveBtnClick BtnRight;
+    public TwoBtnModeInput TwoBtnInput;
+    private GameObject mVsJoyGobj;
+    public GameObject VsJoyGobj
+    {
+        get
+        {
+            if (null == mVsJoyGobj)
+            {
+                mVsJoyGobj = transform.FindChild("JoyStick").gameObject;
+            }
+            return mVsJoyGobj;
+        }
+    }
 
     Player mPlayer;
     private Player GetPlayer
@@ -25,10 +35,33 @@ public class MoveInput : MonoBehaviour
         }
     }
 
-    void Awake()
+    void Start()
     {
-        BtnLeft.Init(this, MoveDir.Left);
-        BtnRight.Init(this, MoveDir.Right);
+        SetInputMode(InputModeStyle.JoyStick);
+    }
+
+    public enum InputModeStyle
+    {
+        TwoBtn = 0,
+        JoyStick
+    }
+    public void SetInputMode(InputModeStyle inputMode)
+    {
+        if (inputMode == InputModeStyle.TwoBtn)
+        {
+            VsJoyGobj.SetActive(false);
+            TwoBtnInput.SetOn();
+        }
+        else
+        {
+            TwoBtnInput.SetOff();
+            VirtualStick vstick = VsJoyGobj.GetComponent<VirtualStick>();
+            if (null != vstick)
+            {
+                vstick.Reset();
+            }
+            VsJoyGobj.SetActive(true);
+        }
     }
 
     public void OnClickMove(MoveDir dir)
