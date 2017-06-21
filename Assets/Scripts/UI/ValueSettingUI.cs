@@ -7,6 +7,7 @@ public class ValueSettingUI : MonoBehaviour {
 
     public Transform Grid;
     public GameObject InputPrefab;
+    public Text TxtCurrentInputMode;
     private Dictionary<e_BaseValue, InputField> settingInputs = new Dictionary<e_BaseValue, InputField>();
 
     public bool bPlayerSetting = false;
@@ -17,6 +18,7 @@ public class ValueSettingUI : MonoBehaviour {
         ValueManager.Instance().Load(bPlayerSetting);
         InitSettingInput(System.Enum.GetNames(typeof(e_BaseValue)));
         Grid.gameObject.SetActive(true);
+        ShowCurrentInputMode();
     }
 
     public void Save()
@@ -102,6 +104,25 @@ public class ValueSettingUI : MonoBehaviour {
         }
 
         return newChild;
+    }
+
+    /// <summary>
+    /// 切换输入方式
+    /// </summary>
+    public void OnClickChangeInputMode()
+    {
+        GameManager.Instance().ChangeInputMode();
+        ShowCurrentInputMode();
+    }
+
+    private void ShowCurrentInputMode()
+    {
+        string str = "当前：";
+        if (GameManager.CurrentInputMode == MoveInput.InputModeStyle.JoyStick)
+            str += "摇杆控制";
+        else
+            str += "按钮控制";
+        TxtCurrentInputMode.text = str;
     }
 }
 

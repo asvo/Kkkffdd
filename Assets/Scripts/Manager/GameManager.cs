@@ -93,5 +93,26 @@ public class GameManager : MonoBehaviour
             return mUiRoot;
         }
     }
+
+    public static MoveInput.InputModeStyle CurrentInputMode = MoveInput.InputModeStyle.TwoBtn;
+    public void ChangeInputMode()
+    {
+        if (null == mMoveInputTrans)
+        {
+            mMoveInputTrans = UiRoot.FindChild("HUD/MoveInput");
+        }
+        if (CurrentInputMode == MoveInput.InputModeStyle.JoyStick)
+        {
+            CurrentInputMode = MoveInput.InputModeStyle.TwoBtn;
+        }
+        else
+        {
+            CurrentInputMode = MoveInput.InputModeStyle.JoyStick;            
+        }
+        MoveInput moveinputSc = mMoveInputTrans.GetComponent<MoveInput>();
+        moveinputSc.SetInputMode(CurrentInputMode);
+    }
+
+    private Transform mMoveInputTrans;
 }
 
