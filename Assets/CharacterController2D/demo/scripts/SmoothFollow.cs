@@ -50,40 +50,44 @@ public class SmoothFollow : MonoBehaviour
 	}
 
 
-	void updateCameraPosition()
-	{
+    void updateCameraPosition()
+    {
         if (target == null)
             return;
 
-		if( _playerController == null )
-		{
-			transform.position = Vector3.SmoothDamp( transform.position, target.position - cameraOffset, ref _smoothDampVelocity, smoothDampTime );
-			return;
-		}
-		
-		if( _playerController.velocity.x > 0 )
-		{
-            if (transform.position.x > rightborder)
+        if (_playerController == null)
+        {
+            transform.position = Vector3.SmoothDamp(transform.position, target.position - cameraOffset, ref _smoothDampVelocity, smoothDampTime);
+            return;
+        }
+
+        if (_playerController.velocity.x > 0)
+        {
+            if (transform.position.x - cameraOffset.x > rightborder)
             {
+                return;
             }
-            else
+            else if (transform.position.x + cameraOffset.x < leftborder)
             {
-                transform.position = Vector3.SmoothDamp(transform.position, target.position - cameraOffset, ref _smoothDampVelocity, smoothDampTime);
+                transform.position = new Vector3(leftborder, transform.position.y, transform.position.z);
             }
-		}
-		else
-		{
-            if (transform.position.x < leftborder)
+
+            transform.position = Vector3.SmoothDamp(transform.position, target.position - cameraOffset, ref _smoothDampVelocity, smoothDampTime);
+        }
+        else
+        {
+            if (transform.position.x + cameraOffset.x < leftborder)
             {
-                
+                return;
             }
-            else
+            else if (transform.position.x - cameraOffset.x > rightborder)
             {
-                var leftOffset = cameraOffset;
-                leftOffset.x *= -1;
-                transform.position = Vector3.SmoothDamp(transform.position, target.position - leftOffset, ref _smoothDampVelocity, smoothDampTime);
+                transform.position = new Vector3(rightborder, transform.position.y, transform.position.z);
             }
-		}
-	}
+            var leftOffset = cameraOffset;
+            leftOffset.x *= -1;
+            transform.position = Vector3.SmoothDamp(transform.position, target.position - leftOffset, ref _smoothDampVelocity, smoothDampTime);
+        }
+    }
 	
 }
