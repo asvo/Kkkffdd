@@ -17,6 +17,7 @@ public class SmoothFollow : MonoBehaviour
 
     public float leftborder;
     public float rightborder;
+    public float manposition;
 	
 	
 	public void Init(Transform followTarget)
@@ -61,29 +62,47 @@ public class SmoothFollow : MonoBehaviour
             return;
         }
 
-        if (_playerController.velocity.x > 0)
+        if (transform.position.x <= leftborder)
         {
-            if (transform.position.x - cameraOffset.x > rightborder)
+            if (Player.curMoveDir == MoveDir.Left)
             {
-                return;
-            }
-            else if (transform.position.x + cameraOffset.x < leftborder)
-            {
+                _playerController.velocity.x = 0;
                 transform.position = new Vector3(leftborder, transform.position.y, transform.position.z);
             }
+            else
+            {
+                if (CameraManager.Instance().MainCamera.WorldToScreenPoint(target.position).x < Screen.width *0.5f)
+                {
+                    _playerController.velocity.x = 0;
+                }
+            }
+        }
+        if (transform.position.x >= rightborder)
+        {
+            if (Player.curMoveDir == MoveDir.Right)
+            {
+                _playerController.velocity.x = 0;
+                transform.position = new Vector3(rightborder, transform.position.y, transform.position.z);
+            }
+            else
+            {
+                if (CameraManager.Instance().MainCamera.WorldToScreenPoint(target.position).x > Screen.width * 0.5f)
+                {
+                    _playerController.velocity.x = 0;
+                }
+            }
+        }
 
+        if (_playerController.velocity.x == 0)
+        {
+
+        }
+        else if (_playerController.velocity.x > 0)
+        {
             transform.position = Vector3.SmoothDamp(transform.position, target.position - cameraOffset, ref _smoothDampVelocity, smoothDampTime);
         }
         else
         {
-            if (transform.position.x + cameraOffset.x < leftborder)
-            {
-                return;
-            }
-            else if (transform.position.x - cameraOffset.x > rightborder)
-            {
-                transform.position = new Vector3(rightborder, transform.position.y, transform.position.z);
-            }
             var leftOffset = cameraOffset;
             leftOffset.x *= -1;
             transform.position = Vector3.SmoothDamp(transform.position, target.position - leftOffset, ref _smoothDampVelocity, smoothDampTime);

@@ -12,6 +12,10 @@ public class Player : BaseEntity {
 
 //    public Animator mAnimator;    
     private List<SkillData> mSkillList;
+    public float leftBorder = -5;
+    public float rightBorder = 5;
+
+    public static MoveDir curMoveDir = MoveDir.None;
 
     public enum PlayerStatus
     {
@@ -68,13 +72,15 @@ public class Player : BaseEntity {
 
     public override void Move(MoveDir moveDir)
     {
+        curMoveDir = moveDir;
         if (mIsNormalAttackInCd)
         {
             MoveDir dir = MoveCtrl.GetCurrentFaceDir();
             if (dir == moveDir)
                 return;     //目前（2017/06/20）攻击时只处理向后移动的行为
             CancelNormalAttack();
-        }
+        }        
+
         if (TooNearToMonster(moveDir))
             EndMove();
         else
