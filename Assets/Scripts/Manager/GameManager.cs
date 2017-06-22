@@ -37,8 +37,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         GameOverUI.Instance.HideUi();
-        LoadSettingData();
         LoadPlayer();
+        LoadSettingData();
         spawnManager = FindObjectOfType<SpawnManager>();
         
         StartGame();
