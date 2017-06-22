@@ -48,7 +48,7 @@ public class Player : BaseEntity {
         gameObject.transform.position = Vector3.zero;
         gameObject.transform.localScale = Vector3.one;
         gameObject.layer = Util.PlayerLayer;
-        MoveCtrl.CC2D.platformMask = 1 << Util.MonsterLayer;
+        MoveCtrl.CC2D.platformMask = 1 << Util.GroundLayer | 1 << Util.WallLayer | 1 << Util.MonsterLayer;
 
         //mSkillList = new List<SkillData>();
         //SkillData sk = new SkillData

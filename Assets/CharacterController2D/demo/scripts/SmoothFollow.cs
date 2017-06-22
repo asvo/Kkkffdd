@@ -14,6 +14,9 @@ public class SmoothFollow : MonoBehaviour
 	
 	private CharacterController2D _playerController;
 	private Vector3 _smoothDampVelocity;
+
+    public float leftborder;
+    public float rightborder;
 	
 	
 	public void Init(Transform followTarget)

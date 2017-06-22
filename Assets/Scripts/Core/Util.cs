@@ -46,6 +46,22 @@ public static class Util
         }
     }
 
+    public static int GroundLayer
+    {
+        get
+        {
+            return LayerMask.NameToLayer("Ground");
+        }
+    }
+
+    public static int WallLayer
+    {
+        get
+        {
+            return LayerMask.NameToLayer("Wall");
+        }
+    }
+
     /// <summary>
     /// 主角寻找目标距离的怪物
     /// </summary>
