@@ -67,7 +67,8 @@ public class SmoothFollow : MonoBehaviour
             if (Player.curMoveDir == MoveDir.Left)
             {
                 _playerController.velocity.x = 0;
-                transform.position = new Vector3(leftborder, transform.position.y, transform.position.z);
+                Vector3.SmoothDamp(transform.position, new Vector3(leftborder, transform.position.y, transform.position.z), ref _smoothDampVelocity, smoothDampTime);
+                //transform.position = new Vector3(leftborder, transform.position.y, transform.position.z);
             }
             else
             {
@@ -82,7 +83,8 @@ public class SmoothFollow : MonoBehaviour
             if (Player.curMoveDir == MoveDir.Right)
             {
                 _playerController.velocity.x = 0;
-                transform.position = new Vector3(rightborder, transform.position.y, transform.position.z);
+                Vector3.SmoothDamp(transform.position, new Vector3(rightborder, transform.position.y, transform.position.z), ref _smoothDampVelocity, smoothDampTime);
+                //transform.position = new Vector3(rightborder, transform.position.y, transform.position.z);
             }
             else
             {
