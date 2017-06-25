@@ -79,7 +79,8 @@ public class ValueSettingUI : MonoBehaviour {
             e_BaseValue key = (e_BaseValue)System.Enum.Parse(typeof(e_BaseValue), keys[i]);
             _input.transform.FindChild("Desc").GetComponent<Text>().text = keys[i];
             if (jsData.dic_BaseValues.ContainsKey(keys[i]))
-            {              
+            {
+                _input.text = jsData.dic_BaseValues[keys[i]].ToString();
                 _input.placeholder.GetComponent<Text>().text = jsData.dic_BaseValues[keys[i]].ToString(); 
             }
             else
