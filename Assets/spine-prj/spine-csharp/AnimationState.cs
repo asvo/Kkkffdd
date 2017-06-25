@@ -186,8 +186,15 @@ namespace Spine {
 			entry.OnStart(this, index);
 			if (Start != null) Start(this, index);
 		}
+        public Spine.Animation GetAnimation(int trackIndex, String animationName)
+        {
+            Animation animation = data.skeletonData.FindAnimation(animationName);
+            if (animation == null) throw new ArgumentException("Animation not found: " + animationName);
+            return animation;
+        }
 
-		public TrackEntry SetAnimation (int trackIndex, String animationName, bool loop) {
+
+        public TrackEntry SetAnimation (int trackIndex, String animationName, bool loop) {
 			Animation animation = data.skeletonData.FindAnimation(animationName);
 			if (animation == null) throw new ArgumentException("Animation not found: " + animationName);
 			return SetAnimation(trackIndex, animation, loop);

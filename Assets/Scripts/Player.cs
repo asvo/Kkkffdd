@@ -129,7 +129,15 @@ public class Player : BaseEntity {
     private IEnumerator NormalAttackPre()
     {
         StopMove();
-        PlayAnim("attack");     
+
+        if (SkeletonAnim == null)
+        {
+            yield return null;
+        }
+        Spine.AnimationState animState = SkeletonAnim.state;
+        Spine.Animation anim = animState.GetAnimation(0,"attack");
+        SkeletonAnim.timeScale = anim.duration / NormalAttackCd;
+        PlayAnim("attack");
         yield return new WaitForSeconds(NormalAttackDamgePoint);
         CastNormalAttack();
     }

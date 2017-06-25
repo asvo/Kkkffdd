@@ -103,6 +103,7 @@ public class BaseEntity : MonoBehaviour
         {
             return;
         }
+        SkeletonAnim.timeScale = 1;
         SkeletonAnim.skeleton.SetToSetupPose();
         SkeletonAnim.state.ClearTracks();
     }
