@@ -112,6 +112,7 @@ public class Player : BaseEntity {
         StopAnim("attack");
         PlayAnim("idle");
         StopCoroutine("NormalAttackPre");
+        mIsNormalAttackInCd = false;
     }
 
     private IEnumerator ResetNormalAttackCd()
