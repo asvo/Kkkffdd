@@ -139,4 +139,11 @@ public static class Util
         bool bExists = System.IO.File.Exists(savePath);
         return bExists;
     }
+
+    public static void LogAsvo(string content)
+    {
+        if (!GameManager.Instance().LogAsvo)
+            return;
+        Debug.Log(content);
+    }
 }

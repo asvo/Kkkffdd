@@ -97,13 +97,26 @@ public class Player : BaseEntity {
 
     public void FireSkill(int slot)
     {
+ //       SkillCaster.Instance().CastSkill(mSkillList[slot], this);
+        if (0 == slot)
+        {
+            FireNormalAttack();
+        }
+        else if (1 == slot)
+        {
+            RushSkill rushSkill = Util.TryAddComponent<RushSkill>(gameObject);
+            rushSkill.Cast();
+        }
+    }
+
+    private void FireNormalAttack()
+    {
         //能不能放技能(cd检查)
         if (mIsNormalAttackInCd)
             return;
         mIsNormalAttackInCd = true;
         StartCoroutine(ResetNormalAttackCd());
 
- //       SkillCaster.Instance().CastSkill(mSkillList[slot], this);
         StartCoroutine("NormalAttackPre");
     }
 

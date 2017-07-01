@@ -24,6 +24,12 @@ public class GameManager : MonoBehaviour
 
     public const float NearestDistance = 1.2f;
 
+    #region log
+
+    public bool LogAsvo = false;
+
+    #endregion
+
     void Awake()
     {
         instance = this;

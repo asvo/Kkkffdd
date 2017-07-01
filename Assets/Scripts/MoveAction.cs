@@ -84,6 +84,11 @@ public class MoveAction : MonoBehaviour {
     {
         return mFaceDir;
     }
+
+    public void MoveForward(float moveSpeed)
+    {
+        Move(GetCurrentFaceDir(), moveSpeed);
+    }
 }
 
 
