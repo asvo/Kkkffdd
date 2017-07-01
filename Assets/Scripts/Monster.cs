@@ -12,6 +12,7 @@ public class Monster : BaseEntity {
 
     public EnemyAI enemyAi = null;
     public float RestatsTime = 0.3f;
+    public float MaxConfusedTime = 20;
 
     public void LoadSettingData()
     {
@@ -32,13 +33,24 @@ public class Monster : BaseEntity {
         LoadSettingData();
         Health = 3;
         isDead = false;
-        enemyAi = Util.TryAddComponent<EnemyAI>(gameObject);
-        enemyAi.InitEnemyAI();
+
+        enemyAi = new EnemyAI(this);
+        enemyAi.ChangeAIState(new ConfuseAIState(MaxConfusedTime));
 
         if (SkeletonAnim != null)
         {
             SkeletonAnim.skeleton.SetToSetupPose();
             SkeletonAnim.state.ClearTracks();
+        }
+    }
+
+    void Update()
+    {
+        if (isDead)
+            return;
+        if (enemyAi != null && enemyAi.GetCurrentState() != null)
+        {
+            enemyAi.Update(new System.Collections.Generic.List<BaseEntity>() { GameManager.Instance().MainPlayer });
         }
     }
 
@@ -57,14 +69,6 @@ public class Monster : BaseEntity {
     {
         base.OnDamaged(damage);
         Restats();
-        Damage();
-    }
-
-    public void Damage()
-    {
-        if (enemyAi == null)
-            return;
-        enemyAi.Damage();       
     }
 
     public override void Die()
