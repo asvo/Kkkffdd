@@ -36,9 +36,9 @@ public abstract class ICharacterAI
     public virtual void ChangeAIState(IAIState NewAIState)
     {
         if (m_AIState == null)
-            Debug.LogError("ChangeAIState from: none to:" + NewAIState.ToString());
+            WriteLog("ChangeAIState from: none to:" + NewAIState.ToString());
         else
-            Debug.LogError("ChangeAIState from: " + m_AIState.ToString() + " to: " + NewAIState.ToString());
+            WriteLog("ChangeAIState from: " + m_AIState.ToString() + " to: " + NewAIState.ToString());
         m_AIState = NewAIState;
         m_AIState.SetCharacterAI(this);
     }
@@ -103,6 +103,11 @@ public abstract class ICharacterAI
     public void Update(List<BaseEntity> Targets)
     {
         m_AIState.Update(Targets);
+    }
+
+    public static void WriteLog(object log)
+    {
+        Debug.Log(log);
     }
 }
 
