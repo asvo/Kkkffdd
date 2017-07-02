@@ -36,6 +36,7 @@ public class IdleAIState : IAIState {
             return;
         }
 
+        //有目标进入攻击范围
         if (m_CharacterAI.TargetInAttackRange(player))
         {
             m_CharacterAI.ChangeAIState(new AttackAIState(player));

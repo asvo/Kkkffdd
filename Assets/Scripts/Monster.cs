@@ -54,11 +54,16 @@ public class Monster : BaseEntity {
         }
     }
 
+    public void Idle()
+    {
+        ResetPoseAndPlayAnim("run", true);
+    }
+
     public void Attack()
     {
         if (GameManager.Instance().MainPlayer.isDead)
-            return;        
-        PlayAnim("run", false);
+            return;
+        ResetPoseAndPlayAnim("run", false);
         //范围判断? if need
 
         DamagerHandler.Instance().CalculateDamage(this, GameManager.
@@ -68,7 +73,10 @@ public class Monster : BaseEntity {
     public override void OnDamaged(int damage)
     {
         base.OnDamaged(damage);
-        Restats();
+        if (enemyAi != null)
+        {
+            enemyAi.ChangeAIState(new RestatsAIState(RestatsTime));
+        }
     }
 
     public override void Die()
@@ -122,23 +130,24 @@ public class Monster : BaseEntity {
 
     public void Restats()
     {
-        SkeletonAnim.skeleton.SetToSetupPose();
-        SkeletonAnim.state.ClearTracks();
-        PlayAnim("hit2", false);
+        ResetPoseAndPlayAnim("hit2", false);
     }
 
     public void EndRestats()
     {
-        SkeletonAnim.skeleton.SetToSetupPose();
-        SkeletonAnim.state.ClearTracks();
-        PlayAnim("run", true);
+        ResetPoseAndPlayAnim("run", true);
     }
 
     public void HitFly()
     {
+        ResetPoseAndPlayAnim("hit1", true);
+    }
+
+    public void ResetPoseAndPlayAnim(string Anim, bool isLoop)
+    {
         SkeletonAnim.skeleton.SetToSetupPose();
         SkeletonAnim.state.ClearTracks();
-        PlayAnim("hit", true);
+        PlayAnim(Anim, isLoop);
     }
 }
 

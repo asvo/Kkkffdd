@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 /*
-*  功能需求 ： 
+*  功能需求 ： 跟踪状态
 *  编写者     ： 林鸿伟
 *  version  ：1.0
 */
@@ -23,6 +23,7 @@ public class ChaseAIState : IAIState {
     }
     public override void Update(List<BaseEntity> Targets)
     {
+        //跟踪目标不存在或已死亡，进入待机状态
         if (m_ChaseTarget == null || m_ChaseTarget.isDead)
         {
             m_CharacterAI.ChangeAIState(new IdleAIState());
@@ -40,7 +41,7 @@ public class ChaseAIState : IAIState {
         //已经在追击
         if (m_bOnChase)
         {
-            //
+            //到达目标，是否超出范围停止，目前没有
             float dist = Vector3.Distance(m_ChasePosition, m_CharacterAI.GetPosition());
             if (dist < CHASE_CHECK_DIST)
             {

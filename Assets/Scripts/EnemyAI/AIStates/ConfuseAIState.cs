@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 /*
-*  功能需求 ： 
+*  功能需求 ： 迷茫状态，时长20s
 *  编写者     ： 林鸿伟
 *  version  ：1.0
 */
@@ -11,22 +11,38 @@ using System.Collections.Generic;
 
 public class ConfuseAIState : IAIState {
 
-    private float confuseTime = 0;
+    private float m_ConfuseTime = 0;
+    private bool m_bOnConfuse = false;
 
     public ConfuseAIState(float confuseTime)
     {
-        this.confuseTime = confuseTime;
+        this.m_ConfuseTime = confuseTime;
     }
 
     public override void Update(List<BaseEntity> Targets)
     {
-        if (confuseTime <= 0)
+        if (Targets != null && Targets.Count > 0)
         {
-            m_CharacterAI.ChangeAIState(new IdleAIState());
+            if (m_CharacterAI.TargetInAttackRange(Targets[0]))
+            {
+                m_CharacterAI.ChangeAIState(new AttackAIState(Targets[0]));
+                return;
+            }
+        }
+
+        if (m_bOnConfuse)
+        {
+            m_ConfuseTime -= Time.deltaTime;
+            if (m_ConfuseTime <= 0)
+            {
+                m_CharacterAI.ChangeAIState(new IdleAIState());
+                return;
+            }
             return;
         }
 
-        confuseTime -= Time.deltaTime;
+        m_bOnConfuse = true;
+        m_CharacterAI.Idle();
     }
 }
 

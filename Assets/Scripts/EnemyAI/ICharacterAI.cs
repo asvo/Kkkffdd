@@ -43,17 +43,22 @@ public abstract class ICharacterAI
         m_AIState.SetCharacterAI(this);
     }
 
+    public virtual void Idle()
+    {
+
+    }
+
     //攻击目标
     public virtual void Attack(BaseEntity entity)
     {
-        //
-        m_CoolDown -= Time.deltaTime;
-        if (m_CoolDown > 0)
-            return;
-        m_CoolDown = ATTACK_COOLD_DOWN;
+        ////
+        //m_CoolDown -= Time.deltaTime;
+        //if (m_CoolDown > 0)
+        //    return;
+        //m_CoolDown = ATTACK_COOLD_DOWN;
 
-        //攻击目标
-        (m_Entity as Monster).Attack();
+        ////攻击目标
+        //(m_Entity as Monster).Attack();
     }
 
     //是否在攻击范围内
@@ -79,6 +84,12 @@ public abstract class ICharacterAI
     public void StopMove()
     {
         m_Entity.EndMove();
+    }
+
+    //僵直状态
+    public virtual void Restats()
+    {
+       
     }
 
     //设置死亡
