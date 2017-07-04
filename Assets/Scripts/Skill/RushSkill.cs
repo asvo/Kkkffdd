@@ -19,14 +19,15 @@ public class RushSkill : MonoBehaviour {
 	
     public void Cast()
     {
-        //check cd
-        if (mIsInRush)
-            return;
-
-        mIsInRush = true;
-        StartCoroutine("WaitToResetSkillCd");
         Util.LogAsvo("cast skill 1--- rush!");
         mEntity = gameObject.GetComponent<BaseEntity>();
+        //clear
+        StopCoroutine("WaitToEndMove");
+        StopCoroutine("CalculateRushDamage");
+        //clear spine
+        mEntity.SkeletonAnim.skeleton.SetToSetupPose();
+        mEntity.SkeletonAnim.state.ClearTracks();
+
         mEntity.MoveCtrl.MoveForward(RushSpeed);
         StartCoroutine("WaitToEndMove");
         //start damage-calculate corutine
@@ -60,11 +61,5 @@ public class RushSkill : MonoBehaviour {
     private void EndSkill()
     {
              
-    }
-
-    private IEnumerator WaitToResetSkillCd()
-    {
-        yield return new WaitForSeconds(RushSkillCd);
-        mIsInRush = false;
     }
 }
