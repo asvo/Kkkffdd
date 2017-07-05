@@ -46,6 +46,10 @@ public class Skill01Btn : SkillBtn {
         ++CurCounter;
         //cast skill
         GameManager.Instance().MainPlayer.FireSkill(SkillSlotId);
+        //附带skill01的buff
+        float skill01BuffPersistTime = 1.0f;
+        SkillDataMgr.Instance().IsSkill01BuffActive = true;
+        SkillDataMgr.Instance().SetOnSkill01BuffCdData(skill01BuffPersistTime, Time.realtimeSinceStartup, true);
     }
 
     protected override void OnUpdateBeforeCd(float deltaTime)

@@ -150,7 +150,7 @@ public class Player : BaseEntity {
         }
         Spine.AnimationState animState = SkeletonAnim.state;
         Spine.Animation anim = animState.GetAnimation(0,"attack");
-        SkeletonAnim.timeScale = anim.duration / NormalAttackCd;
+  //      SkeletonAnim.timeScale = anim.duration / NormalAttackCd;
         PlayAnim("attack");
         yield return new WaitForSeconds(NormalAttackDamgePoint);
         CastNormalAttack();
@@ -165,6 +165,12 @@ public class Player : BaseEntity {
         if (null != target)
         {
             DamagerHandler.Instance().CalculateDamage(this, target, NormalAttackDamge);
+            //normal attack hit on target.
+            if (SkillDataMgr.Instance().IsSkill01BuffActive)
+            {
+                //buff效果。使所有技能cd-1
+                SkillDataMgr.Instance().ReducePlayerAllSkillCd(1f);
+            }
         }
     }
     
