@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     #region log
 
     public bool LogAsvo = false;
+    public bool LogHW = false;
 
     #endregion
 

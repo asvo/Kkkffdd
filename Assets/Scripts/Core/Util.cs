@@ -146,4 +146,11 @@ public static class Util
             return;
         Debug.Log(content);
     }
+
+    public static void LogHW(object content)
+    {
+        if (!GameManager.Instance().LogHW)
+            return;
+        Debug.Log(content);
+    }
 }
