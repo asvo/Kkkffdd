@@ -37,6 +37,15 @@ public class ChaseAIState : IAIState {
             m_CharacterAI.ChangeAIState(new AttackAIState(m_ChaseTarget));
             return;
         }
+        else if(m_CharacterAI.TargetInJumpAttckRange(m_ChaseTarget))
+        {
+            if (m_CharacterAI.CheckCanJump(m_ChaseTarget))
+            {
+                m_CharacterAI.StopMove();
+                m_CharacterAI.ChangeAIState(new JumpAttackAIState(m_ChaseTarget));
+                return;
+            }
+        }
 
         //已经在追击
         if (m_bOnChase)

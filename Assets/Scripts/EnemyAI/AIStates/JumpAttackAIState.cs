@@ -10,9 +10,56 @@ using System.Collections.Generic;
 
 
 public class JumpAttackAIState : IAIState {
+
+    private float m_JumpTime = 0;
+    private bool m_bOnJump = false;
+    private BaseEntity Target;
+
+    public JumpAttackAIState(BaseEntity Target)
+    {
+        this.Target = Target;
+        m_bOnJump = false;
+    } 
+
     public override void Update(List<BaseEntity> Targets)
     {
-        throw new NotImplementedException();
+        if (!m_bOnJump)
+        {
+            if (Target == null || Target.isDead)
+            {
+                m_CharacterAI.ChangeAIState(new IdleAIState());
+                return;
+            }
+        }
+        else
+        {
+            m_JumpTime -= Time.deltaTime;
+            if (m_JumpTime > 0)
+            {
+                return;
+            }
+            else
+            {
+                //Debug.LogError("跳跃结束");
+                //跳跃结束            
+                if (m_CharacterAI.TargetInAttackRange(Target))
+                {
+                    //玩家在攻击范围内，转换为攻击状态，执行攻击
+                    m_CharacterAI.ChangeAIState(new AttackAIState(Target));
+                    return;
+                }
+                else //超出范围，转为跟踪状态
+                {
+                    m_CharacterAI.ChangeAIState(new ChaseAIState(Target));
+                    return;
+                }
+            }
+        }
+
+        m_bOnJump = true;
+        m_JumpTime = m_CharacterAI.CalculateJumpTimeToTarget(Target);
+        m_CharacterAI.JumpAttack(Target);
+
     }
 }
 

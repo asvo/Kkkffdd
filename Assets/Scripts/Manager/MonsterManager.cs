@@ -20,7 +20,7 @@ public class MonsterManager : Single<MonsterManager> {
     /// <param name="spawnPoint"></param>
     /// <param name="EnemyPrefab"></param>
     /// <returns></returns>
-    public Monster SpawnOneMonster(int MonsterIndex, Transform spawnPoint,GameObject EnemyPrefab)
+    public Monster SpawnOneMonster(int MonsterIndex, Transform spawnPoint,GameObject EnemyPrefab,Vector3 offset)
     {
         Monster monster = null;
         if (dic_CacheMonsterList.ContainsKey(MonsterIndex))
@@ -28,7 +28,7 @@ public class MonsterManager : Single<MonsterManager> {
             monster = dic_CacheMonsterList[MonsterIndex];
             monster.Spawn();
             monster.transform.SetParent(spawnPoint);
-            monster.transform.localPosition = Vector3.zero;
+            monster.transform.localPosition = Vector3.zero - offset;
             monster.transform.localEulerAngles = Vector3.zero;
             monster.gameObject.SetActive(true);
             dic_CacheMonsterList.Remove(MonsterIndex);
@@ -39,10 +39,10 @@ public class MonsterManager : Single<MonsterManager> {
             monster = Util.TryAddComponent<Monster>(goMonster);
             monster.Spawn();
             goMonster.layer = Util.MonsterLayer;
-            monster.MoveCtrl.CC2D.platformMask = 1 << Util.GroundLayer | 1 << Util.WallLayer | 1 << Util.PlayerLayer;
+            monster.MoveCtrl.CC2D.platformMask = 1 << Util.GroundLayer | 1 << Util.WallLayer | 1 << Util.PlayerLayer | 1<< Util.MonsterLayer;
             goMonster.name = MonsterIndex.ToString();
             goMonster.transform.SetParent(spawnPoint);
-            goMonster.transform.localPosition = Vector3.zero;
+            goMonster.transform.localPosition = Vector3.zero - offset;
             goMonster.transform.localRotation = Quaternion.identity;
         }
 
@@ -113,24 +113,26 @@ public class MonsterManager : Single<MonsterManager> {
     /// </summary>
     /// <param name="mMonster"></param>
     /// <returns></returns>
-    public bool CheckHaveEnemyInFront(Monster mMonster)
-    {      
-        //MoveDir front = DirToPlayer(mMonster);
-        //foreach (Monster monster in ActiveMonsters)
-        //{
-        //    if (monster == mMonster)
-        //        continue;
-        //    if (DirToTarget(mMonster.transform,monster.transform) == front)
-        //    {
-        //        if (Vector2.Distance(mMonster.transform.position, monster.transform.position) < GameManager.NearestDistance)
-        //        {
-        //            //Debug.Log("Monster " + mMonster.name + " To near to monster " + monster.name);
-        //            return true;
-        //        }
-        //    }
-        //}
+    public List<Monster> GetMonsterInfrontToTarget(Monster mMonster,BaseEntity Target)
+    {
+        float targetX = Target.transform.position.x;
+        float distToTarget = targetX - mMonster.transform.position.x; 
 
-        return false;
+        List<Monster> samedirectmonsters = new List<Monster>();
+        foreach (Monster monster in ActiveMonsters)
+        {
+            if (monster == mMonster)
+                continue;
+
+            float thirdToTarget = targetX - monster.transform.position.x;
+
+            if (thirdToTarget * distToTarget >= 0  && Mathf.Abs(distToTarget) > Mathf.Abs(thirdToTarget))
+            {
+                samedirectmonsters.Add(monster);
+            }
+        }
+
+        return samedirectmonsters;
     }
 
     /// <summary>

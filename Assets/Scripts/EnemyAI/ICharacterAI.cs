@@ -11,6 +11,8 @@ public abstract class ICharacterAI
 {
     protected BaseEntity m_Entity = null;
     protected float m_AttackRange = 0;
+    protected float m_ChaseRange = 0;
+
     protected IAIState m_AIState = null;//AI状态
 
     protected const float CONFUSE_TIME = 20;
@@ -36,11 +38,19 @@ public abstract class ICharacterAI
     public virtual void ChangeAIState(IAIState NewAIState)
     {
         if (m_AIState == null)
-            WriteLog("ChangeAIState from: none to:" + NewAIState.ToString());
+            WriteLog(string.Format(m_Entity.gameObject.name + " ChangeAIState from:{0},to:{1} ", "None", NewAIState.ToString()));
         else
-            WriteLog("ChangeAIState from: " + m_AIState.ToString() + " to: " + NewAIState.ToString());
+            WriteLog(string.Format(m_Entity.gameObject.name + " ChangeAIState from:{0},to:{1} ", m_AIState.ToString(), NewAIState.ToString()));
         m_AIState = NewAIState;
         m_AIState.SetCharacterAI(this);
+    }
+
+    //计算跳跃攻击的时间
+    public float CalculateJumpTimeToTarget(BaseEntity Target)
+    {
+        return (m_Entity as Monster).JumpTime;
+        //float dist = Vector2.Distance(m_Entity.transform.position, Target.transform.position);
+        //return dist * 0.33f;
     }
 
     public virtual void Idle()
@@ -49,23 +59,43 @@ public abstract class ICharacterAI
     }
 
     //攻击目标
-    public virtual void Attack(BaseEntity entity)
-    {
-        ////
-        //m_CoolDown -= Time.deltaTime;
-        //if (m_CoolDown > 0)
-        //    return;
-        //m_CoolDown = ATTACK_COOLD_DOWN;
+    public virtual void Attack(BaseEntity Target)
+    {}
 
-        ////攻击目标
-        //(m_Entity as Monster).Attack();
-    }
+    public virtual void JumpAttack(BaseEntity Target)
+    { }
 
     //是否在攻击范围内
-    public bool TargetInAttackRange(BaseEntity entity)
+    public bool TargetInAttackRange(BaseEntity Target)
     {
-        float dist = Vector3.Distance(m_Entity.transform.position, entity.transform.position);
-        return (dist <= m_AttackRange);
+        return (distanceToTarget(Target) <= m_AttackRange);
+    }
+
+    public virtual bool TargetInJumpAttckRange(BaseEntity Target)
+    {
+        return false;
+    }
+
+    //是否在追击范围内
+    public bool TargetInChaseRange(BaseEntity Target)
+    {
+        return (distanceToTarget(Target) <= m_ChaseRange);
+    }
+
+    protected float distanceToTarget(BaseEntity Target)
+    {
+        return Vector2.Distance(m_Entity.transform.position, Target.transform.position);
+    }
+
+    public bool CheckCanJump(BaseEntity Target)
+    {
+        List<Monster> samedirectmonsters = MonsterManager.Instance().GetMonsterInfrontToTarget(m_Entity as Monster, Target);
+        if (samedirectmonsters.Count != 1)
+            return false;
+
+        if (samedirectmonsters[0]._CurrentAIState.Contains("JumpAttackAIState"))
+            return false;
+        return true;
     }
 
     //当前位置
@@ -118,7 +148,7 @@ public abstract class ICharacterAI
 
     public static void WriteLog(object log)
     {
-        Debug.Log(log);
+        Util.LogHW(log);
     }
 }
 

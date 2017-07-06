@@ -25,7 +25,15 @@ public class ConfuseAIState : IAIState {
         {
             if (m_CharacterAI.TargetInAttackRange(Targets[0]))
             {
+                m_CharacterAI.StopMove();
                 m_CharacterAI.ChangeAIState(new AttackAIState(Targets[0]));
+                return;
+            }
+
+            if (m_CharacterAI.TargetInChaseRange(Targets[0]))
+            {
+                m_CharacterAI.StopMove();
+                m_CharacterAI.ChangeAIState(new ChaseAIState(Targets[0]));
                 return;
             }
         }
@@ -35,6 +43,7 @@ public class ConfuseAIState : IAIState {
             m_ConfuseTime -= Time.deltaTime;
             if (m_ConfuseTime <= 0)
             {
+                m_CharacterAI.StopMove();
                 m_CharacterAI.ChangeAIState(new IdleAIState());
                 return;
             }
@@ -42,7 +51,7 @@ public class ConfuseAIState : IAIState {
         }
 
         m_bOnConfuse = true;
-        m_CharacterAI.Idle();
+        m_CharacterAI.MoveTo(Targets[0].transform.position);
     }
 }
 

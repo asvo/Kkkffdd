@@ -11,8 +11,16 @@ using Spine.Unity;
 public class Monster : BaseEntity {
 
     public EnemyAI enemyAi = null;
+    public float ChaseRange = 5;
     public float RestatsTime = 0.3f;
     public float MaxConfusedTime = 20;
+
+    #region Jump parameters
+    public float JumpPrepareTime = 0.5f;
+    public float JumpAttckRange = 6;
+    public float JumpTime = 1;
+    public float JumpHeight = 3;
+    #endregion
 
     public void LoadSettingData()
     {
@@ -69,6 +77,25 @@ public class Monster : BaseEntity {
         DamagerHandler.Instance().CalculateDamage(this, GameManager.
             Instance().MainPlayer, 10);
     }
+
+    public void JumpAttck(BaseEntity Target)
+    {
+        ResetPoseAndPlayAnim("attack2_Continued", false);
+        Invoke("PlayJumpPose", 0.2f);
+        JumpAttackAcition jumpAction = Util.TryAddComponent<JumpAttackAcition>(this.gameObject);
+        jumpAction.Attack(Target, JumpHeight, JumpTime, EndJumpPose);
+    }
+
+    private void PlayJumpPose()
+    {
+        ResetPoseAndPlayAnim("attack2_End", false);
+    }
+
+    private void EndJumpPose()
+    {
+        Util.LogHW("Jump over!");
+    }
+
 
     public override void OnDamaged(int damage)
     {
@@ -148,6 +175,26 @@ public class Monster : BaseEntity {
         SkeletonAnim.skeleton.SetToSetupPose();
         SkeletonAnim.state.ClearTracks();
         PlayAnim(Anim, isLoop);
+    }
+
+    public MoveDir DirToTarget(BaseEntity Target)
+    {
+        return MonsterManager.Instance().DirToTarget(this.transform, Target.transform);
+    }
+
+    public string _CurrentAIState
+    {
+        get
+        {
+            if (enemyAi != null)
+            {
+                return enemyAi.GetCurrentState();
+            }
+            else
+            {
+                return "None";
+            }
+        }
     }
 }
 
