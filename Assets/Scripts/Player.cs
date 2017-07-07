@@ -107,6 +107,11 @@ public class Player : BaseEntity {
             RushSkill rushSkill = Util.TryAddComponent<RushSkill>(gameObject);
             rushSkill.Cast();
         }
+        else if (2 == slot)
+        {
+            JumpBackSkill jumpSkill = Util.TryAddComponent<JumpBackSkill>(gameObject);
+            jumpSkill.Cast();
+        }
     }
 
     private void FireNormalAttack()

@@ -134,6 +134,11 @@ public class MoveInput : MonoBehaviour
             if (GetPlayer != null)
                 GetPlayer.FireSkill(1);
         }
+        else if (Input.GetKey(KeyCode.L))
+        {
+            if (GetPlayer != null)
+                GetPlayer.FireSkill(2);
+        }
     }
 
     private void AddMove()
