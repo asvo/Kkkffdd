@@ -82,6 +82,8 @@ public class MoveAction : MonoBehaviour {
 
     public MoveDir GetCurrentFaceDir()
     {
+        if (mFaceDir == MoveDir.None)
+            mFaceDir = MoveDir.Right;   //right for default
         return mFaceDir;
     }
 

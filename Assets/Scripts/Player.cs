@@ -174,7 +174,7 @@ public class Player : BaseEntity {
             if (SkillDataMgr.Instance().IsSkill01BuffActive)
             {
                 //buff效果。使所有技能cd-1
-                SkillDataMgr.Instance().ReducePlayerAllSkillCd(1f);
+                SkillDataMgr.Instance().ReducePlayerAllSkillCd(1, 1f);
             }
         }
     }

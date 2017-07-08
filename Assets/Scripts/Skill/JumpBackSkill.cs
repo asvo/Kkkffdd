@@ -6,6 +6,9 @@ public class JumpBackSkill : MonoBehaviour {
     public float DamageTime = 0.5f;
     public float DamageRange = 3f;
     public int Damage = 2;
+    //specail parameters
+    public float BackMoveSpeed = 3f;
+    public float BackMoveTime = 1.2f;
 
     const string ActionJumpName = "skill2_1";
     const string ActionAttackName = "skill2_2";
@@ -15,6 +18,7 @@ public class JumpBackSkill : MonoBehaviour {
     private bool mIsFiringSkill = false;
     private bool mHasAttack = false;
     private float mWaitTime = 0f;
+    private bool mHasPlayFallAction = false;
 
     void OnEnable()
     {
@@ -25,19 +29,7 @@ public class JumpBackSkill : MonoBehaviour {
     {
         EventMgr.Instance().DettachEvent(EventsType.FireNoramlAttack, OnFireNormalAttack);
     }
-
-    private void OnFireNormalAttack(object param)
-    {
-        if (!mIsFiringSkill || mHasAttack)  //只允许攻击一次
-            return;
-        Util.LogAsvo("Recv fire noraml attack Event..");
-        mHasAttack = true;
-        //play attack anim
-        mEntity.PlayAnim(ActionAttackName);
-        //start damage-calculate corutine
-        StartCoroutine("CalculateSkillDamage");
-    }
-
+    
     public void Cast()
     {
         if (!this.enabled)
@@ -46,12 +38,29 @@ public class JumpBackSkill : MonoBehaviour {
         mEntity = GetComponent<BaseEntity>();
 
         mIsFiringSkill = true;
+        SkillDataMgr.Instance().IsSkill02Active = true;
         mHasAttack = false;
         mWaitTime = 0f;
+        mHasPlayFallAction = false;
         //play anim
         mEntity.PlayAnim(ActionJumpName);        
+        //move back
+        mEntity.MoveCtrl.MoveForward(-BackMoveSpeed);
     }
-    
+
+    private void OnFireNormalAttack(object param)
+    {
+        if (!mIsFiringSkill || mHasAttack)  //只允许攻击一次
+            return;
+        Util.LogAsvo("Recv fire noraml attack Event..");
+        mHasAttack = true;
+        //play attack anim
+        mEntity.SkeletonAnim.skeleton.SetToSetupPose();
+        mEntity.PlayAnim(ActionAttackName);
+        //start damage-calculate corutine
+        StartCoroutine("CalculateSkillDamage");
+    }
+
     IEnumerator CalculateSkillDamage()
     {
         yield return new WaitForSeconds(DamageTime);
@@ -73,9 +82,15 @@ public class JumpBackSkill : MonoBehaviour {
             return;
         }
         if (!mHasAttack)
-        {
+        {            
             mWaitTime += Time.deltaTime;
-            if (mWaitTime >= 1.0f)
+            if (mWaitTime >= 1.0f && !mHasPlayFallAction)
+            {
+                mHasPlayFallAction = true;
+                Debug.LogError("play fall");
+                mEntity.PlayAnim(ActionAttackOverName);
+            }
+            else if (mWaitTime >= BackMoveTime)
             {
                 EndSkill();
             }
@@ -84,8 +99,9 @@ public class JumpBackSkill : MonoBehaviour {
 
     private void EndSkill()
     {
-        mEntity.PlayAnim(ActionAttackOverName);
+        mEntity.MoveCtrl.EndMove();
         mIsFiringSkill = false;
         enabled = false;
+        SkillDataMgr.Instance().IsSkill02Active = false;
     }
 }

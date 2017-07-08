@@ -9,13 +9,13 @@ public class Skill01Btn : SkillBtn {
     public int CurCounter = 0;
     public float mCurrentCdIntervalTime = 0f;
     public bool CanFireSecondTime = false;
-
+    
     protected override void OnCastSkill()
     {
         bool canFireSkill = CurCounter < MaxCounter;
         if (!canFireSkill)
         {
-            if (SkillDataMgr.Instance().SkillCdData01.mIsInCd)
+            if (mCdData.mIsInCd)
             {
                 Debug.Log("技能cd中");
                 return;
@@ -24,7 +24,7 @@ public class Skill01Btn : SkillBtn {
         //set cd
         if (0 == CurCounter)
         {
-            SkillDataMgr.Instance().SetOnSkillCd01(TestSkillCd, Time.realtimeSinceStartup, true);
+            SkillDataMgr.Instance().SetOnSkillCd(SkillSlotId, TestSkillCd, Time.realtimeSinceStartup, true);
             CanFireSecondTime = CurCounter + 1 == MaxCounter;
             //技能1特殊逻辑
             if (CanFireSecondTime)
@@ -49,7 +49,7 @@ public class Skill01Btn : SkillBtn {
         //附带skill01的buff
         float skill01BuffPersistTime = 1.0f;
         SkillDataMgr.Instance().IsSkill01BuffActive = true;
-        SkillDataMgr.Instance().SetOnSkill01BuffCdData(skill01BuffPersistTime, Time.realtimeSinceStartup, true);
+        SkillDataMgr.Instance().SetOnSkillCd(11, skill01BuffPersistTime, Time.realtimeSinceStartup, true);
     }
 
     protected override void OnUpdateBeforeCd(float deltaTime)
