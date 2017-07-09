@@ -80,11 +80,9 @@ public class Monster : BaseEntity {
 
     public void JumpAttck(BaseEntity Target)
     {
-        ResetPoseAndPlayAnim("attack2_Continued", false);
-        Invoke("PlayJumpPose", 0.2f);
         JumpAttackAcition jumpAction = Util.TryAddComponent<JumpAttackAcition>(this.gameObject);
         jumpAction.Attack(Target, JumpHeight, JumpTime, EndJumpPose);
-    }
+    }   
 
     private void PlayJumpPose()
     {

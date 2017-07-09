@@ -11,7 +11,14 @@ using Prime31;
 public class JumpAttackAcition : MonoBehaviour {
     
     private float m_JumpTimer = 0;
+    private float m_JumpHeight = 0;
+    Vector3 startPoint;
+    Vector3 endPoint;
+
     private CharacterController2D _controller;
+    private Monster _monster;
+
+    private bool m_bOnJumpPose = false;
 
     Bezier jumpCurve = null;
     System.Action CallBack = null;
@@ -19,6 +26,8 @@ public class JumpAttackAcition : MonoBehaviour {
     void Awake()
     {
         _controller = GetComponent<CharacterController2D>();
+        _monster = GetComponent<Monster>();
+
         // listen to some events for illustration purposes
         _controller.onControllerCollidedEvent += onControllerCollider;
         _controller.onTriggerEnterEvent += onTriggerEnterEvent;
@@ -52,27 +61,52 @@ public class JumpAttackAcition : MonoBehaviour {
 
     #endregion
 
-    public void PrepareForJump(float time)
-    {
-      
-    }
-
     public void Attack(BaseEntity Target,float JumpHeight, float JumpTime,System.Action CallBack = null)
     {
         this.CallBack = CallBack;
         m_JumpTimer = JumpTime;
-        Vector3 startPoint = transform.position;
-        Vector3 endPoint = Target.transform.position;
-        jumpCurve = new Bezier(transform, JumpHeight, startPoint, endPoint, JumpTime);
-        this.enabled = true;
+        m_JumpHeight = JumpHeight;
+        startPoint = transform.position;
+        endPoint = Target.transform.position;
+
+        m_bOnJumpPose = false;
+
+        float preparetime = PrepareJumpTime(Target);
+        PlayPreparePose();
+
+        Invoke("Jump", preparetime);
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+
+    private void PlayPreparePose()
+    {
+        _monster.ResetPoseAndPlayAnim("attack2_Continued", true);
+    }
+
+    private void Jump()
+    {
+        _monster.ResetPoseAndPlayAnim("attack2_End", false);
+        jumpCurve = new Bezier(transform, m_JumpHeight, startPoint, endPoint, m_JumpTimer);
+        m_bOnJumpPose = true;
+    }
+
+
+    private float PrepareJumpTime(BaseEntity to)
+    {
+        float prepareTime = Mathf.Abs(Vector2.Distance(_monster.transform.position, to.transform.position)) * 0.1f;
+        return prepareTime;
+    }
+
+    // Update is called once per frame
+    void Update () {
+
+        if (!m_bOnJumpPose)
+            return;
 
         m_JumpTimer -= Time.deltaTime;
         if (m_JumpTimer <= 0)
         {
+            m_bOnJumpPose = false;
             OnFinish();
         }
         else

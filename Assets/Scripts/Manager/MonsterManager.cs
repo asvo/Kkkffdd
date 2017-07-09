@@ -25,26 +25,22 @@ public class MonsterManager : Single<MonsterManager> {
         Monster monster = null;
         if (dic_CacheMonsterList.ContainsKey(MonsterIndex))
         {
-            monster = dic_CacheMonsterList[MonsterIndex];
-            monster.Spawn();
-            monster.transform.SetParent(spawnPoint);
-            monster.transform.localPosition = Vector3.zero - offset;
-            monster.transform.localEulerAngles = Vector3.zero;
-            monster.gameObject.SetActive(true);
+            monster = dic_CacheMonsterList[MonsterIndex];            
             dic_CacheMonsterList.Remove(MonsterIndex);
         }
         else
         {
             GameObject goMonster = GameObject.Instantiate(EnemyPrefab);
             monster = Util.TryAddComponent<Monster>(goMonster);
-            monster.Spawn();
-            goMonster.layer = Util.MonsterLayer;
-            monster.MoveCtrl.CC2D.platformMask = 1 << Util.GroundLayer | 1 << Util.WallLayer | 1 << Util.PlayerLayer | 1<< Util.MonsterLayer;
-            goMonster.name = MonsterIndex.ToString();
-            goMonster.transform.SetParent(spawnPoint);
-            goMonster.transform.localPosition = Vector3.zero - offset;
-            goMonster.transform.localRotation = Quaternion.identity;
         }
+
+        monster.MoveCtrl.CC2D.platformMask = 1 << Util.GroundLayer | 1 << Util.WallLayer | 1 << Util.PlayerLayer | 1 << Util.MonsterLayer;
+        monster.gameObject.name = MonsterIndex.ToString();
+        monster.gameObject.layer = Util.MonsterLayer;
+        monster.transform.position = spawnPoint.position - offset;
+        monster.transform.rotation = Quaternion.identity;
+        monster.gameObject.SetActive(true);
+        monster.Spawn();
 
         ActiveMonsters.Add(monster);
         return monster;

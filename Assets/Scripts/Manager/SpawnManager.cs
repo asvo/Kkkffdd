@@ -102,7 +102,7 @@ public class SpawnManager : MonoBehaviour
             EnemyPrefab = Resources.Load("ModelPrefab/Enemy") as GameObject;
         }
 
-        int spawnSide = m_HaveSpawnCount / 2;
+        int spawnSide = m_HaveSpawnCount % 2;
         //玩家太靠近出生点时，选择另一个出生点出生
         if (checkSpwanSideNearestToPlayer(spawnSide))
             spawnSide = spawnSide == 0 ? 1 : 0;

@@ -26,6 +26,7 @@ public class MoveAction : MonoBehaviour {
     private Vector2 movement = Vector2.zero;
 
     private MoveDir mFaceDir;
+    [SerializeField]
     private MoveDir mMovingDir;
     private float mCurrentSpeed;
     private float mTargetSpeed;
