@@ -8,7 +8,7 @@ using Prime31;
 */
 
 
-public class JumpAttackAcition : MonoBehaviour {
+public class JumpAttackAction : MonoBehaviour {
     
     private float m_JumpTimer = 0;
     private float m_JumpHeight = 0;
@@ -88,6 +88,8 @@ public class JumpAttackAcition : MonoBehaviour {
         _monster.ResetPoseAndPlayAnim("attack2_End", false);
         jumpCurve = new Bezier(transform, m_JumpHeight, startPoint, endPoint, m_JumpTimer);
         m_bOnJumpPose = true;
+        this.enabled = true;
+        Util.LogHW(gameObject.name + " jump start time:" + Time.time);
     }
 
 
@@ -116,7 +118,8 @@ public class JumpAttackAcition : MonoBehaviour {
 	}
 
     private void OnFinish()
-    { 
+    {
+        Util.LogHW(gameObject.name +  " jump over time:" + Time.time);
         this.enabled = false;
         if (CallBack != null)
         {

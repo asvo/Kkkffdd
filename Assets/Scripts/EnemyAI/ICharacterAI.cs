@@ -38,9 +38,14 @@ public abstract class ICharacterAI
     public virtual void ChangeAIState(IAIState NewAIState)
     {
         if (m_AIState == null)
-            WriteLog(string.Format(m_Entity.gameObject.name + " ChangeAIState from:{0},to:{1} ", "None", NewAIState.ToString()));
+            WriteLog(string.Format(m_Entity.gameObject.name + " State: {0}===============>{1} ", "None", NewAIState.ToString().Replace("AIState", "")));
         else
-            WriteLog(string.Format(m_Entity.gameObject.name + " ChangeAIState from:{0},to:{1} ", m_AIState.ToString(), NewAIState.ToString()));
+            WriteLog(string.Format(m_Entity.gameObject.name + " State: {0}===============>{1} ", m_AIState.ToString().Replace("AIState",""), NewAIState.ToString().Replace("AIState", "")));
+
+        if (m_AIState != null)
+        {
+            m_AIState.ForceStop();
+        }
         m_AIState = NewAIState;
         m_AIState.SetCharacterAI(this);
     }
@@ -62,7 +67,7 @@ public abstract class ICharacterAI
     public virtual void Attack(BaseEntity Target)
     {}
 
-    public virtual void JumpAttack(BaseEntity Target)
+    public virtual void JumpAttack(BaseEntity Target, System.Action CallBack)
     { }
 
     //是否在攻击范围内

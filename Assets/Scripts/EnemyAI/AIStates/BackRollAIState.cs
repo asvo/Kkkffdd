@@ -11,9 +11,29 @@ using System.Collections.Generic;
 
 public class BackRollAIState : IAIState {
 
+    public float RollRange = 2;
+    public float rollSpeed = 0.5f;
+
+    protected bool m_bOnRoll = false;
+
+    public BackRollAIState(float range)
+    {
+        RollRange = range;
+        m_bOnRoll = true;
+    }
+
     public override void Update(List<BaseEntity> Targets)
     {
-        throw new NotImplementedException();
+        if (m_bOnRoll)
+        {
+            (m_CharacterAI as EnemyAI).RollBack(Targets[0], OnFinish);
+            m_bOnRoll = false;
+        }
+    }
+
+    protected virtual void OnFinish()
+    {
+
     }
 }
 

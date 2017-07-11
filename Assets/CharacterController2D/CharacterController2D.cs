@@ -393,6 +393,7 @@ namespace Prime31
                     {
                         deltaMovement.x -= _skinWidth;
                         collisionState.right = true;
+                        deltaMovement.x *= -1;
                     }
                     else
                     {

@@ -43,6 +43,7 @@ public class Bezier
 
         centerPointX = (startPointX + endPointX) / 2;
         centerPointY = (startPointY + endPointY) / 2 + height;
+        t = 0;
     }
 
     public Vector2 Update()

@@ -27,6 +27,12 @@ public abstract class IAIState
     //更新
     public abstract void Update(List<BaseEntity> Targets);
 
+    /// <summary>
+    /// 退出状态
+    /// </summary>
+    public virtual void ForceStop()
+    { }
+
     //目标被删除
     public virtual void RemoveTarget(BaseEntity Target)
     { }

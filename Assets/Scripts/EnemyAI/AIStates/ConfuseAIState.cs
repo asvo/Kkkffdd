@@ -44,7 +44,7 @@ public class ConfuseAIState : IAIState {
             if (m_ConfuseTime <= 0)
             {
                 m_CharacterAI.StopMove();
-                m_CharacterAI.ChangeAIState(new IdleAIState());
+                m_CharacterAI.ChangeAIState(new ChaseAIState(Targets[0]));
                 return;
             }
             return;

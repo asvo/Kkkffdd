@@ -10,7 +10,7 @@ using Spine.Unity;
 
 public class Monster : BaseEntity {
 
-    public EnemyAI enemyAi = null;
+    public EnemyAI m_EnemyAI = null;
     public float ChaseRange = 5;
     public float RestatsTime = 0.3f;
     public float MaxConfusedTime = 20;
@@ -20,7 +20,10 @@ public class Monster : BaseEntity {
     public float JumpAttckRange = 6;
     public float JumpTime = 1;
     public float JumpHeight = 3;
+    public bool HaveSpecialSkill = false;
     #endregion
+
+    public float RollBackRange = 3;
 
     public void LoadSettingData()
     {
@@ -36,14 +39,13 @@ public class Monster : BaseEntity {
         }
     }
 
-    public void Spawn()
+    public void Spawn(EnemyAI AIBrain =null)
     {
         LoadSettingData();
         Health = 3;
         isDead = false;
 
-        enemyAi = new EnemyAI(this);
-        enemyAi.ChangeAIState(new ConfuseAIState(MaxConfusedTime));
+        m_EnemyAI = AIBrain;       
 
         if (SkeletonAnim != null)
         {
@@ -56,9 +58,9 @@ public class Monster : BaseEntity {
     {
         if (isDead)
             return;
-        if (enemyAi != null && enemyAi.GetCurrentState() != null)
+        if (m_EnemyAI != null && m_EnemyAI.GetCurrentState() != null)
         {
-            enemyAi.Update(new System.Collections.Generic.List<BaseEntity>() { GameManager.Instance().MainPlayer });
+            m_EnemyAI.Update(new System.Collections.Generic.List<BaseEntity>() { GameManager.Instance().MainPlayer });
         }
     }
 
@@ -78,29 +80,21 @@ public class Monster : BaseEntity {
             Instance().MainPlayer, 10);
     }
 
-    public void JumpAttck(BaseEntity Target)
-    {
-        JumpAttackAcition jumpAction = Util.TryAddComponent<JumpAttackAcition>(this.gameObject);
-        jumpAction.Attack(Target, JumpHeight, JumpTime, EndJumpPose);
-    }   
-
-    private void PlayJumpPose()
-    {
-        ResetPoseAndPlayAnim("attack2_End", false);
-    }
-
-    private void EndJumpPose()
-    {
-        Util.LogHW("Jump over!");
-    }
-
-
     public override void OnDamaged(int damage)
     {
-        base.OnDamaged(damage);
-        if (enemyAi != null)
+        if (Health - damage < 0)
         {
-            enemyAi.ChangeAIState(new RestatsAIState(RestatsTime));
+            if (m_EnemyAI != null)
+            {
+                m_EnemyAI.ChangeAIState(new BackRollAIState(RollBackRange));
+                return;
+            }
+        }
+        base.OnDamaged(damage);
+
+        if (m_EnemyAI != null)
+        {
+            m_EnemyAI.ChangeAIState(new RestatsAIState(RestatsTime));
         }
     }
 
@@ -128,6 +122,7 @@ public class Monster : BaseEntity {
         MoveDir moveDir = MonsterManager.Instance().DirToPlayer(this);
         Move(moveDir);
     }
+
     public override void Move(MoveDir moveDir)
     {
         //     Debug.LogError("moveDir"+ moveDir);
@@ -146,12 +141,10 @@ public class Monster : BaseEntity {
         }
     }
 
-
     public override void EndMove()
     {
         base.EndMove();
     }
-
 
     public void Restats()
     {
@@ -184,9 +177,9 @@ public class Monster : BaseEntity {
     {
         get
         {
-            if (enemyAi != null)
+            if (m_EnemyAI != null)
             {
-                return enemyAi.GetCurrentState();
+                return m_EnemyAI.GetCurrentState();
             }
             else
             {

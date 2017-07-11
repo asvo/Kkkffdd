@@ -40,10 +40,24 @@ public class MonsterManager : Single<MonsterManager> {
         monster.transform.position = spawnPoint.position - offset;
         monster.transform.rotation = Quaternion.identity;
         monster.gameObject.SetActive(true);
-        monster.Spawn();
+        BuildAiType(monster, EnemyType.Monster_Normal);
 
         ActiveMonsters.Add(monster);
         return monster;
+    }
+
+    private void BuildAiType(Monster monster, EnemyType AiType = EnemyType.Monster_Normal)
+    {
+        EnemyAI monsterAI = null;
+        switch (AiType)
+        {
+            case EnemyType.Monster_Normal:
+                monsterAI = new EnemyAI(monster, EnemyType.Monster_Normal);
+                monsterAI.ChangeAIState(new ConfuseAIState(monster.MaxConfusedTime));
+                break;
+        }
+
+        monster.Spawn(monsterAI);
     }
 
     /// <summary>
