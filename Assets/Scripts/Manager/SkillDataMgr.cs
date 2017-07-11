@@ -13,7 +13,8 @@ public class SkillDataMgr : Single<SkillDataMgr>
     {
         mSkillCdData.Add(1, new SkillCdData());
         mSkillCdData.Add(11, new SkillCdData()); //skill 1的buff效果cd
-        mSkillCdData.Add(2, new SkillCdData());
+        mSkillCdData.Add(2, new SkillCdData());     //skill 2 cd slot 1
+        mSkillCdData.Add(21, new SkillCdData());    //skill 2 cd slot 2
 
         IsSkill01BuffActive = false;
         SetOnSkillCd(11, 1f, 0f, false);
@@ -44,6 +45,45 @@ public class SkillDataMgr : Single<SkillDataMgr>
             return;
         cddata.AddCd(-reduceAmount);
     }
+
+#region skill2-special
+
+    int[] skill2ReflectArry = new int[]{
+        2, 21
+    };
+
+    private int mCurrentSkill2ReflectSlotId = 2;
+
+    public void SetOnCurSkill2Cd(float cdTime, float curTime, bool isInToCd)
+    {
+        SkillCdData cddata = GetCurSkill2CdData();
+        cddata.SetOnCd(cdTime, curTime, isInToCd);
+    }
+
+    public SkillCdData GetCurSkill2CdData()
+    {
+        return GetSkillCdDataBySlotId(mCurrentSkill2ReflectSlotId);
+    }
+    
+    public SkillCdData GetLeastCdSkill2CdData()
+    {
+        float endCdTime = float.MaxValue;
+        SkillCdData targetCdata = null;
+        for(int i = 0; i < skill2ReflectArry.Length; ++i)
+        {
+            SkillCdData cdData = GetSkillCdDataBySlotId(skill2ReflectArry[i]);
+            if (cdData.mEndCdTime < endCdTime)
+            {
+                targetCdata = cdData;
+                endCdTime = cdData.mEndCdTime;
+                //
+                mCurrentSkill2ReflectSlotId = skill2ReflectArry[i];
+            }
+        }
+        return targetCdata;
+    }
+
+#endregion
 }
 
 public class SkillCdData
