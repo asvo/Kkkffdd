@@ -169,13 +169,8 @@ public class Player : BaseEntity {
         BaseEntity target = Util.FindNereastTargetMonsterByDist(this, NormalAttackRange);
         if (null != target)
         {
+            int damage = SkillDataMgr.Instance().IsSkill01BuffActive ? NormalAttackDamge : 2*NormalAttackDamge;
             DamagerHandler.Instance().CalculateDamage(this, target, NormalAttackDamge);
-            //normal attack hit on target.
-            if (SkillDataMgr.Instance().IsSkill01BuffActive)
-            {
-                //buff效果。使所有技能cd-1
-                SkillDataMgr.Instance().ReducePlayerAllSkillCd(1, 1f);
-            }
         }
     }
     

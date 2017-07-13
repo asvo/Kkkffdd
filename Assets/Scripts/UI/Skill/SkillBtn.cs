@@ -72,6 +72,11 @@ public class SkillBtn : MonoBehaviour {
     protected virtual void OnCdOver()
     {
         mCdData.mIsInCd = false;
+        ResetShowCd();
+    }
+
+    protected void ResetShowCd()
+    {
         ImgCd.fillAmount = 0f;
         TxtCd.text = string.Empty;
         ImgCd.gameObject.SetActive(false);

@@ -19,6 +19,7 @@ public class JumpBackSkill : MonoBehaviour {
     private bool mHasAttack = false;
     private float mWaitTime = 0f;
     private bool mHasPlayFallAction = false;
+    private Vector3 mStartSkillPos;
 
     void OnEnable()
     {
@@ -42,6 +43,7 @@ public class JumpBackSkill : MonoBehaviour {
         mHasAttack = false;
         mWaitTime = 0f;
         mHasPlayFallAction = false;
+        mStartSkillPos = mEntity.transform.position;
         //play anim
         mEntity.PlayAnim(ActionJumpName);        
         //move back
@@ -64,7 +66,8 @@ public class JumpBackSkill : MonoBehaviour {
     IEnumerator CalculateSkillDamage()
     {
         yield return new WaitForSeconds(DamageTime);
-        BaseEntity target = Util.FindNereastTargetMonsterByDist(mEntity, DamageRange);
+        float moveDist = Vector3.Distance(mStartSkillPos, mEntity.transform.position);
+        BaseEntity target = Util.FindNereastTargetMonsterByDist(mEntity, DamageRange + moveDist);
         Util.LogAsvo("Skill02 attack !");
         if (null != target)
         {
@@ -87,7 +90,6 @@ public class JumpBackSkill : MonoBehaviour {
             if (mWaitTime >= 1.0f && !mHasPlayFallAction)
             {
                 mHasPlayFallAction = true;
-                Debug.LogError("play fall");
                 mEntity.PlayAnim(ActionAttackOverName);
             }
             else if (mWaitTime >= BackMoveTime)

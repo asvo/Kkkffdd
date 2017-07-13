@@ -5,7 +5,6 @@ using System.Collections;
 public class HUD : MonoBehaviour {
 
     public Button BtnNormalAttack;
-
     public Text TxtSkill01Buff;
     
     void Awake()
@@ -45,7 +44,7 @@ public class HUD : MonoBehaviour {
                 }
                 else
                 {
-                    TxtSkill01Buff.text = string.Format("技能01Buff效果剩余时间: {0:F} ", leftTime);
+                    TxtSkill01Buff.text = string.Format("普攻双倍伤害.技能01Buff效果剩余时间: {0:F} ", leftTime);
                 }
             }
         }

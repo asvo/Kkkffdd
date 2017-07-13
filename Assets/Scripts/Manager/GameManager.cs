@@ -80,6 +80,7 @@ public class GameManager : MonoBehaviour
         MainPlayer.InitPlayer();
         spawnManager.Init();
         IsGameOver = false;
+        SkillDataMgr.Instance().ClearSkillCds();
     }
 
     public void PauseGame()

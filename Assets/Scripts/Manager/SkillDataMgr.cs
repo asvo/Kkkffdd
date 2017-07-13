@@ -20,6 +20,16 @@ public class SkillDataMgr : Single<SkillDataMgr>
         SetOnSkillCd(11, 1f, 0f, false);
     }
 
+    public void ClearSkillCds()
+    {
+        IsSkill01BuffActive = false;
+        IsSkill02Active = false;
+        foreach(var pair in mSkillCdData)
+        {
+            pair.Value.ClearCd();
+        }
+    }
+
     public void SetOnSkillCd(int slotId, float cdTime, float curTime, bool isInToCd)
     {
         SkillCdData cddata = GetSkillCdDataBySlotId(slotId);
@@ -102,5 +112,11 @@ public class SkillCdData
         SkillCdTime = cdTime;
         mEndCdTime = curTime + cdTime;
         mIsInCd = isInToCd;
+    }
+
+    public void ClearCd()
+    {
+        mIsInCd = false;
+        mEndCdTime = 0f;
     }
 }
