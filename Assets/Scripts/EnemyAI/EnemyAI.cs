@@ -54,7 +54,7 @@ public class EnemyAI : ICharacterAI
             return;
         }
         JumpAttackAction jumpAction = Util.TryAddComponent<JumpAttackAction>(monster.gameObject);
-        jumpAction.Attack(Target, monster.JumpHeight, monster.JumpTime, CallBack);
+        jumpAction.Attack(Target, monster.JumpHeight, monster.JumpTime, monster.PrepareJumpTime(Target), CallBack);
     }
 
     /// <summary>

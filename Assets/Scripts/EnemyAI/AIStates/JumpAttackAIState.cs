@@ -11,7 +11,6 @@ using System.Collections.Generic;
 
 public class JumpAttackAIState : IAIState {
 
-    private float m_JumpTime = 0;
     private bool m_bOnJump = false;
     private BaseEntity Target;
 
@@ -37,14 +36,22 @@ public class JumpAttackAIState : IAIState {
         }
 
         m_bOnJump = true;
-        m_JumpTime = m_CharacterAI.CalculateJumpTimeToTarget(Target);
         m_CharacterAI.JumpAttack(Target, JumpOver);
 
     }
 
-    private void JumpOver()
+    protected virtual void JumpOver()
     {
+        if (m_CharacterAI.IsDead())
+            return;
         m_bOnJump = false;
+        //精英怪物
+        if (m_CharacterAI.GetEnemyType() == EnemyType.Monster_OnlyJumpSkill)
+        {
+            m_CharacterAI.ChangeAIState(new JumpAttackAIState(Target));
+            return;
+        }
+
         if (m_CharacterAI.TargetInAttackRange(Target))
         {
             //玩家在攻击范围内，转换为攻击状态，执行攻击

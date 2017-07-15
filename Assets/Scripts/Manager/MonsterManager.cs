@@ -40,7 +40,13 @@ public class MonsterManager : Single<MonsterManager> {
         monster.transform.position = spawnPoint.position - offset;
         monster.transform.rotation = Quaternion.identity;
         monster.gameObject.SetActive(true);
-        BuildAiType(monster, EnemyType.Monster_Normal);
+
+        EnemyType random =(EnemyType)Random.Range((int)EnemyType.Monster_Normal,(int)EnemyType.Max);
+        if (random > EnemyType.Monster_TwoSkillStrength)
+        {
+            random = EnemyType.Monster_Normal;
+        }
+        BuildAiType(monster, random);
 
         ActiveMonsters.Add(monster);
         return monster;

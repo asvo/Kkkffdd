@@ -15,7 +15,7 @@ public class BackRollAIState : IAIState {
     public float rollSpeed = 0.5f;
 
     protected bool m_bOnRoll = false;
-
+    BaseEntity Target;
     public BackRollAIState(float range)
     {
         RollRange = range;
@@ -26,14 +26,20 @@ public class BackRollAIState : IAIState {
     {
         if (m_bOnRoll)
         {
-            (m_CharacterAI as EnemyAI).RollBack(Targets[0], OnFinish);
+            Target = Targets[0];
+            (m_CharacterAI as EnemyAI).RollBack(Target, OnFinish);
             m_bOnRoll = false;
         }
     }
 
     protected virtual void OnFinish()
     {
-
+        // 精英怪例3
+        if (m_CharacterAI.GetEnemyType() == EnemyType.Monster_TwoSkillStrength)
+        {
+            m_CharacterAI.ChangeAIState(new JumpAttackAIState(Target));
+            return;
+        }
     }
 }
 

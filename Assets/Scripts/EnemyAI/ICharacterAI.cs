@@ -27,6 +27,18 @@ public abstract class ICharacterAI
         m_AttackRange = entity.NormalAttackDamge;
     }
 
+    public EnemyType GetEnemyType()
+    {
+        if (m_Entity is Monster)
+        {
+            return (m_Entity as Monster).m_EnemyAI.m_EnemyType;
+        }
+        else
+        {
+            return EnemyType.Max;
+        }
+    }
+
     public string GetCurrentState()
     {
         if (m_AIState == null)

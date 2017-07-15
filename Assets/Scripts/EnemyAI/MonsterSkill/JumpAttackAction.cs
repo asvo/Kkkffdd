@@ -44,24 +44,35 @@ public class JumpAttackAction : MonoBehaviour {
             return;
 
         // logs any collider hits if uncommented. it gets noisy so it is commented out for the demo
-        //Debug.Log( "flags: " + _controller.collisionState + ", hit.normal: " + hit.normal );
+        //LogTrigger("flags: " + _controller.collisionState + ", hit.normal: " + hit.normal );
     }
 
 
     void onTriggerEnterEvent(Collider2D col)
     {
-        //Debug.Log("onTriggerEnterEvent: " + col.gameObject.name);
+        if (col.gameObject.GetComponent<Player>() != null)
+        {
+            LogTrigger("onTriggerEnterEvent: " + col.gameObject.name);
+        }
     }
 
 
     void onTriggerExitEvent(Collider2D col)
     {
-        //Debug.Log("onTriggerExitEvent: " + col.gameObject.name);
+        if (col.gameObject.GetComponent<Player>() != null)
+        {
+            LogTrigger("onTriggerExitEvent: " + col.gameObject.name);
+        }
+    }
+
+    private void LogTrigger(string log)
+    {
+        Debug.Log(log);
     }
 
     #endregion
 
-    public void Attack(BaseEntity Target,float JumpHeight, float JumpTime,System.Action CallBack = null)
+    public void Attack(BaseEntity Target,float JumpHeight, float JumpTime,float PrepareTime, System.Action CallBack = null)
     {
         this.CallBack = CallBack;
         m_JumpTimer = JumpTime;
@@ -70,11 +81,9 @@ public class JumpAttackAction : MonoBehaviour {
         endPoint = Target.transform.position;
 
         m_bOnJumpPose = false;
-
-        float preparetime = PrepareJumpTime(Target);
         PlayPreparePose();
 
-        Invoke("Jump", preparetime);
+        Invoke("Jump", PrepareTime);
     }
 
 

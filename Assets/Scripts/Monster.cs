@@ -39,7 +39,7 @@ public class Monster : BaseEntity {
         }
     }
 
-    public void Spawn(EnemyAI AIBrain =null)
+    public virtual void Spawn(EnemyAI AIBrain =null)
     {
         LoadSettingData();
         Health = 3;
@@ -60,7 +60,12 @@ public class Monster : BaseEntity {
             return;
         if (m_EnemyAI != null && m_EnemyAI.GetCurrentState() != null)
         {
+            _CurrentAIState = m_EnemyAI.GetCurrentState();
             m_EnemyAI.Update(new System.Collections.Generic.List<BaseEntity>() { GameManager.Instance().MainPlayer });
+        }
+        else
+        {
+            _CurrentAIState = "None";
         }
     }
 
@@ -82,14 +87,6 @@ public class Monster : BaseEntity {
 
     public override void OnDamaged(int damage)
     {
-        if (Health - damage < 0)
-        {
-            if (m_EnemyAI != null)
-            {
-                m_EnemyAI.ChangeAIState(new BackRollAIState(RollBackRange));
-                return;
-            }
-        }
         base.OnDamaged(damage);
 
         if (m_EnemyAI != null)
@@ -172,20 +169,13 @@ public class Monster : BaseEntity {
     {
         return MonsterManager.Instance().DirToTarget(this.transform, Target.transform);
     }
+    [Header("状态")]
+    public string _CurrentAIState;
 
-    public string _CurrentAIState
+    public virtual  float PrepareJumpTime(BaseEntity to)
     {
-        get
-        {
-            if (m_EnemyAI != null)
-            {
-                return m_EnemyAI.GetCurrentState();
-            }
-            else
-            {
-                return "None";
-            }
-        }
+        float prepareTime = Mathf.Abs(Vector2.Distance(this.transform.position, to.transform.position)) * 0.1f;
+        return prepareTime;
     }
 }
 
