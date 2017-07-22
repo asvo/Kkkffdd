@@ -29,6 +29,8 @@ public class ValueManager : Single<ValueManager>
 {
     public const string PLYER_VALUE = "PLYER_VALUE";
     public const string MONSTER_VALUE = "MONSTER_VALUE";
+    //player skills
+    public const string PLYER_SKILLS = "PLYER_SKILLS";
 
     public JsDataBaseValue MonsterValueSettings = null;
     public JsDataBaseValue PlayerValueSettings = null;

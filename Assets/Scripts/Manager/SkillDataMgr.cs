@@ -11,6 +11,7 @@ public class SkillDataMgr : Single<SkillDataMgr>
 
     public void InitSkillCdData()
     {
+        mSkillCdData.Clear();
         mSkillCdData.Add(1, new SkillCdData());
         mSkillCdData.Add(11, new SkillCdData()); //skill 1的buff效果cd
         mSkillCdData.Add(2, new SkillCdData());     //skill 2 cd slot 1
@@ -35,6 +36,9 @@ public class SkillDataMgr : Single<SkillDataMgr>
         SkillCdData cddata = GetSkillCdDataBySlotId(slotId);
         if (null == cddata)
             return;
+        SkillCfgUnit cfgUnit = SkillCfgMgr.Instance().GetSkillCfgBySlotId(slotId);
+        if (null != cfgUnit)
+            cdTime = cfgUnit.SkillCd;
         cddata.SetOnCd(cdTime, curTime, isInToCd);
     }
 

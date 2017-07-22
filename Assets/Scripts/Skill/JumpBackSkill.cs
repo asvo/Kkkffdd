@@ -3,12 +3,12 @@ using System.Collections;
 
 public class JumpBackSkill : MonoBehaviour {
 
-    public float DamageTime = 0.5f;
-    public float DamageRange = 3f;
-    public int Damage = 2;
+    private float DamageTime = 0.5f;
+    private float DamageRange = 3f;
+    private int Damage = 2;
     //specail parameters
-    public float BackMoveSpeed = 3f;
-    public float BackMoveTime = 1.2f;
+    private float BackMoveSpeed = 3f;
+    private float BackMoveTime = 1.2f;
 
     const string ActionJumpName = "skill2_1";
     const string ActionAttackName = "skill2_2";
@@ -36,6 +36,7 @@ public class JumpBackSkill : MonoBehaviour {
         if (!this.enabled)
             enabled = true;
         Util.LogAsvo("cast skill 2--- jump back!");
+        LoadSkillCfgData();
         mEntity = GetComponent<BaseEntity>();
 
         mIsFiringSkill = true;
@@ -48,6 +49,19 @@ public class JumpBackSkill : MonoBehaviour {
         mEntity.PlayAnim(ActionJumpName);        
         //move back
         mEntity.MoveCtrl.MoveForward(-BackMoveSpeed);
+    }
+
+    private void LoadSkillCfgData()
+    {
+        SkillCfgUnit cfgUnit = SkillCfgMgr.Instance().GetSkillCfgBySlotId(SkillConst.PlayerSkill02SlotId);
+        if (null != cfgUnit)
+        {
+            Damage = cfgUnit.Damge;
+            DamageRange = cfgUnit.DamageRange;
+            DamageTime = cfgUnit.DamageTime;
+            BackMoveTime = cfgUnit.SkillMoveTime;
+            BackMoveSpeed = cfgUnit.SkillMoveSpeed;
+        }
     }
 
     private void OnFireNormalAttack(object param)

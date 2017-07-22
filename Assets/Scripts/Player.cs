@@ -33,11 +33,23 @@ public class Player : BaseEntity {
         JsDataBaseValue jsdata = ValueManager.Instance().PlayerValueSettings;
         if (jsdata != null)
         {
-            NormalAttackCd = jsdata.dic_BaseValues[e_BaseValue.NormalAttackCd.ToString()];
-            NormalAttackRange = jsdata.dic_BaseValues[e_BaseValue.NormalAttackRange.ToString()];
-            NormalAttackDamgePoint = jsdata.dic_BaseValues[e_BaseValue.NormalAttackDamgePoint.ToString()];
-            NormalAttackDamge = (int)jsdata.dic_BaseValues[e_BaseValue.NormalAttackDamge.ToString()];
+            //NormalAttackCd = jsdata.dic_BaseValues[e_BaseValue.NormalAttackCd.ToString()];
+            //NormalAttackRange = jsdata.dic_BaseValues[e_BaseValue.NormalAttackRange.ToString()];
+            //NormalAttackDamgePoint = jsdata.dic_BaseValues[e_BaseValue.NormalAttackDamgePoint.ToString()];
+            //NormalAttackDamge = (int)jsdata.dic_BaseValues[e_BaseValue.NormalAttackDamge.ToString()];
             InitMoveSpeed = jsdata.dic_BaseValues[e_BaseValue.MoveSpeed.ToString()];
+        }
+    }
+
+    public void LoadSkillSettingData()
+    {
+        SkillCfgUnit cfgUnit = SkillCfgMgr.Instance().GetSkillCfgBySlotId(SkillConst.NormalAttackSkillSlotId);
+        if (null != cfgUnit)
+        {
+            NormalAttackCd = cfgUnit.SkillCd;
+            NormalAttackRange = cfgUnit.DamageRange;
+            NormalAttackDamgePoint = cfgUnit.DamageTime;
+            NormalAttackDamge = cfgUnit.Damge;
         }
     }
 
@@ -98,16 +110,16 @@ public class Player : BaseEntity {
     public void FireSkill(int slot)
     {
  //       SkillCaster.Instance().CastSkill(mSkillList[slot], this);
-        if (0 == slot)
+        if (SkillConst.NormalAttackSkillSlotId == slot)
         {
             FireNormalAttack();
         }
-        else if (1 == slot)
+        else if (SkillConst.PlayerSkill01SlotId == slot)
         {
             RushSkill rushSkill = Util.TryAddComponent<RushSkill>(gameObject);
             rushSkill.Cast();
         }
-        else if (2 == slot)
+        else if (SkillConst.PlayerSkill02SlotId == slot)
         {
             JumpBackSkill jumpSkill = Util.TryAddComponent<JumpBackSkill>(gameObject);
             jumpSkill.Cast();

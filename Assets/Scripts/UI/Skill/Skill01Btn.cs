@@ -24,7 +24,7 @@ public class Skill01Btn : SkillBtn {
         //set cd
         if (0 == CurCounter)
         {
-            SkillDataMgr.Instance().SetOnSkillCd(SkillSlotId, TestSkillCd, Time.realtimeSinceStartup, true);
+            SkillDataMgr.Instance().SetOnSkillCd(SkillConst.PlayerSkill01SlotId, TestSkillCd, Time.realtimeSinceStartup, true);
             CanFireSecondTime = CurCounter + 1 == MaxCounter;
             //技能1特殊逻辑
             if (CanFireSecondTime)
@@ -49,7 +49,7 @@ public class Skill01Btn : SkillBtn {
         //附带skill01的buff
         float skill01BuffPersistTime = 1.0f;
         SkillDataMgr.Instance().IsSkill01BuffActive = true;
-        SkillDataMgr.Instance().SetOnSkillCd(11, skill01BuffPersistTime, Time.realtimeSinceStartup, true);
+        SkillDataMgr.Instance().SetOnSkillCd(SkillConst.PlayerSkill01BuffSlotId, skill01BuffPersistTime, Time.realtimeSinceStartup, true);
     }
 
     protected override void OnUpdateBeforeCd(float deltaTime)

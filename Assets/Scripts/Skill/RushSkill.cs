@@ -3,13 +3,13 @@ using System.Collections;
 
 public class RushSkill : MonoBehaviour {
     
-    public float RushSpeed = 2f;
-    public float DamageTime = 0.5f;
-    public float RushDamageRange = 3f;
-    public int RushDamage = 2;
-    public float RushSkillCd = 3.0f;
+    private float RushSpeed = 2f;
+    private float DamageTime = 0.5f;
+    private float RushDamageRange = 3f;
+    private int RushDamage = 2;
+    private float RushSkillCd = 3.0f;
     //move time
-    public float MaxRushMoveTime = 1.0f;
+    private float MaxRushMoveTime = 1.0f;
 
     private float mCurSkillTime;
     private bool mIsInRush = false;
@@ -20,6 +20,7 @@ public class RushSkill : MonoBehaviour {
     public void Cast()
     {
         Util.LogAsvo("cast skill 1--- rush!");
+        LoadSkillCfgData();
         mEntity = gameObject.GetComponent<BaseEntity>();
         //clear
         StopCoroutine("WaitToEndMove");
@@ -34,6 +35,20 @@ public class RushSkill : MonoBehaviour {
         StartCoroutine("CalculateRushDamage");
         //play anim
         mEntity.PlayAnim(SpineAnimName);
+    }
+
+    private void LoadSkillCfgData()
+    {
+        SkillCfgUnit cfgUnit = SkillCfgMgr.Instance().GetSkillCfgBySlotId(SkillConst.PlayerSkill01SlotId);
+        if (null != cfgUnit)
+        {
+            RushDamage = cfgUnit.Damge;
+            RushDamageRange = cfgUnit.DamageRange;
+            DamageTime = cfgUnit.DamageTime;
+            MaxRushMoveTime = cfgUnit.SkillMoveTime;
+            RushSpeed = cfgUnit.SkillMoveSpeed;
+            RushSkillCd = cfgUnit.SkillCd;
+        }
     }
 
     private IEnumerator WaitToEndMove()

@@ -13,7 +13,7 @@ public class Skill02Btn : SkillBtn {
             Debug.Log("技能cd中");
             return;
         }
-        SkillDataMgr.Instance().SetOnCurSkill2Cd(TestSkillCd, Time.realtimeSinceStartup, true);
+        SkillDataMgr.Instance().SetOnCurSkill2Cd(SkillConst.PlayerSkill02SlotId, Time.realtimeSinceStartup, true);
         mCdData = SkillDataMgr.Instance().GetLeastCdSkill2CdData();
         if (mCdData.mIsInCd)
         {
@@ -24,7 +24,7 @@ public class Skill02Btn : SkillBtn {
             ImgCd.fillAmount = leftCdTime / mCdData.SkillCdTime;
         }
         //cast skill
-        GameManager.Instance().MainPlayer.FireSkill(2);
+        GameManager.Instance().MainPlayer.FireSkill(SkillConst.PlayerSkill02SlotId);
     }
 
     protected override void OnUpdateBeforeCd(float deltaTime)

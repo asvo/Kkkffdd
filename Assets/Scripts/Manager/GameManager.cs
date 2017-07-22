@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
         DontDestroyOnLoad(gameObject);
+        SkillCfgMgr.Instance().Load();
         SkillDataMgr.Instance().InitSkillCdData();
     }
 
