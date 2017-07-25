@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector]
     public GameObject player;
-    SpawnManager spawnManager;
+    public SpawnManager spawnManager;
     public Player MainPlayer;
     void Start()
     {

@@ -14,12 +14,20 @@ public class IdleAIState : IAIState {
     bool m_bSetAttackPosition = false;//是否设置了攻击目标
 
     public float ConfusedTime = 0;
+    bool m_bOnIdle = false;
 
     public IdleAIState()
-    { }
+    {
+        m_bOnIdle = false;
+    }
 
     public override void Update(List<BaseEntity> Targets)
     {
+        if (!m_bOnIdle)
+        {
+            m_CharacterAI.Idle();
+            m_bOnIdle = true;
+        }
         //
         if (Targets == null || Targets.Count == 0)
         {

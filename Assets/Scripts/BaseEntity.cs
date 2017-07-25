@@ -79,7 +79,7 @@ public class BaseEntity : MonoBehaviour
 
     public virtual void Die()
     {
-        Debug.Log(this.transform.name + " died");
+        //Debug.Log(this.transform.name + " died");
         isDead = true;
     }
 

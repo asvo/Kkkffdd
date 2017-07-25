@@ -61,6 +61,10 @@ public class MonsterManager : Single<MonsterManager> {
                 monsterAI = new EnemyAI(monster, EnemyType.Monster_Normal);
                 monsterAI.ChangeAIState(new ConfuseAIState(monster.MaxConfusedTime));
                 break;
+            default:
+                monsterAI = new EnemyAI(monster, EnemyType.Monster_Normal);
+                monsterAI.ChangeAIState(new ConfuseAIState(monster.MaxConfusedTime));
+                break;
         }
 
         monster.Spawn(monsterAI);
@@ -121,6 +125,11 @@ public class MonsterManager : Single<MonsterManager> {
             {
                 GameObject.Destroy(monster.gameObject);
             }
+        }
+
+        if (ActiveMonsters.Count == 0)
+        {
+            GameManager.Instance().spawnManager.SpawnNextWave();
         }
     }
 

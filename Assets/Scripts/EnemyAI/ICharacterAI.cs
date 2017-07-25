@@ -72,7 +72,7 @@ public abstract class ICharacterAI
 
     public virtual void Idle()
     {
-
+        (m_Entity as Monster).ResetPoseAndPlayAnim("run", false);
     }
 
     //攻击目标
@@ -111,6 +111,9 @@ public abstract class ICharacterAI
             return false;
 
         if (samedirectmonsters[0]._CurrentAIState.Contains("JumpAttackAIState"))
+            return false;
+
+        if (distanceToTarget(Target) > 0.05f)
             return false;
         return true;
     }

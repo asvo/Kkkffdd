@@ -10,7 +10,7 @@ public class DamagerHandler : Single<DamagerHandler>
     {
         if (null != to)
         {
-            Debug.LogFormat("{0} is OnDamge", to.transform.name);
+            //Debug.LogFormat("{0} is OnDamge", to.transform.name);
             to.OnDamaged(damage);
         }
     }

@@ -77,6 +77,7 @@ public class SpawnManager : MonoBehaviour
     {
         if (WaveCount > MaxWave)
             return;
+        m_HaveSpawnCount = 0;
         m_bFinishSpwanWave = false;
     }
 
