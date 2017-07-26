@@ -7,6 +7,9 @@ public class Skill02Btn : SkillBtn {
 
     protected override void OnCastSkill()
     {
+        SkillSlotId = SkillConst.PlayerSkill02SlotId;
+        if (!SkillFirer.Instance.CheckCanFireSkill(SkillSlotId))
+            return;
         mCdData = SkillDataMgr.Instance().GetLeastCdSkill2CdData();
         if (mCdData.mIsInCd)
         {

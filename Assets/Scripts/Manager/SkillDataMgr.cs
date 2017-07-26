@@ -12,6 +12,7 @@ public class SkillDataMgr : Single<SkillDataMgr>
     public void InitSkillCdData()
     {
         mSkillCdData.Clear();
+        mSkillCdData.Add(0, new SkillCdData());
         mSkillCdData.Add(1, new SkillCdData());
         mSkillCdData.Add(11, new SkillCdData()); //skill 1的buff效果cd
         mSkillCdData.Add(2, new SkillCdData());     //skill 2 cd slot 1
@@ -28,6 +29,7 @@ public class SkillDataMgr : Single<SkillDataMgr>
         foreach(var pair in mSkillCdData)
         {
             pair.Value.ClearCd();
+            pair.Value.ClearActionTime();
         }
     }
 
@@ -98,6 +100,23 @@ public class SkillDataMgr : Single<SkillDataMgr>
     }
 
 #endregion
+
+    public void UpdateAllActionTime()
+    {
+        if (null == mSkillCdData)
+            return;
+        foreach(var skillCd in mSkillCdData)
+        {
+            skillCd.Value.UpdateActionTime();
+        }
+    }
+
+    public void SetOnActionTime(int slotId)
+    {
+        SkillCdData cdData = GetSkillCdDataBySlotId(slotId);
+        if (null != cdData)
+            cdData.SetActionTime(Time.realtimeSinceStartup);
+    }
 }
 
 public class SkillCdData
@@ -105,6 +124,11 @@ public class SkillCdData
     public float SkillCdTime = 3.0f;
     public float mEndCdTime = 0f;
     public bool mIsInCd = false;
+
+    private bool mIsInAction = false;
+    public bool IsInAction { get { return mIsInAction; } }
+    public float ActionCfgTime = 1.0f;
+    private float mActionEndTime = 1.0f;
 
     public void AddCd(float reduceAmount)
     {
@@ -122,5 +146,28 @@ public class SkillCdData
     {
         mIsInCd = false;
         mEndCdTime = 0f;
+    }
+
+    public void SetActionTime(float curTime)
+    {
+        mIsInAction = true;
+        mEndCdTime = curTime + ActionCfgTime;
+    }
+
+    public void UpdateActionTime()
+    {
+        if (mIsInAction)
+        {
+            if (Time.realtimeSinceStartup >= mEndCdTime)
+            {
+                mIsInAction = false;
+            }
+        }
+    }
+
+    public void ClearActionTime()
+    {
+        mIsInAction = false;
+        mActionEndTime = 0f;
     }
 }

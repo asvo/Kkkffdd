@@ -46,7 +46,8 @@ public class JumpBackSkill : MonoBehaviour {
         mHasPlayFallAction = false;
         mStartSkillPos = mEntity.transform.position;
         //play anim
-        mEntity.PlayAnim(ActionJumpName);        
+        mEntity.PlayAnim(ActionJumpName);
+        SkillDataMgr.Instance().SetOnActionTime(SkillConst.PlayerSkill02SlotId);
         //move back
         mEntity.MoveCtrl.MoveForward(-BackMoveSpeed);
     }

@@ -35,6 +35,7 @@ public class RushSkill : MonoBehaviour {
         StartCoroutine("CalculateRushDamage");
         //play anim
         mEntity.PlayAnim(SpineAnimName);
+        SkillDataMgr.Instance().SetOnActionTime(SkillConst.PlayerSkill01SlotId);
     }
 
     private void LoadSkillCfgData()

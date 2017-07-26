@@ -23,7 +23,7 @@ public class SkillBtn : MonoBehaviour {
 
     public void OnClickCastSkill()
     {
-        mCdData = SkillDataMgr.Instance().GetSkillCdDataBySlotId(SkillSlotId);
+        mCdData = SkillDataMgr.Instance().GetSkillCdDataBySlotId(SkillSlotId);        
         OnCastSkill();
     }
 

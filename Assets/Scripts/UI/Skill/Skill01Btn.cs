@@ -12,6 +12,9 @@ public class Skill01Btn : SkillBtn {
     
     protected override void OnCastSkill()
     {
+        SkillSlotId = SkillConst.PlayerSkill01SlotId;
+        if (!SkillFirer.Instance.CheckCanFireSkill(SkillSlotId))
+            return;
         bool canFireSkill = CurCounter < MaxCounter;
         if (!canFireSkill)
         {

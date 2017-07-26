@@ -15,12 +15,14 @@ public class HUD : MonoBehaviour {
 
     private void OnClickNormalAttack()
     {
+        if (!SkillFirer.Instance.CheckCanFireSkill(SkillConst.NormalAttackSkillSlotId))
+            return;
         if (SkillDataMgr.Instance().IsSkill02Active)
         {
             EventMgr.Instance().TriggerEvent(EventsType.FireNoramlAttack, null);
             return;
         }
-        GameManager.Instance().MainPlayer.FireSkill(0);
+        GameManager.Instance().MainPlayer.FireSkill(SkillConst.NormalAttackSkillSlotId);
     }
 
     void Update()

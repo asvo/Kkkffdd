@@ -169,6 +169,7 @@ public class Player : BaseEntity {
         Spine.Animation anim = animState.GetAnimation(0,"attack");
   //      SkeletonAnim.timeScale = anim.duration / NormalAttackCd;
         PlayAnim("attack");
+        SkillDataMgr.Instance().SetOnActionTime(SkillConst.NormalAttackSkillSlotId);
         yield return new WaitForSeconds(NormalAttackDamgePoint);
         CastNormalAttack();
     }
