@@ -19,15 +19,11 @@ public class RushSkill : MonoBehaviour {
 	
     public void Cast()
     {
+        SkillDataMgr.Instance().SetSkillIfOver(SkillConst.PlayerSkill01SlotId, false);
         Util.LogAsvo("cast skill 1--- rush!");
         LoadSkillCfgData();
         mEntity = gameObject.GetComponent<BaseEntity>();
-        //clear
-        StopCoroutine("WaitToEndMove");
-        StopCoroutine("CalculateRushDamage");
-        //clear spine
-        mEntity.SkeletonAnim.skeleton.SetToSetupPose();
-        mEntity.SkeletonAnim.state.ClearTracks();
+        ClearAction();
 
         mEntity.MoveCtrl.MoveForward(RushSpeed);
         StartCoroutine("WaitToEndMove");
@@ -36,6 +32,16 @@ public class RushSkill : MonoBehaviour {
         //play anim
         mEntity.PlayAnim(SpineAnimName);
         SkillDataMgr.Instance().SetOnActionTime(SkillConst.PlayerSkill01SlotId);
+    }
+
+    private void ClearAction()
+    {
+        //clear
+        StopCoroutine("WaitToEndMove");
+        StopCoroutine("CalculateRushDamage");
+        //clear spine
+        mEntity.SkeletonAnim.skeleton.SetToSetupPose();
+        mEntity.SkeletonAnim.state.ClearTracks();
     }
 
     private void LoadSkillCfgData()
@@ -76,6 +82,17 @@ public class RushSkill : MonoBehaviour {
 
     private void EndSkill()
     {
-             
+        SkillDataMgr.Instance().SetSkillIfOver(SkillConst.PlayerSkill01SlotId, true);
+    }
+
+    public void BreakSkill()
+    {
+        if (null != mEntity)
+        {
+            mEntity.EndMove();
+            ClearAction();
+        }
+        mEntity.PlayAnim("idle");
+        EndSkill();
     }
 }

@@ -9,6 +9,8 @@ public class SkillDataMgr : Single<SkillDataMgr>
     public bool IsSkill01BuffActive = false;
     public bool IsSkill02Active = false;
 
+    public Dictionary<int, bool> mIsSkillOver = new Dictionary<int,bool>();
+
     public void InitSkillCdData()
     {
         mSkillCdData.Clear();
@@ -18,8 +20,48 @@ public class SkillDataMgr : Single<SkillDataMgr>
         mSkillCdData.Add(2, new SkillCdData());     //skill 2 cd slot 1
         mSkillCdData.Add(21, new SkillCdData());    //skill 2 cd slot 2
 
+        ResetSkillOver();
+
         IsSkill01BuffActive = false;
         SetOnSkillCd(11, 1f, 0f, false);
+    }
+
+    private void ResetSkillOver()
+    {
+        mIsSkillOver.Clear();
+        mIsSkillOver.Add(0, true);
+        mIsSkillOver.Add(1, true);
+        mIsSkillOver.Add(2, true);
+        mIsSkillOver.Add(21, true);
+    }
+
+    public bool CheckNormalSkillIsInSkill()
+    {
+        foreach (var pair in mIsSkillOver)
+        {
+            if (pair.Key == SkillConst.NormalAttackSkillSlotId)
+                continue;
+            if (!pair.Value)
+                return true;
+        }
+        return false;
+    }
+
+    public void SetSkillIfOver(int slotId, bool isOver)
+    {
+        if (mIsSkillOver.ContainsKey(slotId))
+        {
+            mIsSkillOver[slotId] = isOver;
+        }
+    }
+
+    public bool GetSkillIfOver(int slotId)
+    {
+        if (mIsSkillOver.ContainsKey(slotId))
+        {
+            return mIsSkillOver[slotId];
+        }
+        return false;
     }
 
     public void ClearSkillCds()
@@ -31,6 +73,8 @@ public class SkillDataMgr : Single<SkillDataMgr>
             pair.Value.ClearCd();
             pair.Value.ClearActionTime();
         }
+
+        ResetSkillOver();
     }
 
     public void SetOnSkillCd(int slotId, float cdTime, float curTime, bool isInToCd)

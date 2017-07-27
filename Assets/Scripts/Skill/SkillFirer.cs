@@ -27,6 +27,7 @@ public class SkillFirer : MonoBehaviour {
             Util.LogAsvo("Cannot fire skill.Is Action. slot:" + slotId);
             return false;
         }
+        
         return true;
     }
 

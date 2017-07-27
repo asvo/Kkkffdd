@@ -91,6 +91,7 @@ public class Player : BaseEntity {
             if (dir == moveDir)
                 return;     //目前（2017/06/20）攻击时只处理向后移动的行为
             CancelNormalAttack();
+            CancelSkill01();
         }        
 
         if (TooNearToMonster(moveDir))
@@ -124,6 +125,12 @@ public class Player : BaseEntity {
             JumpBackSkill jumpSkill = Util.TryAddComponent<JumpBackSkill>(gameObject);
             jumpSkill.Cast();
         }
+    }
+
+    private void CancelSkill01()
+    {
+        RushSkill rushSkill = Util.TryAddComponent<RushSkill>(gameObject);
+        rushSkill.BreakSkill();
     }
 
     private void FireNormalAttack()
@@ -169,6 +176,7 @@ public class Player : BaseEntity {
         Spine.Animation anim = animState.GetAnimation(0,"attack");
   //      SkeletonAnim.timeScale = anim.duration / NormalAttackCd;
         PlayAnim("attack");
+        SkeletonAnim.state.AddAnimation(0, "idle", false, 0.8f);
         SkillDataMgr.Instance().SetOnActionTime(SkillConst.NormalAttackSkillSlotId);
         yield return new WaitForSeconds(NormalAttackDamgePoint);
         CastNormalAttack();

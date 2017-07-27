@@ -15,15 +15,18 @@ public class HUD : MonoBehaviour {
 
     private void OnClickNormalAttack()
     {
-        if (!SkillFirer.Instance.CheckCanFireSkill(SkillConst.NormalAttackSkillSlotId))
-            return;
         if (SkillDataMgr.Instance().IsSkill02Active)
         {
             EventMgr.Instance().TriggerEvent(EventsType.FireNoramlAttack, null);
             return;
         }
+
+        if (SkillDataMgr.Instance().CheckNormalSkillIsInSkill())        //普通攻击不能在其它技能中释放.
+            return;
+        if (!SkillFirer.Instance.CheckCanFireSkill(SkillConst.NormalAttackSkillSlotId))
+            return;
         GameManager.Instance().MainPlayer.FireSkill(SkillConst.NormalAttackSkillSlotId);
-    }
+    }    
 
     void Update()
     {
