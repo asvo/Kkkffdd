@@ -12,6 +12,7 @@ using System.Collections.Generic;
 public class AttackAIState : IAIState {
 
     private BaseEntity m_AttackTarget = null;//攻击对象
+    private bool m_bOnAttack = false;
 
     public AttackAIState(BaseEntity AttackTarget)
     {

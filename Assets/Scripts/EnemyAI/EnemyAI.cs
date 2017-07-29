@@ -22,7 +22,16 @@ public class EnemyAI : ICharacterAI
 
     public override void Idle()
     {
+        StopMove();
         (m_Entity as Monster).Idle();
+    }
+
+    public override bool ObstacleOnWay()
+    {
+        Monster monster = m_Entity as Monster;
+        if (monster != null)
+            return monster.FrontMonster != null && !monster.FrontMonster.isDead;
+        return false;
     }
 
     public override void Attack(BaseEntity Target)
@@ -32,7 +41,6 @@ public class EnemyAI : ICharacterAI
         if (m_CoolDown > 0)
             return;
         m_CoolDown = ATTACK_COOLD_DOWN;
-
         //攻击目标
         (m_Entity as Monster).Attack();
     }

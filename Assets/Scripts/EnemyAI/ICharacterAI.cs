@@ -72,7 +72,12 @@ public abstract class ICharacterAI
 
     public virtual void Idle()
     {
-        (m_Entity as Monster).ResetPoseAndPlayAnim("run", false);
+        StopMove();
+    }
+
+    public virtual bool ObstacleOnWay()
+    {
+        return false;
     }
 
     //攻击目标
@@ -113,8 +118,6 @@ public abstract class ICharacterAI
         if (samedirectmonsters[0]._CurrentAIState.Contains("JumpAttackAIState"))
             return false;
 
-        if (distanceToTarget(Target) > 0.05f)
-            return false;
         return true;
     }
 
@@ -128,6 +131,11 @@ public abstract class ICharacterAI
     public void MoveTo(Vector3 Postition)
     {
         m_Entity.Move(Postition.x - GetPosition().x >= 0 ? MoveDir.Right : MoveDir.Left);
+    }
+
+    public void ChangeBoxCollider()
+    {
+        m_Entity.MoveCtrl.CC2D.platformMask = 1 << Util.GroundLayer | 1 << Util.WallLayer | 1 << Util.PlayerLayer | 1 << Util.MonsterLayer;
     }
 
     //停止移动

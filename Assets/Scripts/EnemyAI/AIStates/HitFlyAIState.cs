@@ -11,11 +11,16 @@ using System.Collections.Generic;
 
 public class HitFlyAIState : IAIState {
 
-
+    private bool m_bHitFly = false;
 
     public override void Update(List<BaseEntity> Targets)
     {
-        throw new NotImplementedException();
+        if (m_bHitFly)
+        {
+            return;
+        }
+        m_bHitFly = true;
+        Debug.LogError("HitFly");
     }
 }
 

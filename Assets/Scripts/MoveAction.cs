@@ -31,6 +31,8 @@ public class MoveAction : MonoBehaviour {
     private float mCurrentSpeed;
     private float mTargetSpeed;
 
+    public float gravity = -25f;
+
     void Awake()
     {
         CC2D.onControllerCollidedEvent += OnCC2DCollider;
@@ -72,11 +74,23 @@ public class MoveAction : MonoBehaviour {
     }
 
     void FixedUpdate()
-    {        
+    {
+        if (mCC2D.isGrounded)
+            movement.y = 0;
+
+        // apply gravity before moving
+        movement.y += gravity * Time.deltaTime;
+
         if (mMovingDir == MoveDir.None)
-            return;
-        float speed = mTargetSpeed;
-        movement.x = speed;
+        {
+            movement.x = 0;
+        }
+        else
+        {
+            movement.x = mTargetSpeed;
+        }
+
+
         if (null != mCC2D)
             mCC2D.move(movement * Time.fixedDeltaTime);
     }

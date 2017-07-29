@@ -25,6 +25,8 @@ public class Monster : BaseEntity {
 
     public float RollBackRange = 3;
 
+    public Monster FrontMonster = null;
+
     public void LoadSettingData()
     {
         JsDataBaseValue jsdata = ValueManager.Instance().MonsterValueSettings;
@@ -54,6 +56,32 @@ public class Monster : BaseEntity {
         }
     }
 
+    void Start()
+    {
+        MoveCtrl.CC2D.onControllerCollidedEvent += onTriggerEnterEvent;
+    }
+
+    void onTriggerEnterEvent(RaycastHit2D hit)
+    {
+        if (hit.collider == null)
+        {
+            FrontMonster = null;
+            return;
+        }
+        Monster monster = hit.collider.GetComponent<Monster>();
+        if (monster != null)
+        {
+            if (monster._CurrentAIState.Equals(typeof(JumpAttackAIState).ToString()))
+                return;
+
+            FrontMonster = monster;
+            if (m_EnemyAI != null)
+            {
+                m_EnemyAI.ChangeAIState(new IdleAIState());
+            }
+        }
+    }
+
     void Update()
     {
         if (isDead)
@@ -78,11 +106,17 @@ public class Monster : BaseEntity {
     {
         if (GameManager.Instance().MainPlayer.isDead)
             return;
-        ResetPoseAndPlayAnim("run", false);
+        ResetPoseAndPlayAnim("attack1", false);
         //范围判断? if need
+        StartCoroutine(CalculateDamage());
 
+    }
+
+    IEnumerator CalculateDamage()
+    {
+        yield return new WaitForSeconds(0.5f);
         DamagerHandler.Instance().CalculateDamage(this, GameManager.
-            Instance().MainPlayer, 10);
+    Instance().MainPlayer, 10);
     }
 
     public override void OnDamaged(int damage)
@@ -91,19 +125,32 @@ public class Monster : BaseEntity {
 
         if (m_EnemyAI != null)
         {
-            m_EnemyAI.ChangeAIState(new RestatsAIState(RestatsTime));
+            if (m_EnemyAI.GetCurrentState().Equals(typeof(JumpAttackAIState).ToString()))
+            {
+                JumpAttackAction jumpAction = GetComponent<JumpAttackAction>();
+                if (jumpAction != null && jumpAction.enabled)
+                {
+                    jumpAction.ForceStop();
+                }
+                StartCoroutine(HitOnSpace());
+            }
+            else
+            {
+                m_EnemyAI.ChangeAIState(new RestatsAIState(RestatsTime));
+            }
         }
     }
 
     public override void Die()
     {
         base.Die();
-        HitFly();
-        StartCoroutine(TimeForFly());
+        StartCoroutine(DieOnGround());
     }
 
-    IEnumerator TimeForFly()
+    IEnumerator DieOnGround()
     {
+        //地面死亡
+        ResetPoseAndPlayAnim("hitfly1", false);
         float delaydestroy = 0;
         var trackEntry = SkeletonAnim.state.GetCurrent(0);
         if (trackEntry != null)
@@ -111,7 +158,40 @@ public class Monster : BaseEntity {
             delaydestroy = trackEntry.endTime;
         }
         yield return new WaitForSeconds(delaydestroy);
+
+        ResetPoseAndPlayAnim("hitfly2", false);
+        trackEntry = SkeletonAnim.state.GetCurrent(0);
+        if (trackEntry != null)
+        {
+            delaydestroy = trackEntry.endTime;
+        }
+        yield return new WaitForSeconds(delaydestroy);
         MonsterManager.Instance().MonsterDie(this);
+    }
+
+    IEnumerator HitOnSpace()
+    {
+        //地面死亡
+        ResetPoseAndPlayAnim("hitfly2", false);
+        float delaydestroy = 0;
+        var trackEntry = SkeletonAnim.state.GetCurrent(0);
+        if (trackEntry != null)
+        {
+            delaydestroy = trackEntry.endTime;
+        }
+        yield return new WaitForSeconds(delaydestroy);
+
+        ResetPoseAndPlayAnim("hitfly3", false);
+        trackEntry = SkeletonAnim.state.GetCurrent(0);
+        if (trackEntry != null)
+        {
+            delaydestroy = trackEntry.endTime;
+        }
+        yield return new WaitForSeconds(delaydestroy);
+        if (!isDead)
+        {
+            m_EnemyAI.ChangeAIState(new IdleAIState());
+        }
     }
 
     public void MoveToPlayer()
@@ -153,11 +233,6 @@ public class Monster : BaseEntity {
         ResetPoseAndPlayAnim("run", true);
     }
 
-    public void HitFly()
-    {
-        ResetPoseAndPlayAnim("hit1", true);
-    }
-
     public void ResetPoseAndPlayAnim(string Anim, bool isLoop)
     {
         SkeletonAnim.skeleton.SetToSetupPose();
@@ -176,6 +251,11 @@ public class Monster : BaseEntity {
     {
         float prepareTime = Mathf.Abs(Vector2.Distance(this.transform.position, to.transform.position)) * 0.1f;
         return prepareTime;
+    }
+
+    public void ChangeCollider(bool open)
+    {
+        MoveCtrl.CC2D.platformMask = 1 << Util.GroundLayer | 1 << Util.WallLayer;
     }
 }
 

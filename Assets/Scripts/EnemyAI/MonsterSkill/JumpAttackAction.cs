@@ -50,19 +50,19 @@ public class JumpAttackAction : MonoBehaviour {
 
     void onTriggerEnterEvent(Collider2D col)
     {
-        if (col.gameObject.GetComponent<Player>() != null)
-        {
-            LogTrigger("onTriggerEnterEvent: " + col.gameObject.name);
-        }
+        //if (col.gameObject.GetComponent<Player>() != null)
+        //{
+        //    LogTrigger("onTriggerEnterEvent: " + col.gameObject.name);
+        //}
     }
 
 
     void onTriggerExitEvent(Collider2D col)
     {
-        if (col.gameObject.GetComponent<Player>() != null)
-        {
-            LogTrigger("onTriggerExitEvent: " + col.gameObject.name);
-        }
+        //if (col.gameObject.GetComponent<Player>() != null)
+        //{
+        //    LogTrigger("onTriggerExitEvent: " + col.gameObject.name);
+        //}
     }
 
     private void LogTrigger(string log)
@@ -97,6 +97,8 @@ public class JumpAttackAction : MonoBehaviour {
         _monster.ResetPoseAndPlayAnim("attack2_End", false);
         jumpCurve = new Bezier(transform, m_JumpHeight, startPoint, endPoint, m_JumpTimer);
         m_bOnJumpPose = true;
+
+        _monster.ChangeCollider(false);
         this.enabled = true;
         Util.LogHW(gameObject.name + " jump start time:" + Time.time);
     }
@@ -104,12 +106,13 @@ public class JumpAttackAction : MonoBehaviour {
 
     private float PrepareJumpTime(BaseEntity to)
     {
-        float prepareTime = Mathf.Abs(Vector2.Distance(_monster.transform.position, to.transform.position)) * 0.1f;
+        float prepareTime = Mathf.Abs(Vector2.Distance(_monster.transform.position, to.transform.position)) * 0.2f;
         return prepareTime;
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
 
         if (!m_bOnJumpPose)
             return;
@@ -124,17 +127,35 @@ public class JumpAttackAction : MonoBehaviour {
         {
             jumpCurve.Update();
         }
-	}
+    }
 
     private void OnFinish()
     {
         Util.LogHW(gameObject.name +  " jump over time:" + Time.time);
         this.enabled = false;
+
+        //OpenCollider(true);
         if (CallBack != null)
         {
             CallBack();
             CallBack = null;
         }
+    }
+
+    public void ForceStop()
+    {
+        CallBack = LandGround;
+        m_bOnJumpPose = false;
+        m_JumpTimer = 0.3f;
+        jumpCurve = new Bezier(transform, m_JumpHeight, transform.position, startPoint, m_JumpTimer);
+        _monster.ChangeCollider(false);
+
+        m_bOnJumpPose = true;
+    }
+
+    private void LandGround()
+    {
+        
     }
 }
 

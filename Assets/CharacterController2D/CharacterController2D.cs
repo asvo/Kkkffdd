@@ -207,6 +207,8 @@ namespace Prime31
             }
         }
 
+        void Start()
+        { }
 
         public void OnTriggerEnter2D(Collider2D col)
         {
@@ -292,6 +294,9 @@ namespace Prime31
             {
                 for (var i = 0; i < _raycastHitsThisFrame.Count; i++)
                     onControllerCollidedEvent(_raycastHitsThisFrame[i]);
+
+                if (_raycastHitsThisFrame.Count == 0)
+                    onControllerCollidedEvent(new RaycastHit2D());
             }
 
             ignoreOneWayPlatformsThisFrame = false;
@@ -341,7 +346,7 @@ namespace Prime31
         {
             // our raycasts need to be fired from the bounds inset by the skinWidth
             var modifiedBounds = boxCollider.bounds;
-            modifiedBounds.Expand(-2f * _skinWidth);
+            modifiedBounds.Expand(2f * _skinWidth);
 
             _raycastOrigins.topLeft = new Vector2(modifiedBounds.min.x, modifiedBounds.max.y);
             _raycastOrigins.bottomRight = new Vector2(modifiedBounds.max.x, modifiedBounds.min.y);
@@ -365,7 +370,6 @@ namespace Prime31
             for (var i = 0; i < totalHorizontalRays; i++)
             {
                 var ray = new Vector2(initialRayOrigin.x, initialRayOrigin.y + i * _verticalDistanceBetweenRays);
-
                 DrawRay(ray, rayDirection * rayDistance, Color.red);
 
                 // if we are grounded we will include oneWayPlatforms only on the first ray (the bottom one). this will allow us to

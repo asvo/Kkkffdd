@@ -52,17 +52,19 @@ public class JumpAttackAIState : IAIState {
             return;
         }
 
-        if (m_CharacterAI.TargetInAttackRange(Target))
-        {
-            //玩家在攻击范围内，转换为攻击状态，执行攻击
-            m_CharacterAI.ChangeAIState(new AttackAIState(Target));
-            return;
-        }
-        else //超出范围，转为跟踪状态
-        {
-            m_CharacterAI.ChangeAIState(new ChaseAIState(Target));
-            return;
-        }
+        //if (m_CharacterAI.TargetInAttackRange(Target))
+        //{
+        //    //玩家在攻击范围内，转换为攻击状态，执行攻击
+        //    m_CharacterAI.ChangeAIState(new AttackAIState(Target));
+        //    return;
+        //}
+        //else //超出范围，转为跟踪状态
+        //{
+        //    m_CharacterAI.ChangeAIState(new ChaseAIState(Target));
+        //    return;
+        //}
+
+        m_CharacterAI.ChangeAIState(new IdleAIState());
     }
 }
 
