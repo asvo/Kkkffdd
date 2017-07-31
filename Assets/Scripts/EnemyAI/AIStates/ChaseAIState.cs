@@ -61,7 +61,7 @@ public class ChaseAIState : IAIState {
 
         m_bOnChase = true;
         m_ChasePosition = m_ChaseTarget.transform.position;
-        m_CharacterAI.ChangeBoxCollider();
+        //m_CharacterAI.ChangeBoxCollider();
         m_CharacterAI.MoveTo(m_ChasePosition);
     }
 }
