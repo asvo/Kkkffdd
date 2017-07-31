@@ -43,7 +43,6 @@ public class Monster : BaseEntity {
 
     public virtual void Spawn(EnemyAI AIBrain =null)
     {
-        LoadSettingData();
         Health = 3;
         isDead = false;
 

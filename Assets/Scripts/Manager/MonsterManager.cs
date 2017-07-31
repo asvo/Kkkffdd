@@ -55,6 +55,7 @@ public class MonsterManager : Single<MonsterManager> {
     private void BuildAiType(Monster monster, EnemyType AiType = EnemyType.Monster_Normal)
     {
         EnemyAI monsterAI = null;
+        monster.LoadSettingData();
         switch (AiType)
         {
             case EnemyType.Monster_Normal:
@@ -65,8 +66,7 @@ public class MonsterManager : Single<MonsterManager> {
                 monsterAI = new EnemyAI(monster, EnemyType.Monster_Normal);
                 monsterAI.ChangeAIState(new ConfuseAIState(monster.MaxConfusedTime));
                 break;
-        }
-
+        }     
         monster.Spawn(monsterAI);
     }
 

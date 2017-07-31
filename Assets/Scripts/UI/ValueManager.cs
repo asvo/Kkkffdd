@@ -108,7 +108,7 @@ public class ValueManager : Single<ValueManager>
             dic_BaseValues.Add(e_BaseValue.NormalAttackCd.ToString(), 0.3f);
             dic_BaseValues.Add(e_BaseValue.NormalAttackDamge.ToString(), 1);
             dic_BaseValues.Add(e_BaseValue.NormalAttackDamgePoint.ToString(), 0.3f);
-            dic_BaseValues.Add(e_BaseValue.NormalAttackRange.ToString(), 0.2f);
+            dic_BaseValues.Add(e_BaseValue.NormalAttackRange.ToString(), 1.5f);
             dic_BaseValues.Add(e_BaseValue.RestatsTime.ToString(), 1);
 
             MonsterValueSettings = defaultValue;
