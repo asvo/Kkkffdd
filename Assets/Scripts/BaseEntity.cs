@@ -68,6 +68,22 @@ public class BaseEntity : MonoBehaviour
         }
     }
 
+    public void RotateToDir(MoveDir moveDir)
+    {
+        if (MoveCtrl != null)
+        {
+            if (moveDir == MoveDir.Left)
+            {
+                SkeletonAnim.Skeleton.FlipX = true;
+            }
+            else if (moveDir == MoveDir.Right)
+            {
+                SkeletonAnim.Skeleton.FlipX = false;
+            }
+            MoveCtrl.SetFacingDir(moveDir);
+        }
+    }
+
     public virtual void EndMove()
     {
         //      Debug.LogError("EndMove");

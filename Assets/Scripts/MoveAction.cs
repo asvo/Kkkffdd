@@ -102,6 +102,11 @@ public class MoveAction : MonoBehaviour {
         return mFaceDir;
     }
 
+    public void SetFacingDir(MoveDir moveDir)
+    {
+        mFaceDir = moveDir;
+    }
+
     public void MoveForward(float moveSpeed)
     {
         Move(GetCurrentFaceDir(), moveSpeed);

@@ -98,12 +98,24 @@ public class SkillDataMgr : Single<SkillDataMgr>
         return skilcd;
     }
 
-    public void ReducePlayerAllSkillCd(int slotId, float reduceAmount)
+    private void ReducePlayerSkillCd(int slotId, float reduceAmount)
     {
         SkillCdData cddata = GetSkillCdDataBySlotId(slotId);
         if (null == cddata)
             return;
         cddata.AddCd(-reduceAmount);
+    }
+
+    private static List<int> s_ReduceCdSkillList = new List<int>
+    {
+        1,2,21
+    };
+    public void ReducePlayerAllSkillCd(float reduceAmount)
+    {
+        for(int i = 0; i < s_ReduceCdSkillList.Count; ++i)
+        {
+            ReducePlayerSkillCd(s_ReduceCdSkillList[i], reduceAmount);
+        }
     }
 
 #region skill2-special
@@ -177,6 +189,8 @@ public class SkillCdData
     public void AddCd(float reduceAmount)
     {
         mEndCdTime += reduceAmount;
+        if (mEndCdTime < 0f)
+            mEndCdTime = 0f;
     }
 
     public void SetOnCd(float cdTime, float curTime, bool isInToCd)

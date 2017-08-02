@@ -92,8 +92,9 @@ public class Player : BaseEntity {
                 return;     //目前（2017/06/20）攻击时只处理向后移动的行为
             CancelNormalAttack();
             CancelSkill01();
-        }        
-
+        }
+        //修正朝向
+        base.RotateToDir(moveDir);
         if (TooNearToMonster(moveDir))
             EndMove();
         else
@@ -190,8 +191,12 @@ public class Player : BaseEntity {
         BaseEntity target = Util.FindNereastTargetMonsterByDist(this, NormalAttackRange);
         if (null != target)
         {
-            int damage = SkillDataMgr.Instance().IsSkill01BuffActive ? NormalAttackDamge : 2*NormalAttackDamge;
+            //int damage = SkillDataMgr.Instance().IsSkill01BuffActive ? NormalAttackDamge : 2*NormalAttackDamge;
             DamagerHandler.Instance().CalculateDamage(this, target, NormalAttackDamge);
+            if (SkillDataMgr.Instance().IsSkill01BuffActive)
+            {
+                SkillDataMgr.Instance().ReducePlayerAllSkillCd(1.0f);
+            }
         }
     }
     
