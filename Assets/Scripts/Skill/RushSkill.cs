@@ -91,8 +91,8 @@ public class RushSkill : MonoBehaviour {
         {
             mEntity.EndMove();
             ClearAction();
+            mEntity.PlayAnim("idle");
         }
-        mEntity.PlayAnim("idle");
         EndSkill();
     }
 }

@@ -173,6 +173,13 @@ public class SkillDataMgr : Single<SkillDataMgr>
         if (null != cdData)
             cdData.SetActionTime(Time.realtimeSinceStartup);
     }
+
+    public void ClearActionTimeBySlot(int slotId)
+    {
+        SkillCdData cdData = GetSkillCdDataBySlotId(slotId);
+        if (null != cdData)
+            cdData.ClearActionTime();
+    }
 }
 
 public class SkillCdData

@@ -85,11 +85,14 @@ public class Player : BaseEntity {
     public override void Move(MoveDir moveDir)
     {
         curMoveDir = moveDir;
-        if (mIsNormalAttackInCd)
+//        if (mIsNormalAttackInCd)
         {
-            MoveDir dir = MoveCtrl.GetCurrentFaceDir();
+            MoveDir dir = MoveCtrl.GetCurrentFaceDir();            
             if (dir == moveDir)
+            {
+                Util.LogAsvo("same dir : " + dir);
                 return;     //目前（2017/06/20）攻击时只处理向后移动的行为
+            }
             CancelNormalAttack();
             CancelSkill01();
         }
@@ -151,6 +154,9 @@ public class Player : BaseEntity {
         PlayAnim("idle");
         StopCoroutine("NormalAttackPre");
         mIsNormalAttackInCd = false;
+        //cancel normal action cd
+        Util.LogAsvo("cancel normal attack");
+        SkillDataMgr.Instance().ClearActionTimeBySlot(SkillConst.NormalAttackSkillSlotId);
     }
 
     private IEnumerator ResetNormalAttackCd()
