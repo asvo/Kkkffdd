@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     }
 
     public bool bPause = false;
+    public bool bInvincible = false;
 
     public const float NearestDistance = 1.2f;
 

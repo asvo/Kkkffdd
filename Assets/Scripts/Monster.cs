@@ -114,8 +114,10 @@ public class Monster : BaseEntity {
     IEnumerator CalculateDamage()
     {
         yield return new WaitForSeconds(0.5f);
-        DamagerHandler.Instance().CalculateDamage(this, GameManager.
-    Instance().MainPlayer, 10);
+        if (!GameManager.Instance().bInvincible)
+        {
+            DamagerHandler.Instance().CalculateDamage(this, GameManager.Instance().MainPlayer, 10);
+        }
     }
 
     public override void OnDamaged(int damage)

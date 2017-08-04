@@ -239,6 +239,8 @@ public class Player : BaseEntity {
     {
         foreach (Monster monster in MonsterManager.Instance().ActiveMonsters)
         {
+            if (monster.gameObject.activeSelf == false)
+                continue;
             if (MonsterManager.Instance().DirToTarget(transform, monster.transform) == moveDir)
             {
                 if (Vector2.Distance(monster.transform.position, transform.position) <= GameManager.NearestDistance + monster.NormalAttackRange)
