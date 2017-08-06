@@ -99,89 +99,6 @@ public class ValueSettingUI : MonoBehaviour {
         }
     }
 
-    //private void SaveJsonKeyEnumPair()
-    //{
-    //    if (settingInputs == null || settingInputs.Count == 0)
-    //    {
-    //        return;
-    //    }
-    //    JsDataBaseValue jsData = null;
-    //    if (bPlayerSetting)
-    //    {
-    //        //jsData = ValueManager.Instance().PlayerValueSettings;
-    //    }
-    //    else
-    //    {
-    //        //jsData = ValueManager.Instance().MonsterValueSettings;
-    //    }
-
-    //    foreach (var pair in settingInputs)
-    //    {
-    //        float value = 0;
-    //        if (float.TryParse(pair.Value.text, out value))
-    //        {
-    //            if (jsData.dic_BaseValues.ContainsKey(pair.Key.ToString()))
-    //            {
-    //                jsData.dic_BaseValues[pair.Key.ToString()] = value;
-    //            }
-    //            else
-    //            {
-    //                jsData.dic_BaseValues.Add(pair.Key.ToString(), value);
-    //            }
-    //        }
-    //    }
-
-    //    ValueManager.Instance().Save(bPlayerSetting);        
-    //}
-
-    //private void InitSettingInput(string[] keys)
-    //{
-    //    Util.SetChildsActive(Grid, false);
-    //    settingInputs.Clear();
-    //    JsDataBaseValue jsData = null;
-    //    if (bPlayerSetting)
-    //    {
-    //        //jsData = ValueManager.Instance().PlayerValueSettings;
-    //    }
-    //    else
-    //    {
-    //        //jsData = ValueManager.Instance().MonsterValueSettings;
-    //    }
-
-    //    for (int i = 0; i < keys.Length; i++)
-    //    {
-    //        GameObject obj = CreateInput(Grid, InputPrefab, i);
-    //        InputField _input = obj.GetComponent<InputField>();
-    //        e_BaseValue key = (e_BaseValue)System.Enum.Parse(typeof(e_BaseValue), keys[i]);
-    //        _input.transform.FindChild("Desc").GetComponent<Text>().text = keys[i];
-    //        if (jsData.dic_BaseValues.ContainsKey(keys[i]))
-    //        {
-    //            _input.text = jsData.dic_BaseValues[keys[i]].ToString();
-    //            _input.placeholder.GetComponent<Text>().text = jsData.dic_BaseValues[keys[i]].ToString(); 
-    //        }
-    //        else
-    //        {
-    //            _input.placeholder.GetComponent<Text>().text = keys[i];
-    //        }
-    //        settingInputs.Add(key, _input);
-    //        obj.SetActive(true);
-    //    }
-    //}
-
-    //private GameObject CreateInput(Transform tParent, GameObject prefab,int index = 0)
-    //{
-    //    GameObject newChild = null;
-    //    if (tParent.childCount > index)
-    //    {
-    //        newChild = tParent.GetChild(index).gameObject;
-    //    }
-    //    else
-    //    {
-    //        newChild = Util.AddChildToTarget(prefab, tParent.gameObject);
-    //    }
-
-    //    return newChild;
-    //}
     #region 基础数值设置
     private void SaveJsonKeyEnumPair()
     {
@@ -220,6 +137,8 @@ public class ValueSettingUI : MonoBehaviour {
 
     private void InitSettingInput(IBaseValue valueData)
     {
+        settingInputs.Clear();
+
         Type type = valueData.GetType();
         FieldInfo[] fields = type.GetFields();
 
