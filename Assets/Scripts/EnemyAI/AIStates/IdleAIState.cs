@@ -8,57 +8,54 @@ using System.Collections.Generic;
 *  version  ：1.0
 */
 
-
-public class IdleAIState : IAIState {
-
-    bool m_bSetAttackPosition = false;//是否设置了攻击目标
-
-    public float ConfusedTime = 0;
-    bool m_bOnIdle = false;
-
-    private BaseEntity mAttackTarget = null;
-
-    public IdleAIState(BaseEntity Target = null)
+namespace AIState
+{
+    public class IdleAIState : IAIState
     {
-        mAttackTarget = Target;
-        m_bOnIdle = false;
-    }
 
-    public override void Update(List<BaseEntity> Targets)
-    {
-        if (!m_bOnIdle)
+        public float ConfusedTime = 0;
+        bool m_bOnIdle = false;
+
+        public IdleAIState(BaseEntity Target = null)
         {
-            m_CharacterAI.Idle();
-            m_bOnIdle = true;
+            m_bOnIdle = false;
         }
 
-        //
-        if (Targets.Count == 0 || Targets[0].isDead)
+        public override void Update(List<BaseEntity> Targets)
         {
-            return;
-        }
-        if (m_CharacterAI.ObstacleOnWay())
-        {
-            if (m_CharacterAI.TargetInJumpAttckRange(Targets[0]))
+            if (!m_bOnIdle)
             {
-                if (m_CharacterAI.CheckCanJump(Targets[0]))
-                {
-                    m_CharacterAI.StopMove();
-                    m_CharacterAI.ChangeAIState(new JumpAttackAIState(Targets[0]));
-                    return;
-                }
+                m_CharacterAI.Idle();
+                m_bOnIdle = true;
             }
-            return;
-        }
-        //有目标进入攻击范围
-        if (m_CharacterAI.TargetInAttackRange(Targets[0]))
-        {
-            m_CharacterAI.ChangeAIState(new AttackAIState(Targets[0]));
-        }
-        else
-        {
-            m_CharacterAI.ChangeAIState(new ChaseAIState(Targets[0]));
+
+            //
+            if (Targets.Count == 0 || Targets[0].isDead)
+            {
+                return;
+            }
+            if (m_CharacterAI.ObstacleOnWay())
+            {
+                if (m_CharacterAI.TargetInJumpAttckRange(Targets[0]))
+                {
+                    if (m_CharacterAI.CheckCanJump(Targets[0]))
+                    {
+                        m_CharacterAI.StopMove();
+                        m_CharacterAI.ChangeAIState(new JumpAttackAIState(Targets[0]));
+                        return;
+                    }
+                }
+                return;
+            }
+            //有目标进入攻击范围
+            if (m_CharacterAI.TargetInAttackRange(Targets[0]))
+            {
+                m_CharacterAI.ChangeAIState(new AttackAIState(Targets[0]));
+            }
+            else
+            {
+                m_CharacterAI.ChangeAIState(new ChaseAIState(Targets[0]));
+            }
         }
     }
 }
-

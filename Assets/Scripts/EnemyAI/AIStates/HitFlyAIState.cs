@@ -7,20 +7,23 @@ using System.Collections.Generic;
 *  编写者     ： 林鸿伟
 *  version  ：1.0
 */
+namespace AIState
+{
 
-
-public class HitFlyAIState : IAIState {
-
-    private bool m_bHitFly = false;
-
-    public override void Update(List<BaseEntity> Targets)
+    public class HitFlyAIState : IAIState
     {
-        if (m_bHitFly)
+
+        private bool m_bHitFly = false;
+
+        public override void Update(List<BaseEntity> Targets)
         {
-            return;
+            if (m_bHitFly)
+            {
+                return;
+            }
+            m_bHitFly = true;
+            Debug.LogError("HitFly");
         }
-        m_bHitFly = true;
-        Debug.LogError("HitFly");
     }
 }
 

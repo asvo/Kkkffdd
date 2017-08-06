@@ -8,50 +8,53 @@ using System.Collections.Generic;
 *  version  ：1.0
 */
 
-
-public class ConfuseAIState : IAIState {
-
-    private float m_ConfuseTime = 0;
-    private bool m_bOnConfuse = false;
-
-    public ConfuseAIState(float confuseTime)
+namespace AIState
+{
+    public class ConfuseAIState : IAIState
     {
-        this.m_ConfuseTime = confuseTime;
-    }
 
-    public override void Update(List<BaseEntity> Targets)
-    {
-        if (Targets != null && Targets.Count > 0)
+        private float m_ConfuseTime = 0;
+        private bool m_bOnConfuse = false;
+
+        public ConfuseAIState(float confuseTime)
         {
-            if (m_CharacterAI.TargetInAttackRange(Targets[0]))
-            {
-                m_CharacterAI.StopMove();
-                m_CharacterAI.ChangeAIState(new AttackAIState(Targets[0]));
-                return;
-            }
-
-            if (m_CharacterAI.TargetInChaseRange(Targets[0]))
-            {
-                m_CharacterAI.StopMove();
-                m_CharacterAI.ChangeAIState(new ChaseAIState(Targets[0]));
-                return;
-            }
+            this.m_ConfuseTime = confuseTime;
         }
 
-        if (m_bOnConfuse)
+        public override void Update(List<BaseEntity> Targets)
         {
-            m_ConfuseTime -= Time.deltaTime;
-            if (m_ConfuseTime <= 0)
+            if (Targets != null && Targets.Count > 0)
             {
-                m_CharacterAI.StopMove();
-                m_CharacterAI.ChangeAIState(new ChaseAIState(Targets[0]));
+                if (m_CharacterAI.TargetInAttackRange(Targets[0]))
+                {
+                    m_CharacterAI.StopMove();
+                    m_CharacterAI.ChangeAIState(new AttackAIState(Targets[0]));
+                    return;
+                }
+
+                if (m_CharacterAI.TargetInChaseRange(Targets[0]))
+                {
+                    m_CharacterAI.StopMove();
+                    m_CharacterAI.ChangeAIState(new ChaseAIState(Targets[0]));
+                    return;
+                }
+            }
+
+            if (m_bOnConfuse)
+            {
+                m_ConfuseTime -= Time.deltaTime;
+                if (m_ConfuseTime <= 0)
+                {
+                    m_CharacterAI.StopMove();
+                    m_CharacterAI.ChangeAIState(new ChaseAIState(Targets[0]));
+                    return;
+                }
                 return;
             }
-            return;
-        }
 
-        m_bOnConfuse = true;
-        m_CharacterAI.MoveTo(Targets[0].transform.position);
+            m_bOnConfuse = true;
+            m_CharacterAI.MoveTo(Targets[0].transform.position);
+        }
     }
 }
 

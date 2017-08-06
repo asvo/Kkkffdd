@@ -8,32 +8,35 @@ using System.Collections.Generic;
 *  version  ：1.0
 */
 
-
-public class RestatsAIState : IAIState {
-
-    //僵直时间
-    private float m_RestatsTime = 0;
-    private bool m_bOnRestats = false;
-
-    public RestatsAIState(float Restatstime)
+namespace AIState
+{
+    public class RestatsAIState : IAIState
     {
-        m_RestatsTime = Restatstime;
-    }
 
-    public override void Update(List<BaseEntity> Targets)
-    {
-        if (m_bOnRestats)
+        //僵直时间
+        private float m_RestatsTime = 0;
+        private bool m_bOnRestats = false;
+
+        public RestatsAIState(float Restatstime)
         {
-            m_RestatsTime -= Time.deltaTime;
-            if (m_RestatsTime <= 0)
-            {
-                m_CharacterAI.ChangeAIState(new IdleAIState());
-            }
-            return;
+            m_RestatsTime = Restatstime;
         }
 
-        m_bOnRestats = true;
-        m_CharacterAI.Restats();
+        public override void Update(List<BaseEntity> Targets)
+        {
+            if (m_bOnRestats)
+            {
+                m_RestatsTime -= Time.deltaTime;
+                if (m_RestatsTime <= 0)
+                {
+                    m_CharacterAI.ChangeAIState(new IdleAIState());
+                }
+                return;
+            }
+
+            m_bOnRestats = true;
+            m_CharacterAI.Restats(Targets[0]);
+        }
     }
 }
 

@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 /*
  *  功能需求 ： 二次方贝塞尔曲线：B(t) = (1 - t)^2 * P_0 + 2t(1 - t)P_1 + t^2 * P_2 ,{t in [0,1]}。
  *  编写者     ： 林鸿伟

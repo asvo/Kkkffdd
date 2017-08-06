@@ -6,35 +6,37 @@ using System.Collections.Generic;
  *  version  ：1.0
  */
 
-
-public abstract class IAIState
+namespace AIState
 {
-    protected ICharacterAI m_CharacterAI = null;//怪物AI（状态拥有者）
-
-    public IAIState()
-    { }
-
-    //设置CharacterAI的对象
-    public void SetCharacterAI(ICharacterAI CharacterAI)
+    public abstract class IAIState
     {
-        m_CharacterAI = CharacterAI;
+        protected ICharacterAI m_CharacterAI = null;//怪物AI（状态拥有者）
+
+        public IAIState()
+        { }
+
+        //设置CharacterAI的对象
+        public void SetCharacterAI(ICharacterAI CharacterAI)
+        {
+            m_CharacterAI = CharacterAI;
+        }
+
+        //设置要攻击的目标
+        public virtual void SetAttckPosition(Vector3 AttackPosition)
+        { }
+
+        //更新
+        public abstract void Update(List<BaseEntity> Targets);
+
+        /// <summary>
+        /// 退出状态
+        /// </summary>
+        public virtual void ForceStop()
+        { }
+
+        //目标被删除
+        public virtual void RemoveTarget(BaseEntity Target)
+        { }
     }
-
-    //设置要攻击的目标
-    public virtual void SetAttckPosition(Vector3 AttackPosition)
-    {}
-
-    //更新
-    public abstract void Update(List<BaseEntity> Targets);
-
-    /// <summary>
-    /// 退出状态
-    /// </summary>
-    public virtual void ForceStop()
-    { }
-
-    //目标被删除
-    public virtual void RemoveTarget(BaseEntity Target)
-    { }
 }
 

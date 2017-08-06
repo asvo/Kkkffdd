@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using AIState;
 /*
  *  功能需求 ： 
  *  编写者     ： 林鸿伟
@@ -60,11 +61,11 @@ public class MonsterManager : Single<MonsterManager> {
         {
             case EnemyType.Monster_Normal:
                 monsterAI = new EnemyAI(monster, EnemyType.Monster_Normal);
-                monsterAI.ChangeAIState(new ConfuseAIState(monster.MaxConfusedTime));
+                monsterAI.ChangeAIState(new ConfuseAIState(monster.GetMonsterValue().MaxConfusedTime));
                 break;
             default:
                 monsterAI = new EnemyAI(monster, EnemyType.Monster_Normal);
-                monsterAI.ChangeAIState(new ConfuseAIState(monster.MaxConfusedTime));
+                monsterAI.ChangeAIState(new ConfuseAIState(monster.GetMonsterValue().MaxConfusedTime));
                 break;
         }     
         monster.Spawn(monsterAI);

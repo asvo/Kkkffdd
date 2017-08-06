@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Spine.Unity;
+using AIState;
+using ValueModule;
 /*
  *  功能需求 ： 
  *  编写者     ： 林鸿伟
@@ -11,39 +13,21 @@ using Spine.Unity;
 public class Monster : BaseEntity {
 
     public EnemyAI m_EnemyAI = null;
-    public float ChaseRange = 5;
-    public float RestatsTime = 0.3f;
-    public float MaxConfusedTime = 20;
-
-    #region Jump parameters
-    public float JumpPrepareTime = 0.5f;
-    public float JumpAttckRange = 6;
-    public float JumpTime = 1;
-    public float JumpHeight = 3;
-    public bool HaveSpecialSkill = false;
-    #endregion
-
-    public float RollBackRange = 3;
-
     public Monster FrontMonster = null;
 
+    private MonsterValue mMonsterValue = null;
     public void LoadSettingData()
     {
-        JsDataBaseValue jsdata = ValueManager.Instance().MonsterValueSettings;
-        if (jsdata != null)
-        {
-            NormalAttackCd = jsdata.dic_BaseValues[e_BaseValue.NormalAttackCd.ToString()];
-            NormalAttackRange = jsdata.dic_BaseValues[e_BaseValue.NormalAttackRange.ToString()];
-            NormalAttackDamgePoint = jsdata.dic_BaseValues[e_BaseValue.NormalAttackDamgePoint.ToString()];
-            NormalAttackDamge = (int)jsdata.dic_BaseValues[e_BaseValue.NormalAttackDamge.ToString()];
-            RestatsTime = jsdata.dic_BaseValues[e_BaseValue.RestatsTime.ToString()];
-            InitMoveSpeed = (int)jsdata.dic_BaseValues[e_BaseValue.MoveSpeed.ToString()];
-        }
+        m_AttrValue = ValueManager.Instance().MonsterValueSettings;
+        mMonsterValue = m_AttrValue as MonsterValue;
+    }
+    public MonsterValue GetMonsterValue()
+    {
+        return mMonsterValue;
     }
 
     public virtual void Spawn(EnemyAI AIBrain =null)
     {
-        Health = 3;
         isDead = false;
 
         m_EnemyAI = AIBrain;       
@@ -114,6 +98,11 @@ public class Monster : BaseEntity {
     IEnumerator CalculateDamage()
     {
         yield return new WaitForSeconds(0.5f);
+        ForceDamege();
+    }
+
+    public void ForceDamege()
+    {
         if (!GameManager.Instance().bInvincible)
         {
             DamagerHandler.Instance().CalculateDamage(this, GameManager.Instance().MainPlayer, 10);
@@ -137,7 +126,7 @@ public class Monster : BaseEntity {
             }
             else
             {
-                m_EnemyAI.ChangeAIState(new RestatsAIState(RestatsTime));
+                m_EnemyAI.ChangeAIState(new RestatsAIState(GetMonsterValue().RestatsTime));
             }
         }
     }
@@ -215,7 +204,7 @@ public class Monster : BaseEntity {
                 SkeletonAnim.Skeleton.FlipX = true;
             }
             PlayAnim("run", true);
-            MoveCtrl.Move(moveDir, InitMoveSpeed);
+            MoveCtrl.Move(moveDir, m_AttrValue.InitMoveSpeed);
         }
     }
 
@@ -224,9 +213,12 @@ public class Monster : BaseEntity {
         base.EndMove();
     }
 
-    public void Restats()
+    public void Restats(MoveDir HitBackDir)
     {
+        MoveCtrl.Move(HitBackDir, m_AttrValue.InitMoveSpeed * 5);
         ResetPoseAndPlayAnim("hit2", false);
+
+        Invoke("EndMove", 0.1f);
     }
 
     public void EndRestats()
@@ -250,7 +242,7 @@ public class Monster : BaseEntity {
 
     public virtual  float PrepareJumpTime(BaseEntity to)
     {
-        float prepareTime = Mathf.Abs(Vector2.Distance(this.transform.position, to.transform.position)) * 0.1f;
+        float prepareTime = Mathf.Abs(Vector2.Distance(this.transform.position, to.transform.position)) * GetMonsterValue().JumpPrepareTimeRate;
         return prepareTime;
     }
 

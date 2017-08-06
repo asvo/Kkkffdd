@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using AIState;
 /*
  *  功能需求 ： 
  *  编写者     ： 林鸿伟
@@ -15,14 +16,14 @@ public class Monster_SpecialThree : Monster {
     private float _lastDodgeTime = 0;
     public override void OnDamaged(int damage)
     {
-        if (Health - damage < 0)
+        if (m_AttrValue.Health - damage < 0)
         {
             if (Time.time - _lastDodgeTime > _dodgeCd)
             {
                 _lastDodgeTime = Time.time;
                 if (m_EnemyAI != null)
                 {
-                    m_EnemyAI.ChangeAIState(new BackRollAIState(RollBackRange));
+                    m_EnemyAI.ChangeAIState(new BackRollAIState(GetMonsterValue().RollBackRange));
                     return;
                 }
             }

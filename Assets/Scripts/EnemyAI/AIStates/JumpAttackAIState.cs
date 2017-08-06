@@ -8,63 +8,66 @@ using System.Collections.Generic;
 *  version  ：1.0
 */
 
-
-public class JumpAttackAIState : IAIState {
-
-    private bool m_bOnJump = false;
-    private BaseEntity Target;
-
-    public JumpAttackAIState(BaseEntity Target)
+namespace AIState
+{
+    public class JumpAttackAIState : IAIState
     {
-        this.Target = Target;
-        m_bOnJump = false;
-    } 
 
-    public override void Update(List<BaseEntity> Targets)
-    {
-        if (!m_bOnJump)
+        private bool m_bOnJump = false;
+        private BaseEntity Target;
+
+        public JumpAttackAIState(BaseEntity Target)
         {
-            if (Target == null || Target.isDead)
+            this.Target = Target;
+            m_bOnJump = false;
+        }
+
+        public override void Update(List<BaseEntity> Targets)
+        {
+            if (!m_bOnJump)
             {
-                m_CharacterAI.ChangeAIState(new IdleAIState());
+                if (Target == null || Target.isDead)
+                {
+                    m_CharacterAI.ChangeAIState(new IdleAIState());
+                    return;
+                }
+            }
+            else
+            {
                 return;
             }
+
+            m_bOnJump = true;
+            m_CharacterAI.JumpAttack(Target, JumpOver);
+
         }
-        else
+
+        protected virtual void JumpOver()
         {
-            return;
+            if (m_CharacterAI.IsDead())
+                return;
+            m_bOnJump = false;
+            //精英怪物
+            if (m_CharacterAI.GetEnemyType() == EnemyType.Monster_OnlyJumpSkill)
+            {
+                m_CharacterAI.ChangeAIState(new JumpAttackAIState(Target));
+                return;
+            }
+
+            //if (m_CharacterAI.TargetInAttackRange(Target))
+            //{
+            //    //玩家在攻击范围内，转换为攻击状态，执行攻击
+            //    m_CharacterAI.ChangeAIState(new AttackAIState(Target));
+            //    return;
+            //}
+            //else //超出范围，转为跟踪状态
+            //{
+            //    m_CharacterAI.ChangeAIState(new ChaseAIState(Target));
+            //    return;
+            //}
+
+            m_CharacterAI.ChangeAIState(new IdleAIState());
         }
-
-        m_bOnJump = true;
-        m_CharacterAI.JumpAttack(Target, JumpOver);
-
-    }
-
-    protected virtual void JumpOver()
-    {
-        if (m_CharacterAI.IsDead())
-            return;
-        m_bOnJump = false;
-        //精英怪物
-        if (m_CharacterAI.GetEnemyType() == EnemyType.Monster_OnlyJumpSkill)
-        {
-            m_CharacterAI.ChangeAIState(new JumpAttackAIState(Target));
-            return;
-        }
-
-        //if (m_CharacterAI.TargetInAttackRange(Target))
-        //{
-        //    //玩家在攻击范围内，转换为攻击状态，执行攻击
-        //    m_CharacterAI.ChangeAIState(new AttackAIState(Target));
-        //    return;
-        //}
-        //else //超出范围，转为跟踪状态
-        //{
-        //    m_CharacterAI.ChangeAIState(new ChaseAIState(Target));
-        //    return;
-        //}
-
-        m_CharacterAI.ChangeAIState(new IdleAIState());
     }
 }
 

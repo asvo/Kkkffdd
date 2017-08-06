@@ -8,51 +8,54 @@ using System.Collections.Generic;
 *  version  ：1.0
 */
 
-
-public class MoveAIState : IAIState {
-
-    private const float MOVE_CHECK_DIST = 1.5f;
-    bool m_bOnMove = false;
-    Vector3 m_AttackPosition = Vector3.zero;
-
-    public MoveAIState()
-    { }
-
-    //设置要攻击的目标
-    public override void SetAttckPosition(Vector3 AttackPosition)
+namespace AIState
+{
+    public class MoveAIState : IAIState
     {
-        m_AttackPosition = AttackPosition;
-    }
 
-    public override void Update(List<BaseEntity> Targets)
-    {
-        //有目标时，改为待机状态
-        if (Targets != null && Targets.Count != 0)
+        private const float MOVE_CHECK_DIST = 1.5f;
+        bool m_bOnMove = false;
+        Vector3 m_AttackPosition = Vector3.zero;
+
+        public MoveAIState()
+        { }
+
+        //设置要攻击的目标
+        public override void SetAttckPosition(Vector3 AttackPosition)
         {
-            m_CharacterAI.ChangeAIState(new IdleAIState());
-            return;
+            m_AttackPosition = AttackPosition;
         }
 
-        //向目标移动中
-        if (m_bOnMove)
+        public override void Update(List<BaseEntity> Targets)
         {
-            //是否到达目标
-            float dist = Vector3.Distance(m_AttackPosition, m_CharacterAI.GetPosition());
-
-            if (dist < MOVE_CHECK_DIST)
+            //有目标时，改为待机状态
+            if (Targets != null && Targets.Count != 0)
             {
                 m_CharacterAI.ChangeAIState(new IdleAIState());
-                if (m_CharacterAI.IsDead() == false)
-                {
-                }
+                return;
             }
 
-            return;
-        }
+            //向目标移动中
+            if (m_bOnMove)
+            {
+                //是否到达目标
+                float dist = Vector3.Distance(m_AttackPosition, m_CharacterAI.GetPosition());
 
-        //往目标移动
-        m_bOnMove = true;
-        m_CharacterAI.MoveTo(m_AttackPosition);
+                if (dist < MOVE_CHECK_DIST)
+                {
+                    m_CharacterAI.ChangeAIState(new IdleAIState());
+                    if (m_CharacterAI.IsDead() == false)
+                    {
+                    }
+                }
+
+                return;
+            }
+
+            //往目标移动
+            m_bOnMove = true;
+            m_CharacterAI.MoveTo(m_AttackPosition);
+        }
     }
 }
 

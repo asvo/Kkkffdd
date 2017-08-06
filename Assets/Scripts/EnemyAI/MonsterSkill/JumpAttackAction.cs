@@ -23,15 +23,17 @@ public class JumpAttackAction : MonoBehaviour {
     Bezier jumpCurve = null;
     System.Action CallBack = null;
 
+    public float HitBackSpeed = 3;
+
     void Awake()
     {
         _controller = GetComponent<CharacterController2D>();
-        _monster = GetComponent<Monster>();
+        _monster = GetComponent<Monster>();        
 
         // listen to some events for illustration purposes
-        _controller.onControllerCollidedEvent += onControllerCollider;
+        //_controller.onControllerCollidedEvent += onControllerCollider;
         _controller.onTriggerEnterEvent += onTriggerEnterEvent;
-        _controller.onTriggerExitEvent += onTriggerExitEvent;
+       // _controller.onTriggerExitEvent += onTriggerExitEvent;
     }
 
 
@@ -39,21 +41,19 @@ public class JumpAttackAction : MonoBehaviour {
 
     void onControllerCollider(RaycastHit2D hit)
     {
-        // bail out on plain old ground hits cause they arent very interesting
-        if (hit.normal.y == 1f)
-            return;
-
-        // logs any collider hits if uncommented. it gets noisy so it is commented out for the demo
-        //LogTrigger("flags: " + _controller.collisionState + ", hit.normal: " + hit.normal );
     }
 
 
     void onTriggerEnterEvent(Collider2D col)
     {
-        //if (col.gameObject.GetComponent<Player>() != null)
-        //{
-        //    LogTrigger("onTriggerEnterEvent: " + col.gameObject.name);
-        //}
+        if (col.gameObject.GetComponent<Player>() != null)
+        {
+            //LogTrigger("onTriggerEnterEvent: " + col.gameObject.name);
+            if (_monster != null)
+            {
+                _monster.ForceDamege();
+            } 
+        }
     }
 
 
@@ -74,6 +74,8 @@ public class JumpAttackAction : MonoBehaviour {
 
     public void Attack(BaseEntity Target,float JumpHeight, float JumpTime,float PrepareTime, System.Action CallBack = null)
     {
+        HitBackSpeed = _monster.GetMonsterValue().JumpHitBackSpeed;
+
         this.CallBack = CallBack;
         m_JumpTimer = JumpTime;
         m_JumpHeight = JumpHeight;
@@ -94,15 +96,36 @@ public class JumpAttackAction : MonoBehaviour {
 
     private void Jump()
     {
-        _monster.ResetPoseAndPlayAnim("attack2_End", false);
+        AnimationJumpStart();
+
         jumpCurve = new Bezier(transform, m_JumpHeight, startPoint, endPoint, m_JumpTimer);
         m_bOnJumpPose = true;
 
         _monster.ChangeCollider(false);
         this.enabled = true;
+
         Util.LogHW(gameObject.name + " jump start time:" + Time.time);
+
+        Invoke("AnimationOnSpace", 0.1f);
+        Invoke("AnimationLand", m_JumpTimer - 0.1f);
     }
 
+    #region 空中动作
+    void AnimationJumpStart()
+    {
+        _monster.ResetPoseAndPlayAnim("attack2_End1", false);
+    }
+
+    void AnimationOnSpace()
+    {
+        _monster.ResetPoseAndPlayAnim("attack2_End2", false);
+    }
+
+    void AnimationLand()
+    {
+        _monster.ResetPoseAndPlayAnim("attack2_End3", false);
+    }
+    #endregion
 
     private float PrepareJumpTime(BaseEntity to)
     {
@@ -146,7 +169,7 @@ public class JumpAttackAction : MonoBehaviour {
     {
         CallBack = LandGround;
         m_bOnJumpPose = false;
-        m_JumpTimer = 0.3f;
+        m_JumpTimer = 1 / HitBackSpeed;
         jumpCurve = new Bezier(transform, m_JumpHeight, transform.position, startPoint, m_JumpTimer);
         _monster.ChangeCollider(false);
 

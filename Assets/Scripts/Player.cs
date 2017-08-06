@@ -31,15 +31,15 @@ public class Player : BaseEntity
 
     public void LoadSettingData()
     {
-        JsDataBaseValue jsdata = ValueManager.Instance().PlayerValueSettings;
-        if (jsdata != null)
-        {
-            //NormalAttackCd = jsdata.dic_BaseValues[e_BaseValue.NormalAttackCd.ToString()];
-            //NormalAttackRange = jsdata.dic_BaseValues[e_BaseValue.NormalAttackRange.ToString()];
-            //NormalAttackDamgePoint = jsdata.dic_BaseValues[e_BaseValue.NormalAttackDamgePoint.ToString()];
-            //NormalAttackDamge = (int)jsdata.dic_BaseValues[e_BaseValue.NormalAttackDamge.ToString()];
-            InitMoveSpeed = jsdata.dic_BaseValues[e_BaseValue.MoveSpeed.ToString()];
-        }
+        m_AttrValue = ValueManager.Instance().PlayerValueSettings;
+        //if (jsdata != null)
+        //{
+        //    //NormalAttackCd = jsdata.dic_BaseValues[e_BaseValue.NormalAttackCd.ToString()];
+        //    //NormalAttackRange = jsdata.dic_BaseValues[e_BaseValue.NormalAttackRange.ToString()];
+        //    //NormalAttackDamgePoint = jsdata.dic_BaseValues[e_BaseValue.NormalAttackDamgePoint.ToString()];
+        //    //NormalAttackDamge = (int)jsdata.dic_BaseValues[e_BaseValue.NormalAttackDamge.ToString()];
+        //    InitMoveSpeed = jsdata.dic_BaseValues[e_BaseValue.MoveSpeed.ToString()];
+        //}
     }
 
     public void LoadSkillSettingData()
@@ -47,17 +47,17 @@ public class Player : BaseEntity
         SkillCfgUnit cfgUnit = SkillCfgMgr.Instance().GetSkillCfgBySlotId(SkillConst.NormalAttackSkillSlotId);
         if (null != cfgUnit)
         {
-            NormalAttackCd = cfgUnit.SkillCd;
-            NormalAttackRange = cfgUnit.DamageRange;
-            NormalAttackDamgePoint = cfgUnit.DamageTime;
-            NormalAttackDamge = cfgUnit.Damge;
+            m_AttrValue.NormalAttackCd = cfgUnit.SkillCd;
+            m_AttrValue.NormalAttackRange = cfgUnit.DamageRange;
+            m_AttrValue.NormalAttackDamgePoint = cfgUnit.DamageTime;
+            m_AttrValue.NormalAttackDamge = cfgUnit.Damge;
         }
     }
 
     public void InitPlayer()
     {
         LoadSettingData();
-        Health = 1;
+        m_AttrValue.Health = 1;
 
         isDead = false;
         if (!gameObject.activeSelf)
@@ -180,7 +180,7 @@ public class Player : BaseEntity
 
     private IEnumerator ResetNormalAttackCd()
     {
-        yield return new WaitForSeconds(NormalAttackCd);
+        yield return new WaitForSeconds(m_AttrValue.NormalAttackCd);
         mIsNormalAttackInCd = false;
     }
 
@@ -204,7 +204,7 @@ public class Player : BaseEntity
         PlayAnim("attack");
         SkeletonAnim.state.AddAnimation(0, "idle", false, 0.8f);
         SkillDataMgr.Instance().SetOnActionTime(SkillConst.NormalAttackSkillSlotId);
-        yield return new WaitForSeconds(NormalAttackDamgePoint);
+        yield return new WaitForSeconds(m_AttrValue.NormalAttackDamgePoint);
         CastNormalAttack();
     }
 
@@ -213,11 +213,11 @@ public class Player : BaseEntity
         //     Debug.LogError("cast noarml attack");
         // cur-weight = 1.14f;
         //        float normalAtackDist = 1.14f * 0.5f + 1.14f * 0.5f + 1.14f;
-        BaseEntity target = Util.FindNereastTargetMonsterByDist(this, NormalAttackRange);
+        BaseEntity target = Util.FindNereastTargetMonsterByDist(this, m_AttrValue.NormalAttackRange);
         if (null != target)
         {
             //int damage = SkillDataMgr.Instance().IsSkill01BuffActive ? NormalAttackDamge : 2*NormalAttackDamge;
-            DamagerHandler.Instance().CalculateDamage(this, target, NormalAttackDamge);
+            DamagerHandler.Instance().CalculateDamage(this, target, m_AttrValue.NormalAttackDamge);
             if (SkillDataMgr.Instance().IsSkill01BuffActive)
             {
                 SkillDataMgr.Instance().ReducePlayerAllSkillCd(1.0f);
@@ -262,7 +262,7 @@ public class Player : BaseEntity
                 continue;
             if (MonsterManager.Instance().DirToTarget(transform, monster.transform) == moveDir)
             {
-                if (Vector2.Distance(monster.transform.position, transform.position) <= GameManager.NearestDistance + monster.NormalAttackRange)
+                if (Vector2.Distance(monster.transform.position, transform.position) <= GameManager.NearestDistance + monster.m_AttrValue.NormalAttackRange)
                 {
                     return true;
                 }

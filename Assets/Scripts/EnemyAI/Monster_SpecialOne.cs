@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using AIState;
 /*
  *  功能需求 ： 
  *  编写者     ： 林鸿伟
@@ -18,12 +19,12 @@ public class Monster_SpecialOne : Monster {
 
     public override void OnDamaged(int damage)
     {
-        if (m_bHadCastDodge == false && Health - damage < 0)
+        if (m_bHadCastDodge == false && m_AttrValue.Health - damage < 0)
         {
             if (m_EnemyAI != null)
             {
                 m_bHadCastDodge = true;
-                m_EnemyAI.ChangeAIState(new BackRollAIState(RollBackRange));
+                m_EnemyAI.ChangeAIState(new BackRollAIState(GetMonsterValue().RollBackRange));
                 return;
             }
         }
