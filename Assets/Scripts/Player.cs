@@ -8,9 +8,10 @@ using Spine.Unity;
  *  version  ：1.0
  */
 
-public class Player : BaseEntity {
+public class Player : BaseEntity
+{
 
-//    public Animator mAnimator;    
+    //    public Animator mAnimator;    
     private List<SkillData> mSkillList;
     public float leftBorder = -5;
     public float rightBorder = 5;
@@ -80,41 +81,60 @@ public class Player : BaseEntity {
 
         Status = PlayerStatus.Idle;
         PlayAnim("idle");
-    }    
+        IsPLayerMoing = false;
+    }
+
+    public static bool IsPLayerMoing = false;
 
     public override void Move(MoveDir moveDir)
     {
         curMoveDir = moveDir;
-//        if (mIsNormalAttackInCd)
+        bool isSameDir = MoveCtrl.GetCurrentFaceDir() == moveDir;
+        if (mIsNormalAttackInCd)
         {
-            MoveDir dir = MoveCtrl.GetCurrentFaceDir();            
-            if (dir == moveDir)
+            if (isSameDir)
             {
-                Util.LogAsvo("same dir : " + dir);
+                Util.LogAsvo("same dir : " + moveDir);
                 return;     //目前（2017/06/20）攻击时只处理向后移动的行为
             }
             CancelNormalAttack();
             CancelSkill01();
         }
+        SkillDataMgr.Instance().ClearActionTimeBySlot(SkillConst.NormalAttackSkillSlotId);
         //修正朝向
         base.RotateToDir(moveDir);
         if (TooNearToMonster(moveDir))
             EndMove();
         else
-            base.Move(moveDir);
+        {
+            if (isSameDir)
+            {
+                if (!IsPLayerMoing)
+                {
+                    IsPLayerMoing = true;
+                    base.Move(moveDir);
+                }
+            }
+            else
+            {
+                IsPLayerMoing = true;
+                base.Move(moveDir);
+            }
+        }
     }
 
     public override void EndMove()
     {
         base.EndMove();
         PlayAnim("idle");
+        IsPLayerMoing = false;
     }
-    
+
     private bool mIsNormalAttackInCd = false;
 
     public void FireSkill(int slot)
     {
- //       SkillCaster.Instance().CastSkill(mSkillList[slot], this);
+        //       SkillCaster.Instance().CastSkill(mSkillList[slot], this);
         if (SkillConst.NormalAttackSkillSlotId == slot)
         {
             FireNormalAttack();
@@ -149,14 +169,13 @@ public class Player : BaseEntity {
     }
 
     private void CancelNormalAttack()
-    {     
+    {
         StopAnim("attack");
         PlayAnim("idle");
         StopCoroutine("NormalAttackPre");
         mIsNormalAttackInCd = false;
         //cancel normal action cd
         Util.LogAsvo("cancel normal attack");
-        SkillDataMgr.Instance().ClearActionTimeBySlot(SkillConst.NormalAttackSkillSlotId);
     }
 
     private IEnumerator ResetNormalAttackCd()
@@ -180,8 +199,8 @@ public class Player : BaseEntity {
             yield return null;
         }
         Spine.AnimationState animState = SkeletonAnim.state;
-        Spine.Animation anim = animState.GetAnimation(0,"attack");
-  //      SkeletonAnim.timeScale = anim.duration / NormalAttackCd;
+        Spine.Animation anim = animState.GetAnimation(0, "attack");
+        //      SkeletonAnim.timeScale = anim.duration / NormalAttackCd;
         PlayAnim("attack");
         SkeletonAnim.state.AddAnimation(0, "idle", false, 0.8f);
         SkillDataMgr.Instance().SetOnActionTime(SkillConst.NormalAttackSkillSlotId);
@@ -191,9 +210,9 @@ public class Player : BaseEntity {
 
     private void CastNormalAttack()
     {
-   //     Debug.LogError("cast noarml attack");
+        //     Debug.LogError("cast noarml attack");
         // cur-weight = 1.14f;
-//        float normalAtackDist = 1.14f * 0.5f + 1.14f * 0.5f + 1.14f;
+        //        float normalAtackDist = 1.14f * 0.5f + 1.14f * 0.5f + 1.14f;
         BaseEntity target = Util.FindNereastTargetMonsterByDist(this, NormalAttackRange);
         if (null != target)
         {
@@ -205,7 +224,7 @@ public class Player : BaseEntity {
             }
         }
     }
-    
+
     public override void OnDamaged(int damage)
     {
         base.OnDamaged(damage);
