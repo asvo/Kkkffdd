@@ -262,7 +262,7 @@ public class Player : BaseEntity
                 continue;
             if (MonsterManager.Instance().DirToTarget(transform, monster.transform) == moveDir)
             {
-                if (Vector2.Distance(monster.transform.position, transform.position) <= GameManager.NearestDistance + monster.m_AttrValue.NormalAttackRange)
+                if (Vector2.Distance(monster.transform.position, transform.position) <= GameManager.NearestDistance)
                 {
                     return true;
                 }
