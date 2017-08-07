@@ -9,10 +9,10 @@ using System;
 
 namespace ValueModule
 {
-    [Serializable]
-    public class IBaseValue
+    public interface IBaseValue
     {
-
+        IBaseValue SimpleClone();
+        IBaseValue DeepClone();       
     }
 }
 

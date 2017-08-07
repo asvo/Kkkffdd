@@ -15,11 +15,11 @@ public class Monster : BaseEntity {
     public EnemyAI m_EnemyAI = null;
     public Monster FrontMonster = null;
 
-    private MonsterValue mMonsterValue = null;
+    public MonsterValue mMonsterValue = null;
     public void LoadSettingData()
     {
-        m_AttrValue = ValueManager.Instance().MonsterValueSettings;
-        mMonsterValue = m_AttrValue as MonsterValue;
+        m_AttrValue = ValueManager.Instance().MonsterValueSettings.DeepClone() as ICharacterValue;
+        mMonsterValue = m_AttrValue.SimpleClone() as MonsterValue;
     }
     public MonsterValue GetMonsterValue()
     {

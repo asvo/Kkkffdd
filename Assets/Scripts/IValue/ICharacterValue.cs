@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 /*
  *  功能需求 ： 
  *  编写者     ： 林鸿伟
@@ -21,6 +23,19 @@ namespace ValueModule
 
         public float InitMoveSpeed = 2f;
         public float MaxMoveSpeed = 10f;
-    }
 
+        public IBaseValue SimpleClone()
+        {
+            return this.MemberwiseClone() as ICharacterValue;
+        }
+
+        public IBaseValue DeepClone()
+        {
+            MemoryStream stream = new MemoryStream();
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(stream, this);
+            stream.Position = 0;
+            return formatter.Deserialize(stream) as ICharacterValue;
+        }
+    }
 }
