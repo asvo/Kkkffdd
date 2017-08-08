@@ -64,6 +64,14 @@ public static class Util
         }
     }
 
+    public static int DamageZoneLayer
+    {
+        get
+        {
+            return LayerMask.NameToLayer("DamageZone");
+        }
+    }
+
     /// <summary>
     /// 主角寻找目标距离的怪物
     /// </summary>

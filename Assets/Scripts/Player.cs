@@ -205,7 +205,33 @@ public class Player : BaseEntity
         SkeletonAnim.state.AddAnimation(0, "idle", false, 0.8f);
         SkillDataMgr.Instance().SetOnActionTime(SkillConst.NormalAttackSkillSlotId);
         yield return new WaitForSeconds(m_AttrValue.NormalAttackDamgePoint);
-        CastNormalAttack();
+        PlaceNormalAttackZone();
+     //   CastNormalAttack();
+    }
+
+    private BoxCollider2D mCollider;
+    public BoxCollider2D PlayerCollider
+    {
+        get
+        {
+            if (null == mCollider)
+                mCollider = GetComponent<BoxCollider2D>();
+            return mCollider;
+        }
+    }
+
+    private void PlaceNormalAttackZone()
+    {
+        Spine.AnimationState animState = SkeletonAnim.state;
+        Spine.Animation anim = animState.GetAnimation(0, "attack");
+        float placeTime = anim.Duration - m_AttrValue.NormalAttackDamgePoint;
+        if (placeTime < 0f)
+            placeTime = 0f;
+        float halfRange = m_AttrValue.NormalAttackRange * 0.5f;
+        Vector2 placePos = transform.position + Vector3.right * halfRange;
+        Vector2 placeSize = new Vector2(m_AttrValue.NormalAttackRange, PlayerCollider.size.y);
+        StayInDamgeZoneCtrler.Instance().PlaceZone(SkillConst.NormalAttackSkillSlotId,
+            this, placePos, placeSize, placeTime, m_AttrValue.NormalAttackDamge);
     }
 
     private void CastNormalAttack()
@@ -214,6 +240,8 @@ public class Player : BaseEntity
         // cur-weight = 1.14f;
         //        float normalAtackDist = 1.14f * 0.5f + 1.14f * 0.5f + 1.14f;
         BaseEntity target = Util.FindNereastTargetMonsterByDist(this, m_AttrValue.NormalAttackRange);
+        if (null != target)
+            Util.LogAsvo("find target: " + target.name);
         if (null != target)
         {
             //int damage = SkillDataMgr.Instance().IsSkill01BuffActive ? NormalAttackDamge : 2*NormalAttackDamge;
@@ -237,21 +265,15 @@ public class Player : BaseEntity
         //play die anim.
         PlayAnim("idle");
 
-        StartCoroutine(WaitForDieAnimOver());
+        if (Status == PlayerStatus.Die && this.gameObject.activeInHierarchy)
+        {
+            StopAllCoroutines();
+            this.gameObject.SetActive(false);
+        }
 
         //game over
         GameManager.Instance().PauseGame();
         GameOverUI.Instance.ShowUi();
-    }
-
-    IEnumerator WaitForDieAnimOver()
-    {
-        yield return new WaitForSeconds(1.0f);
-        if (Status == PlayerStatus.Die)
-        {
-            this.gameObject.SetActive(false);
-            StopAllCoroutines();
-        }
     }
 
     private bool TooNearToMonster(MoveDir moveDir)
