@@ -14,11 +14,21 @@ public class StayInDamgeZoneCtrler : Single<StayInDamgeZoneCtrler>
         StayInDamageZone zone = GetStayInZone(skillId);
         if (null == zone)
         {
-            zone = CreateStayInZone(skillId);
+            zone = CreateStayInZone(skillId, owner.transform);
             mStayInZones.Add(skillId, zone);
         }
         zone.SetSize(zoneSize);
         zone.Place(owner, position, persistime, damge);
+    }
+
+    public void CancelPlaceZone(int skillId)
+    {
+        Util.LogAsvo("cancel zone : " + skillId);
+        StayInDamageZone zone = GetStayInZone(skillId);
+        if (null != zone)
+        {
+            zone.RemoveZoneFromOutter();
+        }
     }
 
     private void CreateRoot()
@@ -26,11 +36,15 @@ public class StayInDamgeZoneCtrler : Single<StayInDamgeZoneCtrler>
         mStayInZoneRoot = new GameObject("StayInZoneRoot");
     }
 
-    private StayInDamageZone CreateStayInZone(int skillId)
+    private StayInDamageZone CreateStayInZone(int skillId, Transform ownerTrans)
     {
         GameObject stayZoneGobj = new GameObject(skillId.ToString());
         stayZoneGobj.layer = Util.DamageZoneLayer;
-        stayZoneGobj.transform.SetParent(mStayInZoneRoot.transform);
+        StayInDamageZoneType zoneType = GetStayInTypeBySkill(skillId);
+        if (zoneType == StayInDamageZoneType.StayStatic)
+            stayZoneGobj.transform.SetParent(mStayInZoneRoot.transform);
+        else if (zoneType == StayInDamageZoneType.StayFollowOwner)
+            stayZoneGobj.transform.SetParent(ownerTrans);
         stayZoneGobj.transform.localScale = Vector2.one;
         //add collider
         BoxCollider2D collider = stayZoneGobj.AddComponent<BoxCollider2D>();
@@ -39,10 +53,24 @@ public class StayInDamgeZoneCtrler : Single<StayInDamgeZoneCtrler>
         return zoneSc;
     }
 
+    private StayInDamageZoneType GetStayInTypeBySkill(int skillId)
+    {
+        if (skillId == SkillConst.PlayerSkill01SlotId || skillId == SkillConst.PlayerSkill02SlotId)
+            return StayInDamageZoneType.StayFollowOwner;
+        return StayInDamageZoneType.StayStatic;
+    }
+
     private StayInDamageZone GetStayInZone(int skillId)
     {
         StayInDamageZone zone = null;
-        mStayInZones.TryGetValue(skillId, out zone);
+        if (null != mStayInZones)
+            mStayInZones.TryGetValue(skillId, out zone);
         return zone;
     }
+}
+
+public enum StayInDamageZoneType
+{
+    StayStatic,
+    StayFollowOwner,
 }

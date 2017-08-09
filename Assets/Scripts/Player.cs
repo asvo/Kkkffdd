@@ -96,7 +96,10 @@ public class Player : BaseEntity
             {
                 Util.LogAsvo("same dir : " + moveDir);
                 return;     //目前（2017/06/20）攻击时只处理向后移动的行为
-            }
+            }            
+        }
+        if (!isSameDir)
+        {
             CancelNormalAttack();
             CancelSkill01();
         }
@@ -176,6 +179,7 @@ public class Player : BaseEntity
         mIsNormalAttackInCd = false;
         //cancel normal action cd
         Util.LogAsvo("cancel normal attack");
+        StayInDamgeZoneCtrler.Instance().CancelPlaceZone(SkillConst.NormalAttackSkillSlotId);
     }
 
     private IEnumerator ResetNormalAttackCd()
@@ -207,18 +211,7 @@ public class Player : BaseEntity
         yield return new WaitForSeconds(m_AttrValue.NormalAttackDamgePoint);
         PlaceNormalAttackZone();
      //   CastNormalAttack();
-    }
-
-    private BoxCollider2D mCollider;
-    public BoxCollider2D PlayerCollider
-    {
-        get
-        {
-            if (null == mCollider)
-                mCollider = GetComponent<BoxCollider2D>();
-            return mCollider;
-        }
-    }
+    }    
 
     private void PlaceNormalAttackZone()
     {
@@ -229,7 +222,7 @@ public class Player : BaseEntity
             placeTime = 0f;
         float halfRange = m_AttrValue.NormalAttackRange * 0.5f;
         Vector2 placePos = transform.position + Vector3.right * halfRange;
-        Vector2 placeSize = new Vector2(m_AttrValue.NormalAttackRange, PlayerCollider.size.y);
+        Vector2 placeSize = new Vector2(m_AttrValue.NormalAttackRange, EntityCollider.size.y);
         StayInDamgeZoneCtrler.Instance().PlaceZone(SkillConst.NormalAttackSkillSlotId,
             this, placePos, placeSize, placeTime, m_AttrValue.NormalAttackDamge);
     }

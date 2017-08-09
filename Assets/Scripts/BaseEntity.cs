@@ -38,6 +38,17 @@ public class BaseEntity : MonoBehaviour
         }
     }
 
+    private BoxCollider2D mCollider;
+    public BoxCollider2D EntityCollider
+    {
+        get
+        {
+            if (null == mCollider)
+                mCollider = GetComponent<BoxCollider2D>();
+            return mCollider;
+        }
+    }
+
     void Awake()
     {
         MoveCtrl = Util.TryAddComponent<MoveAction>(gameObject);

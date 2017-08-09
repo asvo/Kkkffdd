@@ -65,9 +65,16 @@ public class StayInDamageZone : MonoBehaviour {
         {
             if (mDamagedEntites.Contains(entity)) //（一块区域内伤害对象一次）
                 return;
+            if (mDamagedEntites.Count == 0) //if hit any enemy. once hit only once trigger OnHitAntEnemy.
+                OnHitAnyEnemy();
             mDamagedEntites.Add(entity);
             DamagerHandler.Instance().CalculateDamage(mOwner, entity, mDamage);
         }
+    }
+
+    private void OnHitAnyEnemy()
+    {
+        SkillDataMgr.Instance().ReducePlayerAllSkillCd(1.0f);
     }
 
     private void Clear()
@@ -81,6 +88,6 @@ public class StayInDamageZone : MonoBehaviour {
     {
         mIsActive = false;
         gameObject.SetActive(mIsActive);
-        //
+        mDamagedEntites.Clear();
     }
 }

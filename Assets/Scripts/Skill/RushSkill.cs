@@ -71,6 +71,21 @@ public class RushSkill : MonoBehaviour {
     private IEnumerator CalculateRushDamage()
     {
         yield return new WaitForSeconds(DamageTime);
+        //FireRushDamage();
+        PlaceRushSkillZone();
+    }
+
+    private void PlaceRushSkillZone()
+    {
+        float halfRange = RushDamageRange * 0.5f;
+        Vector2 placePos = transform.position + Vector3.right * halfRange;
+        Vector2 placeSize = new Vector2(RushDamageRange, mEntity.EntityCollider.size.y);
+        StayInDamgeZoneCtrler.Instance().PlaceZone(SkillConst.PlayerSkill01SlotId,
+            mEntity, placePos, placeSize, MaxRushMoveTime, RushDamage);
+    }
+
+    private void FireRushDamage()
+    {
         BaseEntity target = Util.FindNereastTargetMonsterByDist(mEntity, RushDamageRange);
         Util.LogAsvo("Attack Rush !");
         if (null != target)
@@ -83,6 +98,7 @@ public class RushSkill : MonoBehaviour {
     private void EndSkill()
     {
         SkillDataMgr.Instance().SetSkillIfOver(SkillConst.PlayerSkill01SlotId, true);
+        StayInDamgeZoneCtrler.Instance().CancelPlaceZone(SkillConst.PlayerSkill01SlotId);
     }
 
     public void BreakSkill()
