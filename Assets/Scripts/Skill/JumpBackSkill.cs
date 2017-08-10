@@ -81,16 +81,31 @@ public class JumpBackSkill : MonoBehaviour {
     IEnumerator CalculateSkillDamage()
     {
         yield return new WaitForSeconds(DamageTime);
+        Util.LogAsvo("Skill02 attack !");
+        //CastDamage();
+
+        PlaceSkillZone();
+        EndSkill();
+    }
+
+    private void PlaceSkillZone()
+    {
+        float halfRange = DamageRange * 0.5f;
+        Vector2 placePos = transform.position + Vector3.right * halfRange;
+        Vector2 placeSize = new Vector2(DamageRange, mEntity.EntityCollider.size.y);
+        StayInDamgeZoneCtrler.Instance().PlaceZone(SkillConst.PlayerSkill02SlotId,
+            mEntity, placePos, placeSize, BackMoveTime - DamageTime, Damage);
+    }
+
+    private void CastDamage()
+    {
         float moveDist = Vector3.Distance(mStartSkillPos, mEntity.transform.position);
         BaseEntity target = Util.FindNereastTargetMonsterByDist(mEntity, DamageRange + moveDist);
-        Util.LogAsvo("Skill02 attack !");
         if (null != target)
         {
             Util.LogAsvo("Skill02 attack, targetname = " + target.name);
             DamagerHandler.Instance().CalculateDamage(mEntity, target, Damage);
         }
-
-        EndSkill();
     }
 
     void Update()
