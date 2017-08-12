@@ -8,6 +8,7 @@ public static class SkillConst
     public const int PlayerSkill01SlotId = 1;
     public const int PlayerSkill01BuffSlotId = 11;
     public const int PlayerSkill02SlotId = 2;
+    public const int PlayerSkill02AttackSlotId = 21;
 }
 
 public class SkillCfgMgr : Single<SkillCfgMgr>
@@ -86,6 +87,18 @@ public class SkillCfgMgr : Single<SkillCfgMgr>
             DamageRange = 3f,
             DamageTime = 0.5f,
             SkillCd = 3f,
+            SkillMoveTime = 1.0f,
+            SkillMoveSpeed = 2f
+        };
+        CfgUnitData.Add(cfgUnit);
+        cfgUnit = new SkillCfgUnit()
+        {
+            SlotId = SkillConst.PlayerSkill02AttackSlotId,
+            Name = "技能2-后跳攻击",
+            Damge = 2,
+            DamageRange = 3f,
+            DamageTime = 0.5f,
+            SkillCd = 8f,
             SkillMoveTime = 1.0f,
             SkillMoveSpeed = 2f
         };

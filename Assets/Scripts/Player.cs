@@ -139,7 +139,7 @@ public class Player : BaseEntity
     {
         //       SkillCaster.Instance().CastSkill(mSkillList[slot], this);
         if (SkillConst.NormalAttackSkillSlotId == slot)
-        {
+        {            
             FireNormalAttack();
         }
         else if (SkillConst.PlayerSkill01SlotId == slot)

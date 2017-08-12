@@ -73,7 +73,7 @@ public class JumpBackSkill : MonoBehaviour {
         mHasAttack = true;
         //play attack anim
         mEntity.SkeletonAnim.skeleton.SetToSetupPose();
-        mEntity.PlayAnim(ActionAttackName);
+        mEntity.PlayAnim(ActionAttackName);        
         //start damage-calculate corutine
         StartCoroutine("CalculateSkillDamage");
     }

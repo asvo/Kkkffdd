@@ -17,7 +17,12 @@ public class HUD : MonoBehaviour {
     {
         if (SkillDataMgr.Instance().IsSkill02Active)
         {
-            EventMgr.Instance().TriggerEvent(EventsType.FireNoramlAttack, null);
+            SkillCdData cdData = SkillDataMgr.Instance().GetSkillCdDataBySlotId(SkillConst.PlayerSkill02AttackSlotId);
+            if (null != cdData && !cdData.mIsInCd)
+            {
+                SkillDataMgr.Instance().SetOnSkillCd(SkillConst.PlayerSkill02AttackSlotId, cdData.SkillCdTime, Time.realtimeSinceStartup, true);
+                EventMgr.Instance().TriggerEvent(EventsType.FireNoramlAttack, null);
+            }
             return;
         }
 
@@ -31,6 +36,23 @@ public class HUD : MonoBehaviour {
     void Update()
     {
         UpdateBuffs();
+        UpdateSkill2AttackCd();
+    }
+
+    private SkillCdData mSkill02AttackCd = null;
+
+    private void UpdateSkill2AttackCd()
+    {
+        if (null == mSkill02AttackCd)
+            mSkill02AttackCd = SkillDataMgr.Instance().GetSkillCdDataBySlotId(SkillConst.PlayerSkill02AttackSlotId);
+        if (null != mSkill02AttackCd && mSkill02AttackCd.mIsInCd)
+        {
+            float leftTime = mSkill02AttackCd.mEndCdTime - Time.realtimeSinceStartup;
+            if (leftTime <= 0)
+            {
+                mSkill02AttackCd.mIsInCd = false;
+            }
+        }
     }
 
     private void UpdateBuffs()

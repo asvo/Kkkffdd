@@ -17,8 +17,8 @@ public class SkillDataMgr : Single<SkillDataMgr>
         mSkillCdData.Add(0, new SkillCdData());
         mSkillCdData.Add(1, new SkillCdData());
         mSkillCdData.Add(11, new SkillCdData()); //skill 1的buff效果cd
-        mSkillCdData.Add(2, new SkillCdData());     //skill 2 cd slot 1
-        mSkillCdData.Add(21, new SkillCdData());    //skill 2 cd slot 2
+        mSkillCdData.Add(2, new SkillCdData());     //skill 2 后跳cd
+        mSkillCdData.Add(21, new SkillCdData());    //skill 2 攻击cd
 
         ResetSkillOver();
 
@@ -121,7 +121,7 @@ public class SkillDataMgr : Single<SkillDataMgr>
 #region skill2-special
 
     int[] skill2ReflectArry = new int[]{
-        2, 21
+        2
     };
 
     private int mCurrentSkill2ReflectSlotId = 2;

@@ -16,7 +16,7 @@ public class Skill02Btn : SkillBtn {
             Debug.Log("技能cd中");
             return;
         }
-        SkillDataMgr.Instance().SetOnCurSkill2Cd(SkillConst.PlayerSkill02SlotId, Time.realtimeSinceStartup, true);
+        SkillDataMgr.Instance().SetOnSkillCd(SkillConst.PlayerSkill02SlotId, mCdData.SkillCdTime, Time.realtimeSinceStartup, true);
         mCdData = SkillDataMgr.Instance().GetLeastCdSkill2CdData();
         if (mCdData.mIsInCd)
         {
