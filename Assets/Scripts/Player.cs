@@ -221,7 +221,8 @@ public class Player : BaseEntity
         if (placeTime < 0f)
             placeTime = 0f;
         float halfRange = m_AttrValue.NormalAttackRange * 0.5f;
-        Vector2 placePos = transform.position + Vector3.right * halfRange;
+        int flag = this.MoveCtrl.GetCurrentFaceDir() == MoveDir.Right ? 1 : -1;
+        Vector2 placePos = transform.position + Vector3.right * halfRange * flag;
         Vector2 placeSize = new Vector2(m_AttrValue.NormalAttackRange, EntityCollider.size.y);
         StayInDamgeZoneCtrler.Instance().PlaceZone(SkillConst.NormalAttackSkillSlotId,
             this, placePos, placeSize, placeTime, m_AttrValue.NormalAttackDamge);

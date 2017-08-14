@@ -91,7 +91,8 @@ public class JumpBackSkill : MonoBehaviour {
     private void PlaceSkillZone()
     {
         float halfRange = DamageRange * 0.5f;
-        Vector2 placePos = transform.position + Vector3.right * halfRange;
+        int flag = mEntity.MoveCtrl.GetCurrentFaceDir() == MoveDir.Right ? 1 : -1;
+        Vector2 placePos = transform.position + Vector3.right * halfRange * flag;
         Vector2 placeSize = new Vector2(DamageRange, mEntity.EntityCollider.size.y);
         StayInDamgeZoneCtrler.Instance().PlaceZone(SkillConst.PlayerSkill02SlotId,
             mEntity, placePos, placeSize, BackMoveTime - DamageTime, Damage);
@@ -124,6 +125,11 @@ public class JumpBackSkill : MonoBehaviour {
             }
             else if (mWaitTime >= BackMoveTime)
             {
+                if (!mHasPlayFallAction)
+                {
+                    mHasPlayFallAction = true;
+                    mEntity.PlayAnim(ActionAttackOverName);
+                }
                 EndSkill();
             }
         }

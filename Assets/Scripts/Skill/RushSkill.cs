@@ -78,7 +78,8 @@ public class RushSkill : MonoBehaviour {
     private void PlaceRushSkillZone()
     {
         float halfRange = RushDamageRange * 0.5f;
-        Vector2 placePos = transform.position + Vector3.right * halfRange;
+        int flag = mEntity.MoveCtrl.GetCurrentFaceDir() == MoveDir.Right ? 1 : -1;
+        Vector2 placePos = transform.position + Vector3.right * halfRange * flag;
         Vector2 placeSize = new Vector2(RushDamageRange, mEntity.EntityCollider.size.y);
         StayInDamgeZoneCtrler.Instance().PlaceZone(SkillConst.PlayerSkill01SlotId,
             mEntity, placePos, placeSize, MaxRushMoveTime, RushDamage);
