@@ -1,0 +1,146 @@
+
+d2.png
+size: 512,128
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+d2_body
+  rotate: false
+  xy: 2, 60
+  size: 145, 66
+  orig: 145, 66
+  offset: 0, 0
+  index: -1
+d2_ear1
+  rotate: false
+  xy: 197, 63
+  size: 30, 17
+  orig: 30, 17
+  offset: 0, 0
+  index: -1
+d2_ear2
+  rotate: true
+  xy: 496, 93
+  size: 33, 14
+  orig: 33, 14
+  offset: 0, 0
+  index: -1
+d2_head_u
+  rotate: false
+  xy: 231, 95
+  size: 69, 31
+  orig: 69, 31
+  offset: 0, 0
+  index: -1
+d2_leg1_d
+  rotate: true
+  xy: 406, 103
+  size: 23, 48
+  orig: 23, 48
+  offset: 0, 0
+  index: -1
+d2_leg1_foot
+  rotate: false
+  xy: 277, 80
+  size: 19, 13
+  orig: 19, 13
+  offset: 0, 0
+  index: -1
+d2_leg1_u
+  rotate: true
+  xy: 302, 93
+  size: 33, 50
+  orig: 33, 50
+  offset: 0, 0
+  index: -1
+d2_leg2_d
+  rotate: true
+  xy: 406, 79
+  size: 22, 36
+  orig: 22, 36
+  offset: 0, 0
+  index: -1
+d2_leg2_foot
+  rotate: true
+  xy: 444, 83
+  size: 18, 9
+  orig: 18, 9
+  offset: 0, 0
+  index: -1
+d2_leg2_u
+  rotate: true
+  xy: 456, 95
+  size: 31, 38
+  orig: 31, 38
+  offset: 0, 0
+  index: -1
+d2_leg3_d
+  rotate: true
+  xy: 149, 62
+  size: 18, 46
+  orig: 18, 46
+  offset: 0, 0
+  index: -1
+d2_leg3_foot
+  rotate: false
+  xy: 257, 60
+  size: 17, 14
+  orig: 17, 14
+  offset: 0, 0
+  index: -1
+d2_leg3_u
+  rotate: true
+  xy: 149, 82
+  size: 44, 80
+  orig: 44, 80
+  offset: 0, 0
+  index: -1
+d2_leg4_d
+  rotate: true
+  xy: 231, 76
+  size: 17, 44
+  orig: 17, 44
+  offset: 0, 0
+  index: -1
+d2_leg4_foot
+  rotate: false
+  xy: 455, 80
+  size: 17, 13
+  orig: 17, 13
+  offset: 0, 0
+  index: -1
+d2_leg4_u
+  rotate: true
+  xy: 354, 91
+  size: 35, 50
+  orig: 35, 50
+  offset: 0, 0
+  index: -1
+d2_mouth
+  rotate: false
+  xy: 229, 63
+  size: 26, 11
+  orig: 26, 11
+  offset: 0, 0
+  index: -1
+d2_neck
+  rotate: true
+  xy: 93, 3
+  size: 55, 49
+  orig: 55, 49
+  offset: 0, 0
+  index: -1
+d2_shetou
+  rotate: false
+  xy: 474, 87
+  size: 16, 6
+  orig: 16, 6
+  offset: 0, 0
+  index: -1
+d2_weiba
+  rotate: true
+  xy: 2, 2
+  size: 56, 89
+  orig: 56, 89
+  offset: 0, 0
+  index: -1
