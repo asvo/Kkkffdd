@@ -13,14 +13,16 @@ public class StayInDamageZone : MonoBehaviour {
 
     private float mPersistTime;
     private int mDamage;
+    private BoxCollider2D mBoxColider;
 
     public void SetSize(Vector2 size)
     {
-        BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
-        if (null != boxCollider)
+        mBoxColider = GetComponent<BoxCollider2D>();
+        if (null != mBoxColider)
         {
-            boxCollider.offset = new Vector2(0, 1f);    //这里采用角色的偏移。。
-            boxCollider.size = size;
+            mBoxColider.offset = new Vector2(0, 1f);    //这里采用角色的偏移。。
+            mBoxColider.size = size;
+            mBoxColider.isTrigger = true;
         }
     }
 
@@ -48,14 +50,27 @@ public class StayInDamageZone : MonoBehaviour {
         OnOver();
     }
 
+    public void OnTriggerEnter2D(Collider2D collider)
+    {
+        OnTrigColider(collider);
+    }
+
     public void OnTriggerStay2D(Collider2D collider)
     {
-        if (!mIsActive)
-            return;
+        OnTrigColider(collider);
+    }
+
+    private void OnTrigColider(Collider2D collider)
+    {
         if (mDamagedEntites == null || collider.gameObject == null)
         {
             return;
         }
+        if (collider.gameObject.layer == Util.PlayerLayer)
+            return;
+    //    Debug.Log("coliider to " + collider.gameObject.name);
+        if (!mIsActive)
+            return;
         BaseEntity entity = collider.gameObject.GetComponent<BaseEntity>();
         if (null == entity)
             return;
@@ -82,11 +97,13 @@ public class StayInDamageZone : MonoBehaviour {
         mDamagedEntites = new List<BaseEntity>();
         mIsActive = true;
         gameObject.SetActive(mIsActive);
+        mBoxColider.isTrigger = true;
     }
 
     private void OnOver()
     {
         mIsActive = false;
+        mBoxColider.isTrigger = false;
         gameObject.SetActive(mIsActive);
         mDamagedEntites.Clear();
     }
