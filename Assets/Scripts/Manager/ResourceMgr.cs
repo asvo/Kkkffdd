@@ -4,10 +4,29 @@ using System.IO;
 
 public class ResourceMgr : Single<ResourceMgr> {
 
-	
+	public string GetDataPath()
+    {
+        string filepath = string.Empty;
+#if UNITY_STANDALONE_WIN  //UNITY_EDITOR
+        filepath = "file://" + Application.dataPath + "/StreamingAssets/";
+#elif UNITY_IPHONE
+ filepath = "file://" + Application.dataPath +"/Raw/";
+#elif UNITY_ANDROID
+        filepath = "jar:file://" + Application.dataPath + "!/assets/";
+#endif
+        return filepath;
+    }
+
+    public string GetScenePngPath(string pngName)
+    {
+        return GetDataPath() + "scenes/" + pngName;
+    }
+
     public Sprite LoadSpriteByFile(string fileName)
     {
-        FileStream fs = new FileStream(Application.dataPath + "/Arts/scene/" + fileName + ".png", FileMode.Open,
+        string filepath = string.Empty;
+        Debug.Log(filepath);
+        FileStream fs = new FileStream(filepath + fileName + ".png", FileMode.Open,
             FileAccess.Read);
         fs.Seek(0, SeekOrigin.Begin);
 

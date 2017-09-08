@@ -44,14 +44,17 @@ public class GameManager : MonoBehaviour
     public GameObject player;
     public SpawnManager spawnManager;
     public Player MainPlayer;
-    void Start()
+
+    public void OnSceneLoaded()
     {
         GameOverUI.Instance.HideUi();
         LoadPlayer();
-        LoadSettingData();
+        LoadSettingData(); 
         spawnManager = FindObjectOfType<SpawnManager>();
-        
         StartGame();
+        //hide black pane
+        GameObject gobj = GameObject.Find("Canvas/BlackPane");
+        gobj.SetActive(false);
     }
 
     private void LoadSettingData()
