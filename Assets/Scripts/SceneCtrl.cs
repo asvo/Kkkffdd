@@ -11,7 +11,7 @@ public class SceneCtrl : MonoBehaviour
         {
             if (null == mBgFore)
             {
-                mBgFore = GameObject.Find("scenes/bg_fore").transform;
+                mBgFore = GameObject.Find("bg_fore").transform;
             }
             return mBgFore;
         }
@@ -73,29 +73,29 @@ public class SceneCtrl : MonoBehaviour
         mIsMidLoaded = false;
         mIsBackLoaded = false;
         mIsLoadSceneBgOver = false;
-        LoadScene();
 
-        if (PassLoadImg)
-        {
-            mIsLoadSceneBgOver = true;
-            LoadedSecne();
-        }
+
+		#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_IOS
+		mIsLoadSceneBgOver = true;
+		LoadedSecne();
+		#else
+        LoadScene();        
+		#endif
+		SetBgPosition ();
     }
 
     private void LoadScene()
-    {
-        if (!PassLoadImg)
-        {
-            StartCoroutine(LoadImageA());
-            StartCoroutine(LoadImageB());
-            StartCoroutine(LoadImageC());
-        }
-        //   BgFore.GetComponent<SpriteRenderer>().sprite = ResourceMgr.Instance().LoadSpriteByFile("new_bg_1");
-        //   BgMid.GetComponent<SpriteRenderer>().sprite = ResourceMgr.Instance().LoadSpriteByFile("new_bg_2");
-        //   BgBackend.GetComponent<SpriteRenderer>().sprite = ResourceMgr.Instance().LoadSpriteByFile("new_bg_3");
-        mMidBgPos = BgMid.localPosition;
-        mBackBgPos = BgBackend.localPosition;
+    {        
+		StartCoroutine(LoadImageA());
+		StartCoroutine(LoadImageB());
+		StartCoroutine(LoadImageC());
     }
+
+	private void SetBgPosition()
+	{
+		mMidBgPos = BgMid.localPosition;
+		mBackBgPos = BgBackend.localPosition;
+	}
 
     void Update()
     {
@@ -105,16 +105,16 @@ public class SceneCtrl : MonoBehaviour
             LerpMoveBg();
     }
 
-    private float PlayerMostLeft = -25f;
-    private float PlayerMostRight = 8.7f;
+    private float PlayerMostLeft = -26.2f;
+    private float PlayerMostRight = 0.4f;
     private float mDelta;
 
-    private float MidPosLeft = 0f;
-    private float MidPosRight = 10f;
+    private float MidPosLeft = -9f;
+    private float MidPosRight = 15f;
     private Vector3 mMidBgPos;
 
-    private float BackPosLeft = 0f;
-    private float BackPosRight = 15f;
+    private float BackPosLeft = -9f;
+    private float BackPosRight = 25f;
     private Vector3 mBackBgPos;
 
     private void LerpMoveBg()
