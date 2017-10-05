@@ -130,7 +130,7 @@ public static class Util
         //string jsonTxt = JsonUtility.ToJson(parm);
         string savePath = Application.persistentDataPath + "/" + path + ".json";
         //Debug.LogError(savePath + "," + jsonTxt);
-        System.IO.File.WriteAllText(savePath, jsonTxt);
+		System.IO.File.WriteAllText(savePath, jsonTxt);
     }
 
     public static T LoadJson<T>(string path)

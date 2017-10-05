@@ -80,7 +80,7 @@ public class Player : BaseEntity
         //};
 
         Status = PlayerStatus.Idle;
-        PlayAnim("idle");
+		PlayAnim(GameConst.Player_Idle, true);
         IsPLayerMoing = false;
     }
 
@@ -129,7 +129,7 @@ public class Player : BaseEntity
     public override void EndMove()
     {
         base.EndMove();
-        PlayAnim("idle");
+		PlayAnim(GameConst.Player_Idle, true);
         IsPLayerMoing = false;
     }
 
@@ -174,7 +174,7 @@ public class Player : BaseEntity
     private void CancelNormalAttack()
     {
         StopAnim("attack");
-        PlayAnim("idle");
+		PlayAnim(GameConst.Player_Idle);
         StopCoroutine("NormalAttackPre");
         mIsNormalAttackInCd = false;
         //cancel normal action cd
@@ -206,7 +206,7 @@ public class Player : BaseEntity
         Spine.Animation anim = animState.GetAnimation(0, "attack");
         //      SkeletonAnim.timeScale = anim.duration / NormalAttackCd;
         PlayAnim("attack");
-        SkeletonAnim.state.AddAnimation(0, "idle", false, 0.8f);
+		SkeletonAnim.state.AddAnimation(0, GameConst.Player_Idle, false, 0.8f);
         SkillDataMgr.Instance().SetOnActionTime(SkillConst.NormalAttackSkillSlotId);
         yield return new WaitForSeconds(m_AttrValue.NormalAttackDamgePoint);
         PlaceNormalAttackZone();
@@ -257,7 +257,7 @@ public class Player : BaseEntity
         base.Die();
         Status = PlayerStatus.Die;
         //play die anim.
-        PlayAnim("idle");
+		PlayAnim(GameConst.Player_Idle);
 
         if (Status == PlayerStatus.Die && this.gameObject.activeInHierarchy)
         {

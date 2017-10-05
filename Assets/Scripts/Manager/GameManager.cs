@@ -53,8 +53,9 @@ public class GameManager : MonoBehaviour
         spawnManager = FindObjectOfType<SpawnManager>();
         StartGame();
         //hide black pane
-        GameObject gobj = GameObject.Find("Canvas/BlackPane");
-        gobj.SetActive(false);
+        GameObject gobj = GameObject.Find("Canvas");
+		Transform trans = gobj.transform.FindChild ("BlackPane");
+		trans.gameObject.SetActive(false);
     }
 
     private void LoadSettingData()

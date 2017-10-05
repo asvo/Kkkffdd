@@ -46,8 +46,6 @@ public class SceneCtrl : MonoBehaviour
     private bool mIsBackLoaded;
     private bool mIsLoadSceneBgOver;
 
-    public bool PassLoadImg;
-
     private void CheckHasLoaded()
     {
         if (mIsLoadSceneBgOver)
@@ -75,12 +73,13 @@ public class SceneCtrl : MonoBehaviour
         mIsLoadSceneBgOver = false;
 
 
-		#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_IOS
+		#if PC_RUN
 		mIsLoadSceneBgOver = true;
 		LoadedSecne();
 		#else
         LoadScene();        
-		#endif
+	    #endif
+
 		SetBgPosition ();
     }
 

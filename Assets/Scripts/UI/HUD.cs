@@ -76,4 +76,19 @@ public class HUD : MonoBehaviour {
             }
         }
     }
+
+	void OnGUI()
+	{
+		if (GUILayout.Button ("Test-Spine-Mix")) {
+			TestSpineMix ();
+		}
+	}
+
+	private void TestSpineMix()
+	{
+		Player p = GameManager.Instance ().MainPlayer;
+		p.SkeletonAnim.state.SetAnimation (0, "Interruption attacks", false);
+		p.SkeletonAnim.state.SetAnimation (1, "machine", false);
+
+	}
 }

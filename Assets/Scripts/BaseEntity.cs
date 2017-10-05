@@ -78,7 +78,7 @@ public class BaseEntity : MonoBehaviour
             {
                 SkeletonAnim.Skeleton.FlipX = false;
             }
-            PlayAnim("run", true);
+			PlayAnim(GameConst.Player_Run, true);
             MoveCtrl.Move(moveDir, m_AttrValue.InitMoveSpeed);
         }
     }
